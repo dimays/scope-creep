@@ -55,8 +55,11 @@ Polyglot escape is allowed via the [[app-contract]].
 
 1. **v0 — the seed (this repo).** Charter, core agents, standards, App Contract,
    and one runnable loop (`new-app`) so the factory can build its first app.
-2. **v1 — first manufactured app.** Prove the `new-app` loop end-to-end on the
-   Golden Path: scaffold → test-gate → run → gated deploy.
+2. **v1 — the Console (first manufactured app).** The end-user surface —
+   `scope-creep-console`, its own repo, dogfooding the `new-app` loop end-to-end on
+   the Golden Path. Local-first now; later a persistent host the Owner owns behind
+   an edge perimeter. See [[adr-003]]. (The *operator* surface is the Agent SDK
+   harness and stays headless.)
 3. **v2 — the chatbot extension.** The portable "edit-this-app-in-a-live-preview"
    extension, honoring the Designer's style-isolation standard.
 4. **v3 — self-heal loop in anger.** A failing check auto-opens a heal loop that

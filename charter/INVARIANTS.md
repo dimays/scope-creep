@@ -4,7 +4,7 @@ description: The locked rules Scope Creep may never violate. Amendable only by t
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: human-owner
   last_verified: 2026-09-04
 ---
@@ -41,6 +41,12 @@ surface it to the owner, never to route around it.
    no roles, no per-user data partitioning — ever. Another person becomes a user
    by cloning this repo and running on their own infrastructure with their own
    Claude auth. No feature may assume more than one human.
+   > **Clarification (Owner-approved 2026-09-04, [[adr-003]]):** This is a
+   > *product* rule — never build accounts, roles, or tenancy *into an app*. It is
+   > not a prohibition on a network perimeter. A powerful, publicly-reachable
+   > endpoint (e.g. a deployed Console) may sit behind an **edge access control**
+   > — Tailscale, Cloudflare Access, or a reverse-proxy credential — whose only job
+   > is to keep everyone who isn't the Owner out. Edge perimeter ≠ in-app auth.
 6. **The base repo is the product.** This control-plane repo must stay cleanly
    cloneable. Your personal manufactured apps live in their own repos and are
    *referenced*, never vendored here.
