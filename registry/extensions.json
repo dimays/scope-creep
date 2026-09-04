@@ -1,0 +1,6 @@
+{
+  "_generated": false,
+  "_note": "Bootstrap seed. Extensions declare the App-Contract version they need; the registry refuses incompatible installs.",
+  "schema_version": "1.0.0",
+  "extensions": []
+}

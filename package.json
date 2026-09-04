@@ -1,0 +1,15 @@
+{
+  "name": "scope-creep",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Scope Creep control plane — a single-user, Agent-SDK-native software factory.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "registry:build": "echo 'TODO(v1): harvest manifests into registry/*.json' && exit 1",
+    "docs:lint": "echo 'TODO(v1): validate manifests + last_verified freshness' && exit 1",
+    "ledger:new": "echo 'TODO(v1): scaffold a new ledger entry' && exit 1"
+  }
+}

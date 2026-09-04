@@ -1,0 +1,24 @@
+name: scope-creep
+description: The Scope Creep control plane — a single-user, Agent-SDK-native software factory.
+metadata:
+  type: project
+  status: active
+  version: 0.1.0
+  owner_agent: chief-of-staff
+  last_verified: 2026-09-04
+kind: control-plane
+single_user: true
+blessed_stack: typescript
+charter:
+  invariants: charter/INVARIANTS.md
+  prd: charter/PRD.md
+  glossary: charter/GLOSSARY.md
+core_agents:
+  - chief-of-staff
+  - cto
+  - chief-designer
+  - chief-knowledge-manager
+loops:
+  - new-app
+  - heal
+  - core-upgrade

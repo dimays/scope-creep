@@ -1,0 +1,11 @@
+{
+  "_generated": false,
+  "_note": "Bootstrap seed. Regenerate with `npm run registry:build` once the harvester lands.",
+  "schema_version": "1.0.0",
+  "agents": [
+    { "name": "chief-of-staff", "kind": "core", "status": "active", "path": "agents/chief-of-staff.md" },
+    { "name": "cto", "kind": "core", "status": "active", "path": "agents/cto.md" },
+    { "name": "chief-designer", "kind": "core", "status": "active", "path": "agents/chief-designer.md" },
+    { "name": "chief-knowledge-manager", "kind": "core", "status": "active", "path": "agents/chief-knowledge-manager.md" }
+  ]
+}

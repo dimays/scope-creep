@@ -1,0 +1,6 @@
+{
+  "_generated": false,
+  "_note": "Bootstrap seed. Apps register here via the new-app loop, step 6.",
+  "schema_version": "1.0.0",
+  "apps": []
+}
