@@ -2,12 +2,14 @@
 id: work-027
 title: "Console a11y + design-token cleanup (focus, tokens, error boundary)"
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 spec: prd-console-explore
 created: 2026-09-05
 updated: 2026-09-05
+branch: work-027-a11y-tokens
+pr: https://github.com/dimays/scope-creep-console/pull/18
 ---
 From the level-set ([[ledger-027-level-set-round]], Chief Designer). The `--sc-*` token
 layer is strong (~90% tokenized) but has gaps that bypass it, plus missing a11y basics.
@@ -24,3 +26,5 @@ layer is strong (~90% tokenized) but has gaps that bypass it, plus missing a11y 
 
 **Acceptance:** keyboard focus is visible app-wide; no hardcoded semantic hex in
 `app.css`; thrown errors render on-brand. See [[prd-console-explore]], [[ledger-027-level-set-round]].
+
+**Done (2026-09-05):** Shipped in gated PR dimays/scope-creep-console#18: :focus-visible system, warn/danger tokenized, on-brand ErrorBoundary, CRO display name. (--sc-success + .req-submit contrast deferred pending the palette decision.)

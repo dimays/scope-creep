@@ -2,12 +2,14 @@
 id: work-023
 title: Version-sync — stop /healthz lying; add a version-sync consistency check
 type: bug
-status: proposed
+status: done
 priority: high
 owner: chief-reality-officer
 spec: prd-console-explore
 created: 2026-09-05
 updated: 2026-09-05
+branch: work-023-version-sync
+pr: https://github.com/dimays/scope-creep-console/pull/15
 ---
 From the level-set ([[ledger-027-level-set-round]], CRO + CTO). Console `version.ts`,
 `package.json`, and CHANGELOG top-entry are frozen at **0.13.0** while console PRs
@@ -21,3 +23,5 @@ a stale version and no gate catches it.
 
 **Acceptance:** `/healthz` reports the true version; `consistency()` flags a deliberately
 desynced version. See [[ledger-027-level-set-round]].
+
+**Done (2026-09-05):** Shipped in gated PR dimays/scope-creep-console#15: version bumped to 0.15.0 across version.ts/package.json/CHANGELOG + a `versionSkew` consistency check.
