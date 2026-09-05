@@ -6,7 +6,7 @@ metadata:
   status: active
   version: 1.0.0
   owner_agent: cto
-  last_verified: 2026-09-04
+  last_verified: 2026-09-05
 ---
 
 # The Golden Path (blessed stack)
@@ -20,12 +20,12 @@ road* — the default with the deepest core tooling. Apps may siphon off (become
 | Layer | Choice | Why (short) |
 |---|---|---|
 | Language | **TypeScript**, end to end | One compiler-checked language from control plane to DOM. No forced language boundary. |
-| Full-app framework | **React Router 7** (framework mode) on **Vite** | Explicit typed `loader`/`action` data contracts; SSR shell + real client runtime; state-preserving HMR. |
+| Full-app framework | **React Router 8** (framework mode) on **Vite 8** | Explicit typed `loader`/`action` data contracts; SSR shell + real client runtime; state-preserving HMR. Pinned exact; bumped from RR7/Vite7 via [[work-028]] ([[ledger-029-rr8-core-upgrade]]). |
 | Small-tool path | **Bun**-run `.ts` files | Native TS, zero build; `bun build --compile` for a single binary. |
 | Datastore | **SQLite / libSQL** via **Drizzle ORM** | One file per app = perfect isolation; schema is TypeScript, checked by `tsc`; swaps to Postgres by connection string. |
 | Dev/test/scripts | **Bun** | Fast, native TS. |
 | Prod runtime | **Node LTS** | Sidesteps Bun's 2026 production blockers. |
-| Tests | **Vitest** (+ **Playwright** smoke) | Jest-API corpus is huge; agents write idiomatic tests. |
+| Tests | **Vitest** (Playwright smoke: **deferred** until E2E is warranted — see [[adr-001]] amendment 4) | Jest-API corpus is huge; agents write idiomatic tests. |
 | Typecheck / lint / format | `tsc --noEmit` + **Biome** | One fast binary; the compiler is the self-heal oracle. |
 | Design system | **`@scope-creep/design`** (core-owned package) | See amendment #1 below. |
 | Container | Per-repo multi-stage **Dockerfile** | Reproducible; prod on Node LTS. |
