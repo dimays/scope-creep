@@ -21,3 +21,6 @@ jobs:
       # Validates every work/*.md against the work-item schema.
       - name: Work items valid
         run: bun run work:check
+      # Doc integrity: manifest fields, wiki-link resolution, freshness, registry flags.
+      - name: Docs lint
+        run: bun run docs:lint
