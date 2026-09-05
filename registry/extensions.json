@@ -2,5 +2,15 @@
   "_generated": true,
   "_source": "scripts/registry-build.ts — run `bun run registry:build`",
   "schema_version": "1.0.0",
-  "extensions": []
+  "extensions": [
+    {
+      "name": "scope-creep-ext-feedback",
+      "kind": "extension",
+      "status": "active",
+      "repo": "https://github.com/dimays/scope-creep-ext-feedback",
+      "manifest": "../scope-creep-ext-feedback/MANIFEST.yaml",
+      "app_contract_version": "1.0.0",
+      "registered": "2026-09-04"
+    }
+  ]
 }
