@@ -23,3 +23,9 @@ Covers both immediate action responses and longer request/work-item progress.
 **Acceptance:** every submit gives immediate feedback; in-progress work is visible; an
 interruption shows a clear banner with a resume ETA. Chief Designer owns; CTO for the
 agent-status backend.
+
+**Roadmap note (2026-09-05):** the **Requests whose-turn bug** (first bullet) is
+superseded by the [[prd-cos-threads]] lifecycle/turn model ([[work-029]]) — drop it from
+here when Threads MVP lands. The rest (app-wide loading / in-progress / interrupted
+banner) is **broader than Requests and stays** with this ticket. See
+[[ledger-028-cos-threads-roadmap]].

@@ -16,3 +16,7 @@ a **lifecycle status** connecting the feedback to the action taken — e.g. `sub
 
 **Acceptance:** submitted feedback is visible with its current status; the Owner can
 see what happened to each piece. Source: the `feedback` table. See [[prd-work-intake]].
+
+**Roadmap note (2026-09-05):** likely **folded into [[prd-cos-threads]] Phase 1** —
+feedback-with-lifecycle-status is a thread carrying an intake outcome. Kept `proposed`;
+supersede once the Threads direction is Owner-accepted ([[ledger-028-cos-threads-roadmap]]).
