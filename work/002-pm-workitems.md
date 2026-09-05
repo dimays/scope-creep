@@ -2,7 +2,7 @@
 id: work-002
 title: PM work-item system
 type: feature
-status: active
+status: done
 priority: high
 owner: chief-product-officer
 spec: adr-005
@@ -14,3 +14,7 @@ Backend-first work items in the control plane, surfaced as a Console board
 
 **Acceptance:** `work/` records with a schema + validator; a read-only Console
 board grouped by status; green gate. (Write-back from the Console is a follow-up.)
+
+**Done (2026-09-04):** shipped in `scope-creep-console` 0.3.0 — records + schema +
+`work:check` validator (in CI), and the Work board. Console write-back tracked
+separately.
