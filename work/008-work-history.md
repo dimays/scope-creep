@@ -2,10 +2,11 @@
 id: work-008
 title: Work History (condensed shipped-features log)
 type: feature
-status: proposed
+status: active
 priority: medium
 owner: chief-product-officer
 spec: prd-work-intake
+branch: work-008-work-history
 created: 2026-09-04
 updated: 2026-09-04
 ---

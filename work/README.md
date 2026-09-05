@@ -29,6 +29,7 @@ priority: high          # high | medium | low
 owner: chief-designer   # an agent slug
 spec: prd-console-explore   # REQUIRED: a product/ PRD or ADR name (a [[link]] target)
 branch:                 # optional: the working branch while active/blocked (resume aid)
+pr:                     # optional: the GitHub PR URL that landed the ticket (Work History)
 created: 2026-09-04
 updated: 2026-09-04
 ---

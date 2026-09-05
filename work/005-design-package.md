@@ -7,6 +7,7 @@ priority: medium
 owner: chief-designer
 spec: golden-path
 branch: work-005-design-package
+pr: https://github.com/dimays/scope-creep-console/pull/1
 created: 2026-09-04
 updated: 2026-09-04
 ---

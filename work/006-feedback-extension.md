@@ -7,6 +7,7 @@ priority: medium
 owner: chief-product-officer
 spec: prd-console-explore
 branch: work-006-feedback-ext
+pr: https://github.com/dimays/scope-creep-console/pull/2
 created: 2026-09-04
 updated: 2026-09-04
 ---
