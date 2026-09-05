@@ -45,8 +45,9 @@ Immutable core C-suite: **Chief of Staff** (orchestration + org ratification),
 **Chief Designer** (design systems + delight), **CTO** (architecture + technical
 standards), **Chief Knowledge Manager** (docs, registries, discovery), **Chief
 Product Officer** (product vision, requirements, project management, feedback loop
-— [[adr-004]]). Executives staff employee/app-bound agents as needed; the CoS
-ratifies ([[adr-002]]).
+— [[adr-004]]), **Chief Reality Officer** (independent verifier against
+hallucination and unchecked assumptions — [[adr-007]]). Executives staff
+employee/app-bound agents as needed; the CoS ratifies ([[adr-002]]).
 
 ## The blessed stack `active`
 

@@ -68,6 +68,14 @@ review ([[adr-006]]).
 Rule of thumb: **irreversible, outward-facing, core-touching, or a genuine judgment
 fork → STOP. Everything else → go.**
 
+## Reality check (CRO)
+Before a **load-bearing decision** (ADR-worthy), before **acting on research or an
+external/tool-derived claim**, and before marking consequential work **done**,
+invoke the [[chief-reality-officer]]: label the load-bearing claims verified /
+inferred / assumed, and verify the assumption most likely to break the plan *first*.
+A claim isn't true because an agent asserted it — prefer a runnable check ([[adr-007]]).
+Scoped to these checkpoints, not routine edits.
+
 ## Resumability (source of truth = `work/` + `ledger/`, not the transcript)
 - **Ticket start:** status → `active`, set `branch:`, bump `updated`, commit.
 - **During:** atomic commits on the branch (uncommitted work is the one thing a

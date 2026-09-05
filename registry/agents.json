@@ -32,6 +32,13 @@
       "path": "agents/chief-product-officer.md"
     },
     {
+      "name": "chief-reality-officer",
+      "kind": "core",
+      "status": "active",
+      "description": "The independent skeptic — cross-checks decisions, research, and outputs for hallucinations, fabrications, and unchecked assumptions before they're acted on.",
+      "path": "agents/chief-reality-officer.md"
+    },
+    {
       "name": "cto",
       "kind": "core",
       "status": "active",
