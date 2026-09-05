@@ -3,13 +3,17 @@ name: prd-console-explore
 description: Product requirements for "Explore" — understanding Scope Creep (docs, agents, ledger, consistency) from inside the Console, without touching code.
 metadata:
   type: project
-  status: proposed
+  status: active
   version: 0.1.0
   owner_agent: chief-product-officer
   last_verified: 2026-09-04
 ---
 
 # PRD — Console "Explore"
+
+> **v1 shipped** in `scope-creep-console` 0.2.0 (2026-09-04): docs browser, agent
+> profiles with ledger-derived contributions, timeline, and the consistency view.
+> Roadmap items below remain proposed.
 
 ## The user problem
 The Owner wants to understand *what is being built and how* — and spot what's
