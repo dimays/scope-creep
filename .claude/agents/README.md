@@ -1,8 +1,8 @@
 # .claude/agents
 
-The four core C-suite agents are wired here as **Claude Agent SDK subagents** the
+The six core C-suite agents are wired here as **Claude Agent SDK subagents** the
 harness can invoke by name: `chief-of-staff`, `cto`, `chief-designer`,
-`chief-knowledge-manager`.
+`chief-knowledge-manager`, `chief-product-officer`, `chief-reality-officer`.
 
 ## The loader pattern (single source of truth)
 
