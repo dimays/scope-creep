@@ -15,11 +15,14 @@ vendored here — so this base repo stays cleanly cloneable.
 | Path | What |
 |---|---|
 | `charter/` | The Charter: living [`PRD`](charter/PRD.md), locked [`INVARIANTS`](charter/INVARIANTS.md), [`GLOSSARY`](charter/GLOSSARY.md) |
-| `agents/` | The immutable core C-suite: Chief of Staff, CTO, Chief Designer, Chief Knowledge Manager |
-| `standards/` | [`golden-path`](standards/golden-path.md), [`app-contract`](standards/app-contract.md), [`tech-sops`](standards/tech-sops.md), [`doc-standards`](standards/doc-standards.md), and ADRs |
-| `loops/` | `new-app`, `heal`, `core-upgrade` |
+| `agents/` | The immutable core C-suite: Chief of Staff, CTO, Chief Designer, Chief Knowledge Manager, Chief Product Officer, Chief Reality Officer |
+| `standards/` | [`golden-path`](standards/golden-path.md), [`app-contract`](standards/app-contract.md), [`tech-sops`](standards/tech-sops.md), [`doc-standards`](standards/doc-standards.md), [`engineering-policy`](standards/engineering-policy.md), and ADRs |
+| `loops/` | `ticket-cycle`, `request-intake`, `new-app`, `heal`, `core-upgrade` |
+| `product/` | Product requirement docs (`*.prd.md`) for the manufactured surfaces |
+| `work/` | The ticket backlog (schema in [`work/README.md`](work/README.md)) |
 | `registry/` | Generated discovery indexes (never hand-edited) |
 | `environments/` | Environment definitions and templates |
+| `reference/` | Curated reference data (e.g. the model catalog) |
 | `ledger/` | Append-only event log — episodic memory |
 | `.claude/` | Agent-SDK wiring: agents, hooks (gate enforcement) |
 
