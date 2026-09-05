@@ -1,4 +1,4 @@
-name: Registry
+name: Control plane
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
   pull_request:
 
 jobs:
-  registry:
-    name: Registries in sync with manifests
+  checks:
+    name: Registry sync + work-item schema
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,4 +16,8 @@ jobs:
           bun-version: latest
       # Regenerates registry/*.json from manifests and fails if the committed
       # files drift from what the harvester produces.
-      - run: bun run registry:check
+      - name: Registries in sync with manifests
+        run: bun run registry:check
+      # Validates every work/*.md against the work-item schema.
+      - name: Work items valid
+        run: bun run work:check

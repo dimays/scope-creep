@@ -10,6 +10,7 @@
   "scripts": {
     "registry:build": "bun run scripts/registry-build.ts",
     "registry:check": "bun run scripts/registry-build.ts && git diff --exit-code registry/",
+    "work:check": "bun run scripts/work-check.ts",
     "docs:lint": "echo 'TODO: validate manifests + last_verified freshness' && exit 1",
     "ledger:new": "echo 'TODO: scaffold a new ledger entry' && exit 1"
   }
