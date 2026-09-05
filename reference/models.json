@@ -1,0 +1,46 @@
+{
+  "_note": "Claude API model catalog — seeds the Console model picker and the agent model-selection policy (work-018). Prices are USD per million tokens (MTok). Re-pull periodically; prices/IDs change.",
+  "_source": "Anthropic docs/pricing (platform.claude.com/docs/en/about-claude/{pricing,models/overview,models/model-ids-and-versions})",
+  "_pulled": "2026-09-05",
+  "batch_discount": 0.5,
+  "cache_read_multiplier": 0.1,
+  "defaults": {
+    "chat": "claude-sonnet-5",
+    "agentic": "claude-opus-5",
+    "routine": "claude-haiku-4-5-20251001"
+  },
+  "models": [
+    {
+      "id": "claude-fable-5-1",
+      "tier": "premium",
+      "input": 10.0,
+      "output": 50.0,
+      "context": 1000000,
+      "note": "highest quality"
+    },
+    {
+      "id": "claude-opus-5",
+      "tier": "flagship",
+      "input": 5.0,
+      "output": 25.0,
+      "context": 1000000,
+      "note": "agentic / coding default; frontier reasoning"
+    },
+    {
+      "id": "claude-sonnet-5",
+      "tier": "balanced",
+      "input": 2.0,
+      "output": 10.0,
+      "context": 1000000,
+      "note": "in-app chat default; fast + cost-effective"
+    },
+    {
+      "id": "claude-haiku-4-5-20251001",
+      "tier": "fast",
+      "input": 1.0,
+      "output": 5.0,
+      "context": 200000,
+      "note": "routine / high-volume turns; pinned dated ID"
+    }
+  ]
+}

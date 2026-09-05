@@ -16,8 +16,10 @@ Make the model a choice, not a hardcode. Two axes:
   as the system grows — a cheap/fast model for routine turns, a stronger model for hard
   reasoning/agentic work.
 
-Seed the picker from a `{ id, tier, input$, output$ }` list of current Claude API model
-IDs (pulled 2026-09-05; see the ledger relay). Always falls back to a sane default.
+Seed the picker + agent policy from the committed catalog **`reference/models.json`**
+([[reference]]) — `{id, tier, input$, output$, context}` for the current Claude API
+models, plus `defaults` (chat → sonnet-5, agentic → opus-5, routine → haiku). Always
+falls back to a sane default; validate against the catalog (retired IDs fail hard).
 
 **Acceptance:** the Console exposes a persisted model picker that drives the chat
 model; an agent model-selection policy is documented; unknown/failed IDs fall back
