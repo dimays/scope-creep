@@ -1,0 +1,19 @@
+name: Registry
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  registry:
+    name: Registries in sync with manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      # Regenerates registry/*.json from manifests and fails if the committed
+      # files drift from what the harvester produces.
+      - run: bun run registry:check
