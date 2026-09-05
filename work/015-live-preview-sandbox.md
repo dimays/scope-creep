@@ -2,10 +2,11 @@
 id: work-015
 title: Sandboxed, state-preserving live preview of proposed edits
 type: feature
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-chatbot-extension
+branch: work-015-sandbox
 created: 2026-09-05
 updated: 2026-09-05
 ---
