@@ -2,10 +2,11 @@
 id: work-005
 title: Stand up @scope-creep/design
 type: feature
-status: proposed
+status: active
 priority: medium
 owner: chief-designer
 spec: golden-path
+branch: work-005-design-package
 created: 2026-09-04
 updated: 2026-09-04
 ---
