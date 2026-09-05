@@ -2,11 +2,12 @@
 id: work-020
 title: Human-Input Log — v1b (terminal capture hook)
 type: feature
-status: active
+status: done
 priority: high
 owner: cto
 spec: prd-human-input-log
 branch: work-020-input-capture
+pr: https://github.com/dimays/scope-creep/pull/1
 created: 2026-09-05
 updated: 2026-09-05
 ---
@@ -32,3 +33,16 @@ richest surface (the terminal / first-class Claude session). **Owner-gated core 
 
 **Acceptance:** an Owner prompt in a hooked session becomes a `human-input/` line;
 the Console log shows terminal inputs; Consistency flags gaps. See [[adr-010]].
+
+**Done (2026-09-05):** Owner-gated PR dimays/scope-creep#1 — the `UserPromptSubmit`
+hook (`.claude/hooks/log-human-input.{sh,py}`, redaction guard, `human-input/`
+gitignored) + the one-time backfill (`scripts/backfill-human-input.py`). Companion
+Console reader shipped in dimays/scope-creep-console#13 (`operator-session` events
+unioned via `SCOPE_CREEP_HOME`). Backfill run recovered **31** genuine inputs back
+to the first ideation (`2026-09-04T21:22:46Z`); verified rendering on `/work/inputs`.
+A stdin-vs-heredoc bug and a UTC-parsing bug were caught in verification and fixed.
+
+**Carved out → [[work-022]]:** the **Consistency self-checks** bullet above (flag
+work/merges with no preceding captured input; dup ids) was *not* built here — it's
+a distinct read-side check, split to work-022 for the level-setting round rather
+than claimed as shipped.
