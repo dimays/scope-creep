@@ -8,7 +8,7 @@
       "kind": "app",
       "status": "active",
       "stack": "golden-path",
-      "repo": "pending-remote",
+      "repo": "https://github.com/dimays/scope-creep-console",
       "manifest": "../scope-creep-console/MANIFEST.yaml",
       "registered": "2026-09-04"
     }
