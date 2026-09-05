@@ -2,10 +2,11 @@
 id: work-020
 title: Human-Input Log — v1b (terminal capture hook)
 type: feature
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-human-input-log
+branch: work-020-input-capture
 created: 2026-09-05
 updated: 2026-09-05
 ---
@@ -17,6 +18,12 @@ richest surface (the terminal / first-class Claude session). **Owner-gated core 
   guard so a pasted secret never lands in git).
 - The Console's Human-Input Log ([[work-012]]) unions `human-input/` in (via
   `SCOPE_CREEP_HOME`) so terminal inputs appear.
+- A **one-time backfill** (`scripts/backfill-human-input.py`) reconstructs the Owner's
+  *earlier* terminal inputs — back to the first ideation — from the Claude Code session
+  transcript, so the log isn't blank before the hook was installed. Conservative
+  (drops tool-results / task-notifications / interrupts / compaction summaries, unwraps
+  slash-command args, redacts secrets), idempotent (de-dupes by ts+text), and tags each
+  row `backfill: true`. The backfilled rows live in the same gitignored `human-input/`.
 - **Consistency self-checks:** flag work/merges in a window with no preceding captured
   input (missed input / uninstalled hook) + dup ids.
 
