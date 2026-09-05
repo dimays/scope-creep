@@ -2,10 +2,11 @@
 id: work-014
 title: Shared conversation primitive + in-app agent runtime
 type: feature
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-chatbot-extension
+branch: work-014-conversation
 created: 2026-09-05
 updated: 2026-09-05
 ---
