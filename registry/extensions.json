@@ -11,6 +11,15 @@
       "manifest": "../scope-creep-ext-feedback/MANIFEST.yaml",
       "app_contract_version": "1.0.0",
       "registered": "2026-09-04"
+    },
+    {
+      "name": "scope-creep-ext-chatbot",
+      "kind": "extension",
+      "status": "active",
+      "repo": "https://github.com/dimays/scope-creep-ext-chatbot",
+      "manifest": "../scope-creep-ext-chatbot/MANIFEST.yaml",
+      "app_contract_version": "1.0.0",
+      "registered": "2026-09-05"
     }
   ]
 }
