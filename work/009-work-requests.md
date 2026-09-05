@@ -2,10 +2,11 @@
 id: work-009
 title: Work Requests — request-intake loop (inbox v1)
 type: feature
-status: proposed
+status: active
 priority: high
 owner: chief-product-officer
 spec: prd-work-intake
+branch: work-009-work-requests
 created: 2026-09-04
 updated: 2026-09-04
 ---
