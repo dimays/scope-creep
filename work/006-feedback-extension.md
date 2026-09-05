@@ -2,10 +2,11 @@
 id: work-006
 title: In-app feedback mechanism (Extension)
 type: feature
-status: proposed
+status: active
 priority: medium
 owner: chief-product-officer
 spec: prd-console-explore
+branch: work-006-feedback-ext
 created: 2026-09-04
 updated: 2026-09-04
 ---
