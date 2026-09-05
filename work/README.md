@@ -24,20 +24,24 @@ description / acceptance / notes.
 id: work-001            # stable id, matches NNN
 title: Build the chatbot extension
 type: feature           # feature | bug | debt | chore
-status: proposed        # proposed | active | blocked | done
+status: proposed        # proposed | active | blocked | done | superseded | dropped
 priority: high          # high | medium | low
 owner: chief-designer   # an agent slug
-spec: prd-console-explore   # optional: a product/ PRD or ADR name (a [[link]] target)
+spec: prd-console-explore   # REQUIRED: a product/ PRD or ADR name (a [[link]] target)
+branch:                 # optional: the working branch while active/blocked (resume aid)
 created: 2026-09-04
 updated: 2026-09-04
 ---
-Body: the problem, the acceptance signal, notes.
+Body: the problem, the **Acceptance:** signal (the Definition of Done), notes.
 ```
 
 ## Lifecycle
-`proposed → active → done`, with `blocked` as a side state. Transitions are edits to
-`status` + `updated`, committed like any change; milestones also land in the
-[[ledger]]. Validated in CI by `bun run work:check`.
+Governed by [[ticket-cycle]] ([[adr-006]]). `proposed → active → done`, with
+`blocked` as a side state and `superseded`/`dropped` as terminal alternatives to
+`done`. **Never `rm` a work file** — retire it via a terminal status + a reason in
+the body + a [[ledger]] note ([[invariants]] §III). Transitions are edits to
+`status` + `updated`, committed. `spec` is required and every ticket must trace to
+an existing spec — new scope is human-gated. Validated in CI by `bun run work:check`.
 
 ## Notes
 - Work items are **not** scanned by the Console's Explore/Docs (their `status`

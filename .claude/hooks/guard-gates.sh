@@ -20,6 +20,10 @@ block() {
 case "$cmd" in
   *"fly deploy"*|*"fly apps destroy"*|*"fly volumes destroy"*)
     block "production deploy/destroy (fly)";;
+  *"npm publish"*|*"bun publish"*|*"pnpm publish"*|*"yarn publish"*)
+    block "package publish (outward-facing)";;
+  *"gh release create"*)
+    block "GitHub release (publish)";;
   *"git push --force"*|*"git push -f"*)
     block "force-push (history rewrite)";;
   *"rm -rf /"*|*"rm -rf ~"*)

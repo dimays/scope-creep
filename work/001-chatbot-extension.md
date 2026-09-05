@@ -15,3 +15,7 @@ and state-preserving live preview.
 
 **Acceptance:** installable onto any Golden-Path app; edits render in-place in a
 preview; approving merges via the gated flow.
+
+**Split before execution** (CPO): the acceptance has three clauses (installable /
+renders-in-preview / gated merge) — pre-split into a small epic; one purpose per
+ticket ([[ticket-cycle]] step 4).

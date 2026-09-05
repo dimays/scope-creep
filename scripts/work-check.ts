@@ -11,10 +11,10 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const WORK = join(ROOT, "work");
 
-const REQUIRED = ["id", "title", "type", "status", "priority", "owner", "created", "updated"];
+const REQUIRED = ["id", "title", "type", "status", "priority", "owner", "spec", "created", "updated"];
 const ENUMS: Record<string, string[]> = {
   type: ["feature", "bug", "debt", "chore"],
-  status: ["proposed", "active", "blocked", "done"],
+  status: ["proposed", "active", "blocked", "done", "superseded", "dropped"],
   priority: ["high", "medium", "low"],
 };
 
