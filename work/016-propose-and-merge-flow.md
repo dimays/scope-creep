@@ -2,10 +2,11 @@
 id: work-016
 title: Propose → gated PR → merge (approve/decline in chat)
 type: feature
-status: proposed
+status: active
 priority: medium
 owner: cto
 spec: prd-chatbot-extension
+branch: work-016-land
 created: 2026-09-05
 updated: 2026-09-05
 ---
