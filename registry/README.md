@@ -12,14 +12,19 @@ metadata:
 # Registry
 
 The discovery primitive. `agents.json`, `apps.json`, and `extensions.json` are
-**generated** by harvesting every `MANIFEST` / front-matter block in the ecosystem
-([[doc-standards]] §2). **Do not hand-edit the JSON** — regenerate it:
+**generated** by the harvester ([[doc-standards]] §2). **Do not hand-edit the
+JSON** — regenerate it:
 
 ```bash
-npm run registry:build   # harvests manifests → registry/*.json
+bun run registry:build   # scripts/registry-build.ts → registry/*.json
+bun run registry:check   # build + `git diff --exit-code` (CI gate)
 ```
 
-The generator does not exist yet (v0 seed). Until it lands, the JSON files are
-seeded by hand *as a bootstrap only* and carry `"_generated": false`. The first
-build flips them to generated. RAG/vector search is added only when deterministic
-lookup over these indexes actually fails ([[doc-standards]] §7).
+- **agents.json** is generated from the `agents/*.md` manifests.
+- **apps.json** / **extensions.json** are reconciled from their registration
+  records (written by the `new-app` / extension loops); the harvester validates
+  each referenced manifest exists and re-emits deterministically.
+
+Output is deterministic (no timestamps) so `registry:check` is a reliable
+"in sync?" gate. RAG/vector search is added only when deterministic lookup over
+these indexes actually fails ([[doc-standards]] §7).

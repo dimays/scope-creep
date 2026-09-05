@@ -8,8 +8,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "registry:build": "echo 'TODO(v1): harvest manifests into registry/*.json' && exit 1",
-    "docs:lint": "echo 'TODO(v1): validate manifests + last_verified freshness' && exit 1",
-    "ledger:new": "echo 'TODO(v1): scaffold a new ledger entry' && exit 1"
+    "registry:build": "bun run scripts/registry-build.ts",
+    "registry:check": "bun run scripts/registry-build.ts && git diff --exit-code registry/",
+    "docs:lint": "echo 'TODO: validate manifests + last_verified freshness' && exit 1",
+    "ledger:new": "echo 'TODO: scaffold a new ledger entry' && exit 1"
   }
 }

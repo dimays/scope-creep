@@ -1,6 +1,6 @@
 {
-  "_generated": false,
-  "_note": "Bootstrap seed. Apps register here via the new-app loop, step 6.",
+  "_generated": true,
+  "_source": "scripts/registry-build.ts — run `bun run registry:build`",
   "schema_version": "1.0.0",
   "apps": [
     {
