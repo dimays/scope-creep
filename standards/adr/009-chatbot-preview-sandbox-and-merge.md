@@ -3,7 +3,7 @@ name: adr-009
 description: How a chatbot-proposed edit is isolated, previewed live, and merged only through the existing gated PR flow — and the security line this crosses.
 metadata:
   type: reference
-  status: proposed
+  status: active
   version: 1.0.0
   owner_agent: cto
   last_verified: 2026-09-05
@@ -11,11 +11,12 @@ metadata:
 
 # ADR-009: Sandboxed live preview & gated merge
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-09-05
-- **Deciders:** CTO (drafted, scheduled run), Chief Designer, CRO — awaiting Owner
-- **Owner-gated:** yes (proposed) — see the security note; do NOT build work-015/016
-  until the Owner signs off.
+- **Deciders:** CTO (drafted, scheduled run), Chief Designer, CRO, **Owner (approved
+  2026-09-05)**
+- **Owner-gated:** yes — **approved**. The Owner accepted the agent live-write-access
+  capability in this gated context; work-015/016 are unblocked.
 
 ## Context
 The chatbot proposes edits to an app's code. Those edits must (1) render **live** in

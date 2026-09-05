@@ -13,9 +13,9 @@ Second clause of [[work-001]]'s split: **edits render in-place in a preview.** A
 chatbot-proposed edit in an **isolated git worktree** (never the running checkout),
 build/serve it, and show the diff + a state-preserving preview ([[adr-009]]).
 
-**GATED:** this is the first ticket granting an agent live write access to app code —
-do NOT start until the Owner accepts [[adr-009]]. CRO: verify the worktree can't reach
-the live app or other apps before trusting isolation.
+**Owner-approved (2026-09-05):** [[adr-009]] is accepted — the agent live-write-access
+capability is authorized in this gated context. Ready to build. CRO: still verify the
+worktree can't reach the live app or other apps before trusting isolation.
 
 **Acceptance:** a proposed edit renders in an isolated preview without disturbing the
 running app; the diff is visible in chat. See [[adr-009]].
