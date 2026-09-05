@@ -2,10 +2,11 @@
 id: work-013
 title: Chatbot extension — portable shell (installable)
 type: feature
-status: proposed
+status: active
 priority: high
 owner: chief-designer
 spec: prd-chatbot-extension
+branch: work-013-chatbot-shell
 created: 2026-09-05
 updated: 2026-09-05
 ---
