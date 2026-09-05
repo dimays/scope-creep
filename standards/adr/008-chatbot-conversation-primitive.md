@@ -3,7 +3,7 @@ name: adr-008
 description: A shared conversation primitive (threads/messages/roles + an agent-turn runtime) backing both Work Requests v2 and the chatbot extension.
 metadata:
   type: reference
-  status: proposed
+  status: active
   version: 1.0.0
   owner_agent: cto
   last_verified: 2026-09-05
@@ -11,10 +11,11 @@ metadata:
 
 # ADR-008: A shared conversation primitive
 
-- **Status:** proposed
+- **Status:** accepted
 - **Date:** 2026-09-05
-- **Deciders:** CTO (drafted, scheduled run), CPO — awaiting Owner
-- **Owner-gated:** yes (proposed)
+- **Deciders:** CTO (drafted, scheduled run), CPO, Owner (authorized building work-014)
+- **Owner-gated:** yes — accepted (the Owner directed building work-014, which
+  implements this). Work Requests v2 migration onto the primitive is deferred.
 
 ## Context
 Two features need an in-app agent conversation: **Work Requests v2** (live chat over
