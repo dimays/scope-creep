@@ -43,8 +43,10 @@ destroyed freely; the core stays tiny.
 
 Immutable core C-suite: **Chief of Staff** (orchestration + org ratification),
 **Chief Designer** (design systems + delight), **CTO** (architecture + technical
-standards), **Chief Knowledge Manager** (docs, registries, discovery). Executives
-staff employee/app-bound agents as needed; the CoS ratifies ([[adr-002]]).
+standards), **Chief Knowledge Manager** (docs, registries, discovery), **Chief
+Product Officer** (product vision, requirements, project management, feedback loop
+— [[adr-004]]). Executives staff employee/app-bound agents as needed; the CoS
+ratifies ([[adr-002]]).
 
 ## The blessed stack `active`
 

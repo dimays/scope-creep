@@ -51,7 +51,8 @@ definition is a Charter-level change, not a casual edit.
 
 - **The Owner** — the single human. The source of all authority.
 - **C-suite / core agents** — the immutable-except-by-upgrade orchestrating agents:
-  Chief of Staff, Chief Designer, CTO, Chief Knowledge Manager.
+  Chief of Staff, Chief Designer, CTO, Chief Knowledge Manager, Chief Product
+  Officer.
 - **Employee agent** — an agent spun up by a C-suite executive for a scoped need;
   its creation is ratified by the Chief of Staff.
 - **The App Contract** — the six lifecycle targets every app exposes, regardless
