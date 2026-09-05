@@ -8,3 +8,6 @@ build/
 *.sqlite
 *.sqlite-*
 .claude/settings.local.json
+
+# Human-Input Log — local-only (Owner's choice, ADR-010): never pushed to the public repo.
+human-input/

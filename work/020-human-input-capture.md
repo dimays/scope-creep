@@ -2,10 +2,11 @@
 id: work-020
 title: Human-Input Log — v1b (terminal capture hook)
 type: feature
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-human-input-log
+branch: work-020-input-capture
 created: 2026-09-05
 updated: 2026-09-05
 ---
