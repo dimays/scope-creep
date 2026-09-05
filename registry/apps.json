@@ -2,5 +2,15 @@
   "_generated": false,
   "_note": "Bootstrap seed. Apps register here via the new-app loop, step 6.",
   "schema_version": "1.0.0",
-  "apps": []
+  "apps": [
+    {
+      "name": "scope-creep-console",
+      "kind": "app",
+      "status": "active",
+      "stack": "golden-path",
+      "repo": "pending-remote",
+      "manifest": "../scope-creep-console/MANIFEST.yaml",
+      "registered": "2026-09-04"
+    }
+  ]
 }
