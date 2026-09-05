@@ -2,10 +2,12 @@
 id: work-028
 title: Ratify (or roll back) the RR8 + Vite 8 major bump as a gated core-upgrade
 type: chore
-status: proposed
+status: done
 priority: medium
 owner: cto
 spec: golden-path
+branch: work-028-ratify
+pr: https://github.com/dimays/scope-creep/pull/6
 created: 2026-09-05
 updated: 2026-09-05
 ---
@@ -24,3 +26,8 @@ ADR-001 breach that slipped because nothing enforces it.
 
 **Acceptance:** ADR-001/`golden-path` match the installed framework, versions are pinned,
 and a ledger entry records the decision. See [[golden-path]], [[ledger-027-level-set-round]].
+
+**Done (2026-09-05):** Owner chose **ratify**. ADR-001 amendment (4) + `golden-path`
+updated to RR8/Vite8; Console pinned to react-router/@react-router/* 8.3.1 + vite 8.2.2
+(dimays/scope-creep-console#19); Playwright deferred (test gate = tsc + Biome + Vitest).
+Recorded in [[ledger-029-rr8-core-upgrade]].

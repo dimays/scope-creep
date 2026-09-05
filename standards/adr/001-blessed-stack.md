@@ -1,12 +1,12 @@
 ---
 name: adr-001
-description: The blessed default stack is end-to-end TypeScript (React Router 7, Drizzle/SQLite, Bun+Node, Vitest, Biome, Fly.io).
+description: The blessed default stack is end-to-end TypeScript (React Router 8, Drizzle/SQLite, Bun+Node, Vitest, Biome, Fly.io).
 metadata:
   type: reference
   status: active
   version: 1.0.0
   owner_agent: cto
-  last_verified: 2026-09-04
+  last_verified: 2026-09-05
 ---
 
 # ADR-001: The Blessed Stack is End-to-End TypeScript
@@ -41,7 +41,11 @@ Full stack table and the three binding CoS amendments live in [[golden-path]].
   React design-system + chatbot extension stay same-language; huge coherent corpus.
 - **Amendments (binding):** (1) design system is a semver-pinned `@scope-creep/design`
   package, not shadcn copy-in; (2) the embeddable widget uses Shadow DOM + host CSS
-  variables; (3) the `test` gate also runs under Node LTS in CI.
+  variables; (3) the `test` gate also runs under Node LTS in CI; (4) the full-app
+  framework is **React Router 8 on Vite 8** (bumped from RR7/Vite7), **pinned to exact
+  versions**, ratified as a gated core-upgrade on 2026-09-05 ([[work-028]],
+  [[ledger-029-rr8-core-upgrade]]); **Playwright is deferred** — the `test` gate is
+  `tsc` + Biome + Vitest until an end-to-end need is identified.
 - **Risks accepted (and mitigations):** RR7 less-trodden than Next.js → pin versions,
   core-owned template, gated framework upgrades. TS config footguns → one core-owned
   base `tsconfig`/Biome config, apps extend never author. SQLite outgrows a file →
