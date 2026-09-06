@@ -1,0 +1,63 @@
+{
+  "_generated": true,
+  "_source": "scripts/registry-build.ts — run `bun run registry:build`",
+  "schema_version": "1.0.0",
+  "loops": [
+    {
+      "name": "core-upgrade",
+      "kind": "loop",
+      "status": "active",
+      "description": "The only way the immutable control-plane core changes — ADR, tests, canary, Owner approval, version bump, Ledger.",
+      "owner_agent": "cto",
+      "path": "loops/core-upgrade.md"
+    },
+    {
+      "name": "decision",
+      "kind": "loop",
+      "status": "active",
+      "description": "The load-bearing-decision loop — identify type → convene the required hats per decision-rights → CRO verifies → CoS ratifies → record → Owner-gate where required. Makes \"the right people in the room\" mechanical.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/decision.md"
+    },
+    {
+      "name": "heal",
+      "kind": "loop",
+      "status": "active",
+      "description": "Self-heal loop — recurse on a failing check until it passes or the budget is exhausted, then escalate to the Owner.",
+      "owner_agent": "cto",
+      "path": "loops/heal.md"
+    },
+    {
+      "name": "level-set",
+      "kind": "loop",
+      "status": "active",
+      "description": "The recurring paydown-and-reflection loop — the C-suite (or a scoped subset) each assesses its domain read-only, the CoS synthesizes a ranked plan spanning tech debt AND organizational lessons, and the Owner picks the track. Cadence-triggered; feeds the ticket-cycle.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/level-set.md"
+    },
+    {
+      "name": "new-app",
+      "kind": "loop",
+      "status": "active",
+      "description": "The loop that manufactures a new app on the Golden Path, one repo, contract-conformant, with a green test gate.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/new-app.md"
+    },
+    {
+      "name": "request-intake",
+      "kind": "loop",
+      "status": "active",
+      "description": "The Owner's request-intake loop — submit → triage → decide → respond. Feeds ticket-cycle.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/request-intake.md"
+    },
+    {
+      "name": "ticket-cycle",
+      "kind": "loop",
+      "status": "active",
+      "description": "The operating loop — a retro-driven, governed, terminating ticket flow. How Scope Creep works turn to turn.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/ticket-cycle.md"
+    }
+  ]
+}

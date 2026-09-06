@@ -2,6 +2,7 @@
 /**
  * The registry harvester. The sole writer of registry/*.json:
  *   - agents.json      generated from agents/*.md manifests (in-repo).
+ *   - loops.json       generated from loops/*.md manifests (in-repo).
  *   - apps.json        reconciled from registration records; each app's referenced
  *                      manifest is validated to exist.
  *   - extensions.json  reconciled the same way.
@@ -18,7 +19,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = "scripts/registry-build.ts — run `bun run registry:build`";
 
-type Frontmatter = { name?: string; description?: string; status?: string };
+type Frontmatter = { name?: string; description?: string; status?: string; owner_agent?: string };
 
 function parseFrontmatter(src: string): Frontmatter {
   const fm: Frontmatter = {};
@@ -34,6 +35,7 @@ function parseFrontmatter(src: string): Frontmatter {
     const indented = /^\s{2,}([a-z_]+):\s*(.*)$/.exec(line);
     if (inMeta && indented) {
       if (indented[1] === "status") fm.status = indented[2].trim();
+      else if (indented[1] === "owner_agent") fm.owner_agent = indented[2].trim();
       continue;
     }
     const top = /^([a-z_]+):\s*(.*)$/.exec(line);
@@ -65,6 +67,24 @@ async function buildAgents() {
   );
 }
 
+async function buildLoops() {
+  const dir = join(ROOT, "loops");
+  const files = (await readdir(dir)).filter((f) => f.endsWith(".md") && f !== "README.md").sort();
+  return Promise.all(
+    files.map(async (file) => {
+      const fm = parseFrontmatter(await readFile(join(dir, file), "utf8"));
+      return {
+        name: fm.name ?? file.replace(/\.md$/, ""),
+        kind: "loop",
+        status: fm.status ?? "unknown",
+        description: fm.description ?? "",
+        owner_agent: fm.owner_agent ?? "",
+        path: `loops/${file}`,
+      };
+    }),
+  );
+}
+
 async function reconcile(file: string, key: string): Promise<Array<Record<string, unknown>>> {
   const path = join(ROOT, "registry", file);
   const current = JSON.parse(await readFile(path, "utf8")) as Record<string, unknown>;
@@ -86,10 +106,14 @@ async function write(file: string, key: string, values: unknown[]) {
 async function main() {
   const agents = await buildAgents();
   await write("agents.json", "agents", agents);
+  const loops = await buildLoops();
+  await write("loops.json", "loops", loops);
   await write("apps.json", "apps", await reconcile("apps.json", "apps"));
   await write("extensions.json", "extensions", await reconcile("extensions.json", "extensions"));
 
-  console.log(`registry:build — ${agents.length} agents generated; apps/extensions reconciled.`);
+  console.log(
+    `registry:build — ${agents.length} agents, ${loops.length} loops generated; apps/extensions reconciled.`,
+  );
   if (warnings.length > 0) {
     console.warn(`\n${warnings.length} warning(s):`);
     for (const w of warnings) console.warn(`  - ${w}`);
