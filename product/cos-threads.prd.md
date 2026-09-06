@@ -116,8 +116,11 @@ primitive** ([[work-014]], [[adr-008]]): a thread is a `conversation`; its items
   with linked followups; generated feature requests as first-class cards linking to their
   created tickets/PRDs.
 - **Phase 5 — live in-app conversation.** Replies come from the in-app agent runtime in
-  real time (not async operator triage), riding the [[work-017]] runtime + Grants. **Not
-  ticketed today** — folds into the flagship when it lands.
+  real time (not async operator triage). **Partially pulled forward (2026-09-06):** the
+  Owner prioritized real-time replies, so the *transport* + working-indicator shipped early
+  as [[work-040]] under [[adr-013]] (streaming over the response body, decoupled from the
+  preview/edit runtime). The deeper live multi-agent conversation still rides the [[work-017]]
+  flagship runtime + Grants when it lands.
 
 ## Out of scope (not today)
 - A dedicated real-time multi-agent chat runtime (Phase 5 rides the flagship).
