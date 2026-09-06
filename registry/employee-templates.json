@@ -4,10 +4,26 @@
   "schema_version": "1.0.0",
   "templates": [
     {
+      "name": "auditor",
+      "kind": "template",
+      "status": "active",
+      "description": "Traces a load-bearing claim, record, or gate to its evidence — audits the ledger, registries, and standards for drift and unrecorded gated actions, and reports verified / inferred / unsupported without running the artifact itself.",
+      "owner_agent": "chief-reality-officer",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "auditing",
+        "source-verification",
+        "record-reconciliation",
+        "risk-analysis"
+      ],
+      "path": "agents/templates/auditor.md"
+    },
+    {
       "name": "backend-engineer",
       "kind": "template",
       "status": "active",
       "description": "Builds server-side logic, data models, and integrations on the Golden Path stack — loaders/actions, Drizzle schema, and the App-Contract runtime — behind the gates.",
+      "owner_agent": "cto",
       "default_model": "claude-sonnet-5",
       "skills": [
         "typescript",
@@ -19,10 +35,27 @@
       "path": "agents/templates/backend-engineer.md"
     },
     {
+      "name": "design-systems-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Builds and maintains the shared design substrate — tokens, primitives, and the embeddable-widget pattern in @scope-creep/design — so every surface inherits one system centrally instead of copying decisions in, behind the gates.",
+      "owner_agent": "chief-designer",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "typescript",
+        "design-tokens",
+        "css",
+        "component-architecture",
+        "accessibility"
+      ],
+      "path": "agents/templates/design-systems-engineer.md"
+    },
+    {
       "name": "frontend-engineer",
       "kind": "template",
       "status": "active",
       "description": "Builds and refines user-facing surfaces on the Golden Path stack — routes, components, and design-token adoption — behind the App Contract and the gates.",
+      "owner_agent": "chief-designer",
       "default_model": "claude-sonnet-5",
       "skills": [
         "react-router",
@@ -34,10 +67,106 @@
       "path": "agents/templates/frontend-engineer.md"
     },
     {
+      "name": "integration-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Wires apps to the outside world on the Golden Path — third-party APIs, MCP/connectors, webhooks, and data plumbing — with typed boundaries, resilient failure handling, and no secret leakage, behind the gates.",
+      "owner_agent": "cto",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "typescript",
+        "api-integration",
+        "mcp",
+        "webhooks",
+        "data-modeling"
+      ],
+      "path": "agents/templates/integration-engineer.md"
+    },
+    {
+      "name": "knowledge-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Keeps discovery deterministic and generated — manifests, the harvested registries, wikilink integrity, and the doc-lint/registry tooling — so the index can never lie and nothing has to be hunted for.",
+      "owner_agent": "chief-knowledge-manager",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "typescript",
+        "information-architecture",
+        "doc-standards",
+        "registry-tooling",
+        "linting"
+      ],
+      "path": "agents/templates/knowledge-engineer.md"
+    },
+    {
+      "name": "platform-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Owns the App-Contract runtime and the delivery plumbing — CI gates, environments/secrets isolation, the six lifecycle targets, and healthchecks — so apps ship green and reversibly behind the gates.",
+      "owner_agent": "cto",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "typescript",
+        "ci-cd",
+        "app-contract",
+        "environments",
+        "observability"
+      ],
+      "path": "agents/templates/platform-engineer.md"
+    },
+    {
+      "name": "product-analyst",
+      "kind": "template",
+      "status": "active",
+      "description": "Turns usage, feedback, and outcomes into product signal — metrics, agent-eval design, and prioritization evidence — so roadmap calls rest on measured reality, not vibes.",
+      "owner_agent": "chief-product-officer",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "product-analytics",
+        "agent-evals",
+        "metrics",
+        "synthesis",
+        "sql"
+      ],
+      "path": "agents/templates/product-analyst.md"
+    },
+    {
+      "name": "product-designer",
+      "kind": "template",
+      "status": "active",
+      "description": "Turns a product need into interaction and visual design — flows, wireframes, states, and the delight pass — as reviewable design artifacts a Frontend Engineer can build against, ahead of code.",
+      "owner_agent": "chief-designer",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "interaction-design",
+        "wireframing",
+        "ux-writing",
+        "prototyping",
+        "accessibility"
+      ],
+      "path": "agents/templates/product-designer.md"
+    },
+    {
+      "name": "program-coordinator",
+      "kind": "template",
+      "status": "active",
+      "description": "The Chief of Staff's routine-ops hands — ledger hygiene, staffing bookkeeping, cross-loop status tracking, and cadence reminders. High-volume, low-risk coordination work; the fast-tier exemplar of the model-preset policy.",
+      "owner_agent": "chief-of-staff",
+      "default_model": "claude-haiku-4-5-20251001",
+      "skills": [
+        "coordination",
+        "record-keeping",
+        "status-tracking",
+        "scheduling"
+      ],
+      "path": "agents/templates/program-coordinator.md"
+    },
+    {
       "name": "qa-verifier",
       "kind": "template",
       "status": "active",
       "description": "Turns \"done/works\" into observed fact with an attached proving artifact — runs the thing, records PASS/FAIL/INCONCLUSIVE, and distinguishes couldn't-verify from failed.",
+      "owner_agent": "chief-reality-officer",
       "default_model": "claude-sonnet-5",
       "skills": [
         "testing",
@@ -52,6 +181,7 @@
       "kind": "template",
       "status": "active",
       "description": "Gathers, verifies, and synthesizes current first-party evidence to ground a decision — produces a cited findings artifact, never an unchecked assertion.",
+      "owner_agent": "chief-product-officer",
       "default_model": "claude-sonnet-5",
       "skills": [
         "research",
@@ -66,6 +196,7 @@
       "kind": "template",
       "status": "active",
       "description": "Turns shipped work into discoverable, accurate docs — READMEs, user guides, PRD/ADR prose, and manifests — keeping the knowledge graph fresh and its wikilinks resolving.",
+      "owner_agent": "chief-knowledge-manager",
       "default_model": "claude-sonnet-5",
       "skills": [
         "technical-writing",

@@ -54,14 +54,14 @@
     },
     {
       "name": "git-manager",
-      "kind": "core",
+      "kind": "function",
       "status": "active",
       "description": "The version-control operator — runs branch/PR lifecycle and lands approved work, executing merges on Scope-Creep repos once the Owner has approved. Owns merge hygiene (stacked order, retargeting, cleanup). Never deploys, spends, publishes, or waives a red gate.",
       "path": "agents/git-manager.md"
     },
     {
       "name": "qa-tester",
-      "kind": "core",
+      "kind": "function",
       "status": "active",
       "description": "The hands-on empirical verifier — runs the thing and produces the proving artifact (real test output, a driven app, a validated spike) before a \"done/works\" claim is accepted. Pairs with the Chief Reality Officer.",
       "path": "agents/qa-tester.md"
