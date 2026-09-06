@@ -2,12 +2,12 @@
 id: work-018
 title: Model selection (user- and agent-pickable)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-product-officer
 spec: prd-chatbot-extension
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-06
 ---
 Make the model a choice, not a hardcode. Two axes:
 - **Owner-pickable:** a model picker in the Console (chat / settings), persisted, that
