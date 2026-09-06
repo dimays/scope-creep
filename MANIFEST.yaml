@@ -14,10 +14,13 @@ charter:
   prd: charter/PRD.md
   glossary: charter/GLOSSARY.md
 core_agents:
+  - ceo
   - chief-of-staff
   - cto
   - chief-designer
   - chief-knowledge-manager
+  - chief-product-officer
+  - chief-reality-officer
 loops:
   - new-app
   - heal
