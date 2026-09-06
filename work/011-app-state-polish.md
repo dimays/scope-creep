@@ -2,12 +2,12 @@
 id: work-011
 title: App state clarity & polish (loading / in-progress / interrupted)
 type: feature
-status: proposed
+status: done
 priority: high
 owner: chief-designer
 spec: prd-console-explore
 created: 2026-09-04
-updated: 2026-09-04
+updated: 2026-09-06
 ---
 The Owner should always know the state: submitted vs. waiting on the backend, an
 agent (or set of agents) in progress, or **blocked** (e.g. token-limit reached).
