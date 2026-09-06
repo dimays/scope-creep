@@ -2,7 +2,7 @@
 id: work-047
 title: Threads transcript projection from local Claude session data (no Claude calls)
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads

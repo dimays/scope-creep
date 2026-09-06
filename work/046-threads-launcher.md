@@ -2,7 +2,7 @@
 id: work-046
 title: Threads launcher — submit opens a seeded Claude conversation; resume reopens it
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads
