@@ -7,6 +7,7 @@ priority: low
 owner: chief-of-staff
 spec: tech-sops
 branch: work-035-resource-budget
+pr: https://github.com/dimays/scope-creep/pull/17
 created: 2026-09-05
 updated: 2026-09-06
 ---
