@@ -3,12 +3,14 @@
  * Doc-integrity linter (doc-standards §8). Fails (exit 1) on:
  *   - a dangling wiki-link — `[[target]]` that resolves to no manifest `name` or work `id`;
  *   - a manifest missing a required field (name / description / metadata.type);
- *   - a hand-seeded registry (`_generated: false`) or an agents registry out of sync
- *     with the agents/ manifests.
+ *   - a hand-seeded registry (`_generated: false`) or an agents/loops registry out of
+ *     sync with the agents/ or loops/ manifests;
+ *   - an `owner_agent` (in agents/ or loops/) that doesn't resolve to a real agent
+ *     (or the `human-owner` sentinel) — every "owned-by" cross-link must be trustworthy.
  * Warns (does not fail) on a stale `last_verified`. Run: `bun run docs:lint` (also in CI).
  *
  * Registry *content* drift is covered by `registry:check` (full rebuild + diff), which
- * runs alongside this in CI; here we only guard the generated flag + the agents set.
+ * runs alongside this in CI; here we only guard the generated flag + the agents/loops sets.
  */
 import { readdir, readFile } from "node:fs/promises";
 import { basename, dirname, join, relative } from "node:path";
@@ -72,6 +74,8 @@ async function allMarkdown(dir: string): Promise<string[]> {
   return out;
 }
 
+const OWNER_SENTINEL = "human-owner";
+
 const errors: string[] = [];
 const warnings: string[] = [];
 const now = Date.now();
@@ -85,6 +89,14 @@ for (const file of mdFiles) {
   if (top.name) validTargets.add(top.name);
   if (top.id) validTargets.add(top.id);
 }
+
+// The set of real agents (by manifest filename — the convention agents.json's own
+// symmetry check below relies on). Used to validate every `owner_agent`.
+const agentNames = new Set(
+  (await readdir(join(ROOT, "agents")))
+    .filter((f) => f.endsWith(".md") && f !== "README.md")
+    .map((f) => f.replace(/\.md$/, "")),
+);
 
 // Pass 2 — per-file checks.
 for (const file of mdFiles) {
@@ -117,10 +129,19 @@ for (const file of mdFiles) {
       }
     }
   }
+
+  // owner_agent must resolve to a real agent (or the human-owner sentinel) — scoped to
+  // agents/ and loops/, the two dirs whose owner_agent is a load-bearing cross-link.
+  if (dir === "agents" || dir === "loops") {
+    const owner = meta.owner_agent;
+    if (owner && owner !== OWNER_SENTINEL && !agentNames.has(owner)) {
+      errors.push(`${rel}: owner_agent '${owner}' does not resolve to a real agent (or '${OWNER_SENTINEL}')`);
+    }
+  }
 }
 
 // Pass 3 — registry integrity.
-for (const file of ["agents.json", "apps.json", "extensions.json"]) {
+for (const file of ["agents.json", "loops.json", "apps.json", "extensions.json"]) {
   let json: { _generated?: boolean; agents?: Array<{ name: string }> };
   try {
     json = JSON.parse(await readFile(join(ROOT, "registry", file), "utf8"));
@@ -150,6 +171,25 @@ try {
   }
 } catch {
   // agents.json failure already reported above.
+}
+try {
+  const loopsJson = JSON.parse(await readFile(join(ROOT, "registry", "loops.json"), "utf8"));
+  const inRegistry = new Set((loopsJson.loops ?? []).map((l: { name: string }) => l.name));
+  const onDisk = new Set(
+    (await readdir(join(ROOT, "loops")))
+      .filter((f) => f.endsWith(".md") && f !== "README.md")
+      .map((f) => f.replace(/\.md$/, "")),
+  );
+  for (const name of onDisk) {
+    if (!inRegistry.has(name)) errors.push(`registry/loops.json: missing loop '${name}' — run registry:build`);
+  }
+  for (const name of inRegistry) {
+    if (!onDisk.has(name as string)) {
+      errors.push(`registry/loops.json: lists '${name}' with no loops/${name}.md`);
+    }
+  }
+} catch {
+  // loops.json failure already reported above.
 }
 
 for (const w of warnings) console.warn(`  warn: ${w}`);

@@ -6,14 +6,14 @@ metadata:
   status: active
   version: 1.0.0
   owner_agent: chief-knowledge-manager
-  last_verified: 2026-09-04
+  last_verified: 2026-09-06
 ---
 
 # Registry
 
-The discovery primitive. `agents.json`, `apps.json`, and `extensions.json` are
-**generated** by the harvester ([[doc-standards]] §2). **Do not hand-edit the
-JSON** — regenerate it:
+The discovery primitive. `agents.json`, `loops.json`, `apps.json`, and
+`extensions.json` are **generated** by the harvester ([[doc-standards]] §2). **Do
+not hand-edit the JSON** — regenerate it:
 
 ```bash
 bun run registry:build   # scripts/registry-build.ts → registry/*.json
@@ -21,6 +21,9 @@ bun run registry:check   # build + `git diff --exit-code` (CI gate)
 ```
 
 - **agents.json** is generated from the `agents/*.md` manifests.
+- **loops.json** is generated from the `loops/*.md` manifests (`{name, kind:"loop",
+  status, description, owner_agent, path}`); `docs:lint` checks it stays symmetric
+  with `loops/` and that every `owner_agent` resolves to a real agent.
 - **apps.json** / **extensions.json** are reconciled from their registration
   records (written by the `new-app` / extension loops); the harvester validates
   each referenced manifest exists and re-emits deterministically.
