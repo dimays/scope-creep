@@ -5,6 +5,7 @@ type: feature
 status: proposed
 priority: medium
 owner: chief-product-officer
+assignees: rae
 spec: prd-cos-threads
 created: 2026-09-05
 updated: 2026-09-06

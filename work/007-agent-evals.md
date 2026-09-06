@@ -5,6 +5,7 @@ type: feature
 status: proposed
 priority: low
 owner: chief-product-officer
+assignees: rae
 spec: prd-console-explore
 created: 2026-09-04
 updated: 2026-09-06

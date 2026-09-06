@@ -5,6 +5,7 @@ type: feature
 status: proposed
 priority: high
 owner: cto
+assignees: linus, vera
 spec: prd-cos-threads
 created: 2026-09-06
 updated: 2026-09-06

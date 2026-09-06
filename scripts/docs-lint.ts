@@ -25,6 +25,8 @@ const MANIFEST_DIRS = [
   "product",
   "loops",
   "agents",
+  "agents/employees",
+  "agents/templates",
   "ledger",
   "environments",
 ];
@@ -131,8 +133,9 @@ for (const file of mdFiles) {
   }
 
   // owner_agent must resolve to a real agent (or the human-owner sentinel) — scoped to
-  // agents/ and loops/, the two dirs whose owner_agent is a load-bearing cross-link.
-  if (dir === "agents" || dir === "loops") {
+  // agents/ (incl. employees/templates) and loops/, whose owner_agent is a load-bearing
+  // cross-link.
+  if (dir === "agents" || dir === "agents/employees" || dir === "agents/templates" || dir === "loops") {
     const owner = meta.owner_agent;
     if (owner && owner !== OWNER_SENTINEL && !agentNames.has(owner)) {
       errors.push(`${rel}: owner_agent '${owner}' does not resolve to a real agent (or '${OWNER_SENTINEL}')`);
@@ -141,7 +144,13 @@ for (const file of mdFiles) {
 }
 
 // Pass 3 — registry integrity.
-for (const file of ["agents.json", "loops.json", "apps.json", "extensions.json"]) {
+for (const file of [
+  "agents.json",
+  "employee-templates.json",
+  "loops.json",
+  "apps.json",
+  "extensions.json",
+]) {
   let json: { _generated?: boolean; agents?: Array<{ name: string }> };
   try {
     json = JSON.parse(await readFile(join(ROOT, "registry", file), "utf8"));
@@ -156,17 +165,19 @@ for (const file of ["agents.json", "loops.json", "apps.json", "extensions.json"]
 try {
   const agentsJson = JSON.parse(await readFile(join(ROOT, "registry", "agents.json"), "utf8"));
   const inRegistry = new Set((agentsJson.agents ?? []).map((a: { name: string }) => a.name));
-  const onDisk = new Set(
-    (await readdir(join(ROOT, "agents")))
-      .filter((f) => f.endsWith(".md") && f !== "README.md")
-      .map((f) => f.replace(/\.md$/, "")),
-  );
+  // Core/functional agents live flat in agents/; employees in agents/employees/.
+  const onDisk = new Set<string>();
+  for (const rel of ["agents", "agents/employees"]) {
+    for (const f of await readdir(join(ROOT, rel))) {
+      if (f.endsWith(".md") && f !== "README.md") onDisk.add(f.replace(/\.md$/, ""));
+    }
+  }
   for (const name of onDisk) {
     if (!inRegistry.has(name)) errors.push(`registry/agents.json: missing agent '${name}' — run registry:build`);
   }
   for (const name of inRegistry) {
     if (!onDisk.has(name as string)) {
-      errors.push(`registry/agents.json: lists '${name}' with no agents/${name}.md`);
+      errors.push(`registry/agents.json: lists '${name}' with no manifest under agents/ or agents/employees/`);
     }
   }
 } catch {

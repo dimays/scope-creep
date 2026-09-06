@@ -32,6 +32,25 @@ function parseFlatFrontmatter(src: string): Record<string, string> {
 
 const errors: string[] = [];
 
+// Known agent slugs (core/functional + employees) — used to validate `assignees`.
+async function knownAgents(): Promise<Set<string>> {
+  const names = new Set<string>();
+  for (const rel of ["agents", "agents/employees"]) {
+    const dir = join(ROOT, rel);
+    let entries: string[];
+    try {
+      entries = await readdir(dir);
+    } catch {
+      continue;
+    }
+    for (const f of entries) {
+      if (f.endsWith(".md") && f !== "README.md") names.add(f.replace(/\.md$/, ""));
+    }
+  }
+  return names;
+}
+const agents = await knownAgents();
+
 const files = (await readdir(WORK))
   .filter((f) => f.endsWith(".md") && f !== "README.md")
   .sort();
@@ -44,6 +63,15 @@ for (const file of files) {
   for (const [key, allowed] of Object.entries(ENUMS)) {
     if (fm[key] && !allowed.includes(fm[key])) {
       errors.push(`${file}: '${key}' is '${fm[key]}', expected one of ${allowed.join(", ")}`);
+    }
+  }
+  // `assignees` is optional (comma-separated employee/agent slugs); when present,
+  // every slug must resolve to a known agent so staffing never dangles.
+  if (fm.assignees) {
+    for (const slug of fm.assignees.split(",").map((s) => s.trim()).filter(Boolean)) {
+      if (!agents.has(slug)) {
+        errors.push(`${file}: assignee '${slug}' is not a known agent (agents/ or agents/employees/)`);
+      }
     }
   }
 }

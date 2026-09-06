@@ -5,6 +5,7 @@ type: feature
 status: proposed
 priority: medium
 owner: chief-designer
+assignees: ada
 spec: prd-cos-threads
 created: 2026-09-06
 updated: 2026-09-06

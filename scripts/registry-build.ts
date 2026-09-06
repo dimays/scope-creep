@@ -1,7 +1,9 @@
 #!/usr/bin/env bun
 /**
  * The registry harvester. The sole writer of registry/*.json:
- *   - agents.json      generated from agents/*.md manifests (in-repo).
+ *   - agents.json      generated from agents/*.md, agents/employees/*.md manifests
+ *                      (core + employee agents, in-repo).
+ *   - employee-templates.json  generated from agents/templates/*.md manifests.
  *   - loops.json       generated from loops/*.md manifests (in-repo).
  *   - apps.json        reconciled from registration records; each app's referenced
  *                      manifest is validated to exist.
@@ -19,7 +21,18 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SOURCE = "scripts/registry-build.ts — run `bun run registry:build`";
 
-type Frontmatter = { name?: string; description?: string; status?: string; owner_agent?: string };
+type Frontmatter = {
+  name?: string;
+  description?: string;
+  status?: string;
+  owner_agent?: string;
+  // Employee/template fields (top-level keys; optional):
+  kind?: string;
+  reports_to?: string;
+  template?: string;
+  default_model?: string;
+  skills?: string;
+};
 
 function parseFrontmatter(src: string): Frontmatter {
   const fm: Frontmatter = {};
@@ -43,28 +56,91 @@ function parseFrontmatter(src: string): Frontmatter {
       inMeta = false;
       if (top[1] === "name") fm.name = top[2].trim();
       else if (top[1] === "description") fm.description = top[2].trim();
+      else if (top[1] === "kind") fm.kind = top[2].trim();
+      else if (top[1] === "reports_to") fm.reports_to = top[2].trim();
+      else if (top[1] === "template") fm.template = top[2].trim();
+      else if (top[1] === "default_model") fm.default_model = top[2].trim();
+      else if (top[1] === "skills") fm.skills = top[2].trim();
     }
   }
   return fm;
 }
 
+/** Split a comma-separated frontmatter list into a trimmed string[]. */
+function parseList(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 const warnings: string[] = [];
 
-async function buildAgents() {
-  const dir = join(ROOT, "agents");
-  const files = (await readdir(dir)).filter((f) => f.endsWith(".md")).sort();
+/** Read the .md manifests in a directory (non-recursive), skipping READMEs. */
+async function readManifests(relDir: string) {
+  const dir = join(ROOT, relDir);
+  if (!existsSync(dir)) return [];
+  const files = (await readdir(dir))
+    .filter((f) => f.endsWith(".md") && f !== "README.md")
+    .sort();
   return Promise.all(
-    files.map(async (file) => {
-      const fm = parseFrontmatter(await readFile(join(dir, file), "utf8"));
-      return {
-        name: fm.name ?? file.replace(/\.md$/, ""),
-        kind: "core",
-        status: fm.status ?? "unknown",
-        description: fm.description ?? "",
-        path: `agents/${file}`,
-      };
-    }),
+    files.map(async (file) => ({
+      file,
+      relPath: `${relDir}/${file}`,
+      fm: parseFrontmatter(await readFile(join(dir, file), "utf8")),
+    })),
   );
+}
+
+async function buildAgents() {
+  // Core/functional agents live flat in agents/; employees live in agents/employees/.
+  const core = await readManifests("agents");
+  const employees = await readManifests("agents/employees");
+  const out: Array<Record<string, unknown>> = [];
+  for (const { file, relPath, fm } of core) {
+    out.push({
+      name: fm.name ?? file.replace(/\.md$/, ""),
+      kind: fm.kind ?? "core",
+      status: fm.status ?? "unknown",
+      description: fm.description ?? "",
+      path: relPath,
+    });
+  }
+  for (const { file, relPath, fm } of employees) {
+    const name = fm.name ?? file.replace(/\.md$/, "");
+    out.push({
+      name,
+      kind: fm.kind ?? "employee",
+      status: fm.status ?? "unknown",
+      description: fm.description ?? "",
+      reports_to: fm.reports_to ?? "",
+      template: fm.template ?? "",
+      path: relPath,
+    });
+    if (!fm.reports_to) warnings.push(`agents.json: employee '${name}' has no reports_to`);
+    if (!fm.template) warnings.push(`agents.json: employee '${name}' has no template`);
+  }
+  // Deterministic order: by kind (core before employee), then name.
+  const rank: Record<string, number> = { core: 0, employee: 1 };
+  return out.sort(
+    (a, b) =>
+      (rank[a.kind as string] ?? 9) - (rank[b.kind as string] ?? 9) ||
+      String(a.name).localeCompare(String(b.name)),
+  );
+}
+
+async function buildTemplates() {
+  const templates = await readManifests("agents/templates");
+  return templates.map(({ file, relPath, fm }) => ({
+    name: fm.name ?? file.replace(/\.md$/, ""),
+    kind: "template",
+    status: fm.status ?? "unknown",
+    description: fm.description ?? "",
+    default_model: fm.default_model ?? "",
+    skills: parseList(fm.skills),
+    path: relPath,
+  }));
 }
 
 async function buildLoops() {
@@ -106,13 +182,15 @@ async function write(file: string, key: string, values: unknown[]) {
 async function main() {
   const agents = await buildAgents();
   await write("agents.json", "agents", agents);
+  const templates = await buildTemplates();
+  await write("employee-templates.json", "templates", templates);
   const loops = await buildLoops();
   await write("loops.json", "loops", loops);
   await write("apps.json", "apps", await reconcile("apps.json", "apps"));
   await write("extensions.json", "extensions", await reconcile("extensions.json", "extensions"));
 
   console.log(
-    `registry:build — ${agents.length} agents, ${loops.length} loops generated; apps/extensions reconciled.`,
+    `registry:build — ${agents.length} agents, ${templates.length} employee templates, ${loops.length} loops generated; apps/extensions reconciled.`,
   );
   if (warnings.length > 0) {
     console.warn(`\n${warnings.length} warning(s):`);
