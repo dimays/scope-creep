@@ -4,9 +4,9 @@ description: The locked lexicon of Scope Creep. Every agent uses these terms wit
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-knowledge-manager
-  last_verified: 2026-09-04
+  last_verified: 2026-09-06
 ---
 
 # GLOSSARY (locked lexicon)
@@ -50,19 +50,31 @@ definition is a Charter-level change, not a casual edit.
 ## Governance terms
 
 - **The Owner** — the single human. The source of all authority.
-- **C-suite / core agents** — the immutable-except-by-upgrade orchestrating agents:
-  Chief of Staff, Chief Designer, CTO, Chief Knowledge Manager, Chief Product
-  Officer, Chief Reality Officer.
-- **Employee agent** — an Agent (`kind: employee`) spun up by a C-suite executive for
-  a scoped need, **instantiated from an Employee template** and **reporting to** the
-  executive that created it; its creation is ratified by the Chief of Staff. It is
-  **staffed** to work by listing its slug in a work item's `assignees`. See
-  [[adr-017]].
-- **Employee template** — a reusable, off-the-shelf **role archetype** (`kind:
-  template`, e.g. Frontend Engineer, Researcher) an executive selects from to spin up
-  an Employee agent. It carries the role's operating manual and defaults; when none
-  fits, an executive may create or modify one (a gated change). Templates are agents'
-  *classes*; employee agents are their *instances*.
+- **The agent org — four tiers** ([[adr-020]]). Every agent is exactly one `kind`:
+  **Executives** (`kind: core`), **Standing function agents** (`kind: function`),
+  **Employees** (`kind: employee`), and **Templates** (`kind: template`). The tiers below
+  define each.
+- **Executive / C-suite / core agents** (`kind: core`) — the permanent, immutable-except-by-upgrade
+  leadership that holds *direction* and domains: the Owner-delegated **CEO** atop the agent
+  org ([[adr-018]]), plus the six C-suite — Chief of Staff, Chief Designer, CTO, Chief
+  Knowledge Manager, Chief Product Officer, Chief Reality Officer.
+- **Standing function agent** (`kind: function`) — a **permanent, cross-org function**
+  that holds *execution*, not a domain, and is **not** summoned per-ticket like an employee:
+  the **QA Tester** (proof-by-running) and the **Git Manager** (lands approved work). They
+  live in the core repo and change only by [[core-upgrade]], like the executives; `function`
+  names the role type, not a weaker governance class. See [[adr-020]].
+- **Employee agent** (`kind: employee`) — an **ephemeral/transitory** Agent spun up by an
+  executive for a scoped need, **instantiated from an Employee template** and **reporting
+  to** the executive that created it; its creation is ratified by the Chief of Staff. It is
+  **staffed** to work by listing its slug in a work item's `assignees`, and **retired**
+  (status → `retired` + a reason, never deleted) when the work is done — consistency lives in
+  the template, not in a long-lived worker. See [[adr-017]], [[adr-020]], and [[staffing]].
+- **Employee template** — a **stable-but-mutable**, off-the-shelf **role archetype** (`kind:
+  template`, e.g. Frontend Engineer, Researcher) an executive selects from to spin up an
+  Employee agent. It carries the role's operating manual, its `owner_agent` executive, and
+  defaults including a **model preset** ([[resource-budget]] tier); when none fits, an
+  executive may create or modify one (a gated change). Templates are agents' *classes*;
+  employee agents are their *instances*. See [[staffing]].
 - **The App Contract** — the six lifecycle targets every app exposes, regardless
   of stack.
 - **The Golden Path** — the blessed default stack. See [[golden-path]].

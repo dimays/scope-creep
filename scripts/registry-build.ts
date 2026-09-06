@@ -2,8 +2,12 @@
 /**
  * The registry harvester. The sole writer of registry/*.json:
  *   - agents.json      generated from agents/*.md, agents/employees/*.md manifests
- *                      (core + employee agents, in-repo).
- *   - employee-templates.json  generated from agents/templates/*.md manifests.
+ *                      (executive `core` agents, standing `function` agents, and
+ *                      `employee` agents — all in-repo; the `kind` distinguishes the
+ *                      tier, see [[adr-020]]).
+ *   - employee-templates.json  generated from agents/templates/*.md manifests
+ *                      (each carries the `owner_agent` executive it hangs under, so
+ *                      the org view can group templates per exec — [[adr-020]]).
  *   - loops.json       generated from loops/*.md manifests (in-repo).
  *   - apps.json        reconciled from registration records; each app's referenced
  *                      manifest is validated to exist.
@@ -99,6 +103,8 @@ async function buildAgents() {
   const employees = await readManifests("agents/employees");
   const out: Array<Record<string, unknown>> = [];
   for (const { file, relPath, fm } of core) {
+    // Flat agents/ holds two tiers: executives (`core`) and standing `function`
+    // agents (qa-tester, git-manager). The manifest's `kind` decides; default `core`.
     out.push({
       name: fm.name ?? file.replace(/\.md$/, ""),
       kind: fm.kind ?? "core",
@@ -121,8 +127,8 @@ async function buildAgents() {
     if (!fm.reports_to) warnings.push(`agents.json: employee '${name}' has no reports_to`);
     if (!fm.template) warnings.push(`agents.json: employee '${name}' has no template`);
   }
-  // Deterministic order: by kind (core before employee), then name.
-  const rank: Record<string, number> = { core: 0, employee: 1 };
+  // Deterministic order: executives, then standing functions, then employees; name-tiebroken.
+  const rank: Record<string, number> = { core: 0, function: 1, employee: 2 };
   return out.sort(
     (a, b) =>
       (rank[a.kind as string] ?? 9) - (rank[b.kind as string] ?? 9) ||
@@ -137,6 +143,9 @@ async function buildTemplates() {
     kind: "template",
     status: fm.status ?? "unknown",
     description: fm.description ?? "",
+    // The executive this template hangs under — lets the org view render the
+    // per-exec "types of employees I can summon" catalog ([[adr-020]]).
+    owner_agent: fm.owner_agent ?? "",
     default_model: fm.default_model ?? "",
     skills: parseList(fm.skills),
     path: relPath,

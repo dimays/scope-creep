@@ -52,6 +52,14 @@
       "path": "loops/request-intake.md"
     },
     {
+      "name": "staffing-review",
+      "kind": "loop",
+      "status": "active",
+      "description": "The recurring staffing-health loop — the Chief of Staff audits the employee roster, the template catalog, and the model presets on a cadence, retiring stale employees and truing up presets against the resource budget, then tickets any change through the gated path. The \"ongoing, automated\" staffing project.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/staffing-review.md"
+    },
+    {
       "name": "ticket-cycle",
       "kind": "loop",
       "status": "active",

@@ -21,7 +21,11 @@ core_agents:
   - chief-knowledge-manager
   - chief-product-officer
   - chief-reality-officer
+standing_functions:
+  - qa-tester
+  - git-manager
 loops:
   - new-app
   - heal
   - core-upgrade
+  - staffing-review
