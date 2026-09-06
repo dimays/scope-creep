@@ -44,6 +44,13 @@
       "status": "active",
       "description": "Owns architecture and technical standards; keeps the mutator small and stable while the periphery scales to infinity.",
       "path": "agents/cto.md"
+    },
+    {
+      "name": "qa-tester",
+      "kind": "core",
+      "status": "active",
+      "description": "The hands-on empirical verifier — runs the thing and produces the proving artifact (real test output, a driven app, a validated spike) before a \"done/works\" claim is accepted. Pairs with the Chief Reality Officer.",
+      "path": "agents/qa-tester.md"
     }
   ]
 }

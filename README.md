@@ -15,7 +15,7 @@ vendored here — so this base repo stays cleanly cloneable.
 | Path | What |
 |---|---|
 | `charter/` | The Charter: living [`PRD`](charter/PRD.md), locked [`INVARIANTS`](charter/INVARIANTS.md), [`GLOSSARY`](charter/GLOSSARY.md) |
-| `agents/` | The immutable core C-suite: Chief of Staff, CTO, Chief Designer, Chief Knowledge Manager, Chief Product Officer, Chief Reality Officer |
+| `agents/` | The core C-suite (Chief of Staff, CTO, Chief Designer, Chief Knowledge Manager, Chief Product Officer, Chief Reality Officer) + standing functional agents (QA Tester) |
 | `standards/` | [`golden-path`](standards/golden-path.md), [`app-contract`](standards/app-contract.md), [`tech-sops`](standards/tech-sops.md), [`doc-standards`](standards/doc-standards.md), [`engineering-policy`](standards/engineering-policy.md), and ADRs |
 | `loops/` | `ticket-cycle`, `request-intake`, `new-app`, `heal`, `core-upgrade` |
 | `product/` | Product requirement docs (`*.prd.md`) for the manufactured surfaces |

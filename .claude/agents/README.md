@@ -4,6 +4,10 @@ The six core C-suite agents are wired here as **Claude Agent SDK subagents** the
 harness can invoke by name: `chief-of-staff`, `cto`, `chief-designer`,
 `chief-knowledge-manager`, `chief-product-officer`, `chief-reality-officer`.
 
+Plus one standing **functional** agent (not a C-suite exec): `qa-tester` — the
+hands-on empirical verifier, Owner-authorized and CoS-ratified (ADR-002,
+[`ledger/034`](../../ledger/034-qa-tester.md)). Same thin-loader pattern.
+
 ## The loader pattern (single source of truth)
 
 These subagent files are deliberately **thin loaders**, not copies. Each carries
