@@ -3,18 +3,27 @@ name: prd-cos-threads
 description: CoS-Threads — a single chat interface with the Chief of Staff, organized into discrete threads the Owner can open, follow up, branch, and close. The primary human-input loop; subsumes the separate Chat and Requests surfaces.
 metadata:
   type: project
-  status: proposed
-  version: 0.1.0
+  status: accepted
+  version: 1.0.0
   owner_agent: chief-product-officer
-  last_verified: 2026-09-05
+  last_verified: 2026-09-06
 ---
 
 # PRD — CoS-Threads (the primary human-input loop)
 
 Owner-directed 2026-09-05 (feedback relayed via the CoS), drafted by the CPO, ratified
-as **proposed** by the Chief of Staff. Awaiting Owner acceptance; a reconciling ADR
-should precede the first ticket (see "Relationships" and the escalations in
-[[ledger-028-cos-threads-roadmap]]).
+as **proposed** by the Chief of Staff. **Accepted by the Owner 2026-09-06**; the
+reconciling [[adr-012]] was authored first (per the Owner's chosen sequencing) and the
+five gating decisions in [[ledger-028-cos-threads-roadmap]] are resolved in
+[[ledger-032-cos-threads-accepted]]. Phase 1 ([[work-029]]) is now **active**.
+
+## Owner decisions (accepted 2026-09-06)
+1. **Information architecture:** the unified **Threads** surface lives **top-level,
+   replacing the Chat tab** (Requests folds in) — not nested under Work. (Escalation #1.)
+2. **Process:** author the reconciling **[[adr-012]]** *before* the migration; build
+   behind a gated PR. (Escalation #4.)
+3. **Outcome boundary, CoS-initiated threads, and sequencing** (escalations #2/#3/#5)
+   resolved as the CPO/CoS recommended — see [[ledger-032-cos-threads-accepted]].
 
 ## The user problem
 Today the Console splits the Owner's two-way contact with the org across **two

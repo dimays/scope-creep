@@ -11,11 +11,11 @@ metadata:
 
 # PRD — Work History & Work Requests
 
-> **Superseded in part (2026-09-05):** the **Work Requests** half (and its v2 "live
-> chat" framing) is superseded by [[prd-cos-threads]] — Requests becomes a thread in the
-> unified CoS-Threads surface. **Work History** (glance-back) is independent and stands.
-> See [[ledger-028-cos-threads-roadmap]]. This takes effect when the Threads direction is
-> Owner-accepted.
+> **Superseded in part (Owner-accepted 2026-09-06):** the **Work Requests** half (and its
+> v2 "live chat" framing) is superseded by [[prd-cos-threads]] / [[adr-012]] — Requests
+> becomes a thread in the unified CoS-Threads surface. **Work History** (glance-back) is
+> independent and stands. See [[ledger-032-cos-threads-accepted]] (acceptance) and
+> [[ledger-028-cos-threads-roadmap]] (origin).
 
 Owner-proposed 2026-09-04 (mid-flight during work-006 — itself the motivating
 example: the request was *captured*, not dropped). Two additions to the **Work**
