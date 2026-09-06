@@ -2,7 +2,7 @@
 id: work-040
 title: Real-time streaming CoS replies + working indicator
 type: feature
-status: active
+status: done
 priority: high
 owner: cto
 spec: adr-013
