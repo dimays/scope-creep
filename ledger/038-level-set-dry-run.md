@@ -70,7 +70,7 @@ steps 1–4 and 6–7 without repeating the mistake the loop is meant to catch.
    spike gate: unblocks two other tickets and this cycle's whole transparent-delegation
    thread. No status change; re-affirmed as the top pick once unblocked.
 3. **[[work-037]] / [[work-031]]** — correctly queued behind work-036; no action.
-4. **work-042 (new, filed this round)** — `[[work-042|Verify + close the --sc-success
+4. **work-043 (new, filed this round)** — `[[work-043|Verify + close the --sc-success
    a11y follow-up deferred by work-027]]`: cheap, concrete, closes a real deferred item
    instead of leaving it silently unresolved after work-041 shipped the token.
 5. **[[work-004]]** — real, but not cheap: needs a CI agent-runner spike staffed by CTO
@@ -81,14 +81,14 @@ steps 1–4 and 6–7 without repeating the mistake the loop is meant to catch.
 Per the [[level-set]] loop's own design, this is where the round **stops** absent the
 Owner: the plan above is a proposal, not an executed track. [[work-033]] itself is being
 held open pending Owner approval for the same reason (a new core loop is Owner-gated) —
-so this dry run intentionally does not presume a track. New: [[work-042]] (`proposed`,
+so this dry run intentionally does not presume a track. New: [[work-043]] (`proposed`,
 low priority, cheap enough to queue normally). No other ticket status changed by this
 round.
 
 ## Outcome
 Demonstrates steps 1 (convene, scoped), 2 (assess: debt + reflection), 3 (CRO
 spot-check: not invoked — no convergent finding rose to load-bearing this round, single
-hat), 4 (synthesize: ranked plan above), 6 (tie-in: [[work-042]] filed), and 7 (this
+hat), 4 (synthesize: ranked plan above), 6 (tie-in: [[work-043]] filed), and 7 (this
 entry, becoming `since` for the next cadence count). Step 5 (Owner track pick) is
 correctly left open, not fabricated. Satisfies [[work-033]]'s acceptance: "one dry-run
 through it produces a ranked, ticketed paydown plan."

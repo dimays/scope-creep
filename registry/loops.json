@@ -28,6 +28,14 @@
       "path": "loops/heal.md"
     },
     {
+      "name": "level-set",
+      "kind": "loop",
+      "status": "active",
+      "description": "The recurring paydown-and-reflection loop — the C-suite (or a scoped subset) each assesses its domain read-only, the CoS synthesizes a ranked plan spanning tech debt AND organizational lessons, and the Owner picks the track. Cadence-triggered; feeds the ticket-cycle.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/level-set.md"
+    },
+    {
       "name": "new-app",
       "kind": "loop",
       "status": "active",

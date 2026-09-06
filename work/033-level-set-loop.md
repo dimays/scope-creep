@@ -43,6 +43,6 @@ recurrence across [[ledger-027-level-set-round]], the incident that produced
 [[resource-budget]], and again during tonight's [[ledger-036-overnight-crank]].
 Acceptance dry-run recorded in [[ledger-038-level-set-dry-run]]: a single-hat (CoS-only,
 zero-subagent) pass against the real repo state, producing a ranked plan and one new
-ticket ([[work-042]]); Owner track-selection (loop step 5) correctly left pending, not
+ticket ([[work-043]]); Owner track-selection (loop step 5) correctly left pending, not
 fabricated. **This is a new core loop — Owner-gated per [[invariants]] §I.4; the PR is
 held open for Owner approval, not merged.**

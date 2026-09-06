@@ -1,5 +1,5 @@
 ---
-id: work-042
+id: work-043
 title: Verify + close the --sc-success a11y follow-up deferred by work-027
 type: debt
 status: proposed
