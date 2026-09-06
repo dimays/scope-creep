@@ -2,7 +2,7 @@
 id: work-050
 title: Org view — render the four-tier taxonomy + per-exec template catalog
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-product-officer
 spec: prd-org-and-staffing
