@@ -53,8 +53,16 @@ definition is a Charter-level change, not a casual edit.
 - **C-suite / core agents** — the immutable-except-by-upgrade orchestrating agents:
   Chief of Staff, Chief Designer, CTO, Chief Knowledge Manager, Chief Product
   Officer, Chief Reality Officer.
-- **Employee agent** — an agent spun up by a C-suite executive for a scoped need;
-  its creation is ratified by the Chief of Staff.
+- **Employee agent** — an Agent (`kind: employee`) spun up by a C-suite executive for
+  a scoped need, **instantiated from an Employee template** and **reporting to** the
+  executive that created it; its creation is ratified by the Chief of Staff. It is
+  **staffed** to work by listing its slug in a work item's `assignees`. See
+  [[adr-017]].
+- **Employee template** — a reusable, off-the-shelf **role archetype** (`kind:
+  template`, e.g. Frontend Engineer, Researcher) an executive selects from to spin up
+  an Employee agent. It carries the role's operating manual and defaults; when none
+  fits, an executive may create or modify one (a gated change). Templates are agents'
+  *classes*; employee agents are their *instances*.
 - **The App Contract** — the six lifecycle targets every app exposes, regardless
   of stack.
 - **The Golden Path** — the blessed default stack. See [[golden-path]].

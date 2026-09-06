@@ -1,0 +1,79 @@
+{
+  "_generated": true,
+  "_source": "scripts/registry-build.ts — run `bun run registry:build`",
+  "schema_version": "1.0.0",
+  "templates": [
+    {
+      "name": "backend-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Builds server-side logic, data models, and integrations on the Golden Path stack — loaders/actions, Drizzle schema, and the App-Contract runtime — behind the gates.",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "typescript",
+        "react-router",
+        "drizzle",
+        "sqlite",
+        "vitest"
+      ],
+      "path": "agents/templates/backend-engineer.md"
+    },
+    {
+      "name": "frontend-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Builds and refines user-facing surfaces on the Golden Path stack — routes, components, and design-token adoption — behind the App Contract and the gates.",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "react-router",
+        "tailwind",
+        "typescript",
+        "vitest",
+        "design-tokens"
+      ],
+      "path": "agents/templates/frontend-engineer.md"
+    },
+    {
+      "name": "qa-verifier",
+      "kind": "template",
+      "status": "active",
+      "description": "Turns \"done/works\" into observed fact with an attached proving artifact — runs the thing, records PASS/FAIL/INCONCLUSIVE, and distinguishes couldn't-verify from failed.",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "testing",
+        "verification",
+        "reproduction",
+        "evidence-capture"
+      ],
+      "path": "agents/templates/qa-verifier.md"
+    },
+    {
+      "name": "researcher",
+      "kind": "template",
+      "status": "active",
+      "description": "Gathers, verifies, and synthesizes current first-party evidence to ground a decision — produces a cited findings artifact, never an unchecked assertion.",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "research",
+        "source-verification",
+        "synthesis",
+        "writing"
+      ],
+      "path": "agents/templates/researcher.md"
+    },
+    {
+      "name": "technical-writer",
+      "kind": "template",
+      "status": "active",
+      "description": "Turns shipped work into discoverable, accurate docs — READMEs, user guides, PRD/ADR prose, and manifests — keeping the knowledge graph fresh and its wikilinks resolving.",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "technical-writing",
+        "markdown",
+        "doc-standards",
+        "information-architecture"
+      ],
+      "path": "agents/templates/technical-writer.md"
+    }
+  ]
+}

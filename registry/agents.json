@@ -58,6 +58,51 @@
       "status": "active",
       "description": "The hands-on empirical verifier — runs the thing and produces the proving artifact (real test output, a driven app, a validated spike) before a \"done/works\" claim is accepted. Pairs with the Chief Reality Officer.",
       "path": "agents/qa-tester.md"
+    },
+    {
+      "name": "ada",
+      "kind": "employee",
+      "status": "active",
+      "description": "Frontend engineer spun up by the Chief Designer to carry the Console's design-system and UI tickets — dark-mode consolidation and the Threads link-out cards.",
+      "reports_to": "chief-designer",
+      "template": "frontend-engineer",
+      "path": "agents/employees/ada.md"
+    },
+    {
+      "name": "linus",
+      "kind": "employee",
+      "status": "active",
+      "description": "Backend engineer spun up by the CTO to carry the Threads projection/launcher build and the live-serve preview runtime.",
+      "reports_to": "cto",
+      "template": "backend-engineer",
+      "path": "agents/employees/linus.md"
+    },
+    {
+      "name": "quill",
+      "kind": "employee",
+      "status": "active",
+      "description": "Technical writer spun up by the Chief Knowledge Manager to keep docs discoverable and fresh as scope grows — currently spun up and awaiting staffing.",
+      "reports_to": "chief-knowledge-manager",
+      "template": "technical-writer",
+      "path": "agents/employees/quill.md"
+    },
+    {
+      "name": "rae",
+      "kind": "employee",
+      "status": "active",
+      "description": "Researcher spun up by the Chief Product Officer to ground the agent-eval definition and the inline-activity projection in real, cited evidence.",
+      "reports_to": "chief-product-officer",
+      "template": "researcher",
+      "path": "agents/employees/rae.md"
+    },
+    {
+      "name": "vera",
+      "kind": "employee",
+      "status": "active",
+      "description": "QA verifier spun up by the Chief Reality Officer to produce proving artifacts before \"done\" is accepted — cross-staffed onto the Threads launcher build.",
+      "reports_to": "chief-reality-officer",
+      "template": "qa-verifier",
+      "path": "agents/employees/vera.md"
     }
   ]
 }
