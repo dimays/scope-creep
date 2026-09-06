@@ -2,7 +2,7 @@
 id: work-049
 title: Archive / restore threads (with a confirm gate + Archive view)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 spec: prd-cos-threads
