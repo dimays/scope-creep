@@ -2,7 +2,7 @@
 id: work-043
 title: Verify + close the --sc-success a11y follow-up deferred by work-027
 type: debt
-status: proposed
+status: superseded
 priority: low
 owner: chief-designer
 spec: prd-console-explore
@@ -34,5 +34,10 @@ text ≈3.03:1, and ≈2.5:1 over the chip tint — below AA 4.5:1; light `--sc-
 has the same issue). Per charter (tokens are the design-package's contract; taste lives
 centrally), the light-mode fix was NOT hardcoded in the console — it belongs in
 `@scope-creep/design` (darken the light on-surface text values or add on-surface variants,
-then a v0.2.x tag). Filed as a design-repo follow-up. **Kept `proposed`:** the a11y item is
-not closed until that design-package fix lands and light mode passes AA.
+then a v0.2.x tag). Filed as a design-repo follow-up.
+
+**Superseded (Owner decision 2026-09-06):** the Owner scrapped light mode entirely ("I'll
+never want light mode") — see [[work-045]]. Dropping light mode makes the light-contrast fix
+moot (dark mode already passes AA), so this ticket is closed as superseded rather than fixed.
+The in-flight design-repo chip that was fixing light-mode contrast is superseded by [[work-045]]
+(dark-only) — cancel it or let it finish harmlessly; the dark-only work is the real task.

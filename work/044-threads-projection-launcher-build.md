@@ -33,3 +33,25 @@ claude.ai chat (→ thread-precise) or a Claude Code session (→ new-session+co
 **Acceptance:** the Threads surface projects a real transcript/summary from local data with
 no Claude call, offers a working "open in Claude" launcher (thread-precise where confirmed,
 generic-open otherwise), and renders link-out cards to real artifacts. See [[adr-016]].
+
+---
+
+**Epic decomposition (2026-09-06)** — this ticket is now the umbrella; the work is filed as:
+[[work-046]] launcher (submit→seeded conversation; resume button), [[work-047]] transcript
+projection from local Claude data, [[work-048]] link-out cards. [[work-045]] (dark-only) runs
+alongside. Whole path targets the Owner's feature-flow spec (below).
+
+**⛔ BLOCKING DECISION — the surface (Owner's call):** the auto-captured transcript the Owner
+wants only works ToS-clean from **Claude Code** sessions (local JSONL under `~/.claude/projects/`,
+readable with no Claude call) — **not** from **Claude Desktop / claude.ai** chats (server-side
+transcript, unreadable locally without a Claude call). Confirmed 2026-09-06:
+`claude://claude.ai/new?q=` fires and seeds a message (Claude Desktop path works for *launching*),
+and local Claude Code JSONL transcripts exist. So: **Claude Desktop** = polished chat + thread-
+precise resume, but **no auto-transcript** (manual/summary only); **Claude Code** = full
+auto-projected transcript + CLI resume, but the terminal is the surface. Pick one before
+[[work-046]]/[[work-047]] finalize.
+
+**Feature-flow acceptance (Owner-requested, to dogfood once built):** type a prompt in the UI →
+Submit opens a thread in Claude with that message as the first message of a new conversation →
+the in-app input is then disabled/hidden and replaced by a "Resume in Claude" button that
+reopens the existing thread → responses/follow-ups appear in the in-app thread transcript.
