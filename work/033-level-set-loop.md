@@ -19,6 +19,11 @@ notices something.
   track. Triggered on a cadence (every N merged tickets, or a time interval) and always
   Owner-reviewable before execution.
 - Define the trigger + the tie-in to the [[ticket-cycle]] (paydown items become tickets).
+- **Reflection & evolution (Owner-directed 2026-09-06):** widen the loop's inputs beyond
+  debt — mine the [[ledger]] (and, once it exists, the `activity/*.ndjson` log, [[work-036]])
+  for **mistakes, reversals, and gate-catches** so the org learns from them, not only pays
+  down debt. This is Theme 4 of the direction round; it extends this loop rather than adding
+  a new one.
 - Operational lesson to bake in: **stagger agent spawns / mix models** — the last dry run
   hit the session rate limit spawning five Opus agents at once.
 
