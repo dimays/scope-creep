@@ -25,3 +25,14 @@ run.
 
 **Acceptance:** `--sc-success` usages pass contrast; work-027's deferred item is closed
 with an honest note, not left silently unresolved. See [[work-027]], [[work-041]].
+
+**Partial (2026-09-06, console #31):** the token adoption shipped — every hardcoded
+`#3aa76d`/`#e8833a` now routes through `--sc-success`/`--sc-attention`, and the per-component
+reduced-motion blocks were removed (the package owns that contract). Contrast measured
+against the shipped token: **dark mode passes AA; light mode does NOT** (`--sc-success` as
+text ≈3.03:1, and ≈2.5:1 over the chip tint — below AA 4.5:1; light `--sc-attention` ≈2.71:1
+has the same issue). Per charter (tokens are the design-package's contract; taste lives
+centrally), the light-mode fix was NOT hardcoded in the console — it belongs in
+`@scope-creep/design` (darken the light on-surface text values or add on-surface variants,
+then a v0.2.x tag). Filed as a design-repo follow-up. **Kept `proposed`:** the a11y item is
+not closed until that design-package fix lands and light mode passes AA.
