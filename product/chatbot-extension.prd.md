@@ -3,17 +3,22 @@ name: prd-chatbot-extension
 description: The flagship chatbot Extension — chat that edits a Golden-Path app in a live preview and merges the change through the gated flow.
 metadata:
   type: project
-  status: proposed
+  status: superseded
   version: 0.1.0
   owner_agent: chief-product-officer
-  last_verified: 2026-09-05
+  last_verified: 2026-09-06
 ---
 
 # PRD — Chatbot Extension (flagship)
 
+> **SUPERSEDED (2026-09-06)** by [[adr-016]] + [[adr-019]]. The in-app agent-chat/propose
+> runtime this spec described was retired: powering a self-built app's agent loop is either
+> ToS-disallowed (subscription auth) or a metered duplicate of Claude Code (API key). The
+> successor is the [[adr-016]] projection + "open in Claude" launcher ([[work-044]]) — the app
+> projects local Claude Code transcripts and links out, making zero automated Claude calls.
+> Kept for history, not built.
+
 > Reconstructed from the scheduled overnight run's plan ([[ledger-016-work-001-split]]).
-> **Proposed** — awaiting Owner acceptance (especially the security decision in
-> [[adr-009]]).
 
 ## Why this exists
 `work-001` had been tracing to [[prd-console-explore]], whose v1 explicitly puts
