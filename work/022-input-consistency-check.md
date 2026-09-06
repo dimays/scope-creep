@@ -2,12 +2,12 @@
 id: work-022
 title: Human-Input Log — Consistency self-checks (gap + dup detection)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-reality-officer
 spec: prd-human-input-log
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-06
 ---
 Carved out of [[work-020]] (it was specified there but not built — the capture,
 reader, and backfill shipped; this read-side check did not). Queued for the

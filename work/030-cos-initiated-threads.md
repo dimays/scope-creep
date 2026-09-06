@@ -2,12 +2,12 @@
 id: work-030
 title: CoS-initiated threads + "needs-you" queue
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-product-officer
 spec: prd-cos-threads
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-06
 ---
 Phase 2 of [[prd-cos-threads]]. Today every Owner-facing surface is Owner-initiated;
 this gives the org a voice.
