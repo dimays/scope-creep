@@ -2,7 +2,7 @@
 id: work-038
 title: Loops registry (loops.json harvested) + owner_agent lint
 type: debt
-status: proposed
+status: done
 priority: medium
 owner: chief-knowledge-manager
 spec: doc-standards

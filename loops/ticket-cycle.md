@@ -6,7 +6,8 @@ metadata:
   status: active
   version: 1.0.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-04
+  last_verified: 2026-09-06
+  mode: partially-autonomous
 ---
 
 # Loop: ticket-cycle
