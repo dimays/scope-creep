@@ -2,16 +2,17 @@
 id: work-029
 title: CoS-Threads MVP — unify Chat + Requests onto the conversation primitive
 type: feature
-status: proposed
+status: active
 priority: high
 owner: chief-product-officer
 spec: prd-cos-threads
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-06
 ---
 Phase 1 of [[prd-cos-threads]] — the "refactor Chat/Requests the moment we start."
-**Owner-gated direction:** awaiting acceptance of the Threads IA + a reconciling ADR
-(see [[ledger-028-cos-threads-roadmap]] escalations).
+**Owner-accepted 2026-09-06:** the Threads IA (top-level, replacing Chat) and the
+reconciling [[adr-012]] are ratified; gating decisions resolved in
+[[ledger-032-cos-threads-accepted]]. Now **active** — build behind a gated PR.
 
 - Migrate `requests`/`request_messages` → `conversations`/`conversation_messages`
   (the deferred [[adr-008]] migration), on the shared primitive ([[work-014]]).
