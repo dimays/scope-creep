@@ -2,12 +2,12 @@
 id: work-032
 title: Thread branching + followup links + generated-request cards
 type: feature
-status: proposed
+status: done
 priority: low
 owner: chief-product-officer
 spec: prd-cos-threads
 created: 2026-09-05
-updated: 2026-09-05
+updated: 2026-09-06
 ---
 Phase 4 of [[prd-cos-threads]] — the richest thread interactions.
 

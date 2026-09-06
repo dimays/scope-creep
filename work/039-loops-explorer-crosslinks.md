@@ -2,7 +2,7 @@
 id: work-039
 title: Loops explorer + cross-link pass (one cohesive graph)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 spec: prd-console-explore
