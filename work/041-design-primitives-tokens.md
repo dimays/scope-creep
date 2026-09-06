@@ -2,7 +2,7 @@
 id: work-041
 title: Design-system — promote status/motion tokens + extract primitives
 type: debt
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 spec: adr-013
