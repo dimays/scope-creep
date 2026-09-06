@@ -4,6 +4,13 @@
   "schema_version": "1.0.0",
   "agents": [
     {
+      "name": "ceo",
+      "kind": "core",
+      "status": "active",
+      "description": "The Owner-delegated chief executive — sets org direction and global priorities and makes the central, non-financial executive calls the Owner delegates. Top of the agent org; the Chief of Staff orchestrates the org beneath it. Cannot self-authorize any Owner-gated action.",
+      "path": "agents/ceo.md"
+    },
+    {
       "name": "chief-designer",
       "kind": "core",
       "status": "active",

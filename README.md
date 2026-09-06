@@ -15,7 +15,7 @@ vendored here — so this base repo stays cleanly cloneable.
 | Path | What |
 |---|---|
 | `charter/` | The Charter: living [`PRD`](charter/PRD.md), locked [`INVARIANTS`](charter/INVARIANTS.md), [`GLOSSARY`](charter/GLOSSARY.md) |
-| `agents/` | The core C-suite (Chief of Staff, CTO, Chief Designer, Chief Knowledge Manager, Chief Product Officer, Chief Reality Officer) + standing functional agents (QA Tester, Git Manager) |
+| `agents/` | The **CEO** (Owner-delegated, atop the org — [ADR-018](standards/adr/018-ceo-and-reorg.md)) + the core C-suite (Chief of Staff, CTO, Chief Designer, Chief Knowledge Manager, Chief Product Officer, Chief Reality Officer) + standing functional agents (QA Tester, Git Manager) |
 | `standards/` | [`golden-path`](standards/golden-path.md), [`app-contract`](standards/app-contract.md), [`tech-sops`](standards/tech-sops.md), [`doc-standards`](standards/doc-standards.md), [`engineering-policy`](standards/engineering-policy.md), and ADRs |
 | `loops/` | `ticket-cycle`, `request-intake`, `new-app`, `heal`, `core-upgrade` |
 | `product/` | Product requirement docs (`*.prd.md`) for the manufactured surfaces |
@@ -32,6 +32,10 @@ vendored here — so this base repo stays cleanly cloneable.
   Ledger. **2 compositions:** App, Extension. (See [`GLOSSARY`](charter/GLOSSARY.md).)
 - **Single-user, forever.** No auth, no multi-tenancy — ever. Another person clones
   this repo and runs on their own infra + Claude auth.
+- **Org structure:** Owner (sovereign) → CEO (direction) → Chief of Staff
+  (orchestration) → C-suite & employees. The CEO is Owner-delegated and
+  Owner-revocable; the Owner still holds every gate, all spend, and the core
+  ([ADR-018](standards/adr/018-ceo-and-reorg.md)).
 - **Keep the mutator small and stable; let infinity live in the periphery.**
 - **The App Contract is the interface; the stack is an implementation detail.**
 - **Blessed stack:** end-to-end TypeScript ([ADR-001](standards/adr/001-blessed-stack.md)).
