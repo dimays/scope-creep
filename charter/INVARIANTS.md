@@ -4,9 +4,9 @@ description: The locked rules Scope Creep may never violate. Amendable only by t
 metadata:
   type: reference
   status: active
-  version: 1.1.0
+  version: 1.2.0
   owner_agent: human-owner
-  last_verified: 2026-09-04
+  last_verified: 2026-09-06
 ---
 
 # INVARIANTS
@@ -65,6 +65,17 @@ surface it to the owner, never to route around it.
    secrets, or filesystem namespace. The default datastore is never production.
 10. **Every change is reversible.** All work lands via branch + review + gated
     merge. Nothing is destroyed without the owner and a ledger entry.
+    > **Clarification (Owner-approved 2026-09-06, [[adr-014]]):** The gate on a
+    > **PR merge** is (a) a **green CI gate** and (b) **Owner approval** — not the
+    > Owner's keystroke. Once the Owner approves a merge (in conversation, whether
+    > implicitly or explicitly), a **ratified git-manager / developer agent** may
+    > *execute* that merge on any Scope-Creep repo and record it in the [[ledger]].
+    > Approval is the gate; execution may be delegated. This refines §7's "only the
+    > owner disposes" for merges — the owner disposes by **approving**. It does
+    > **not** loosen §7's other gates: `deploy` / spend / `delete` / publish still
+    > require the Owner at the moment of action (the `guard-gates` hook still blocks
+    > them). A **red** gate is never waivable by an agent — only the Owner waives a
+    > red gate. See [[decision-rights]].
 
 ## IV. The contract over the implementation
 
