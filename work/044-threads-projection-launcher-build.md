@@ -41,7 +41,9 @@ generic-open otherwise), and renders link-out cards to real artifacts. See [[adr
 projection from local Claude data, [[work-048]] link-out cards. [[work-045]] (dark-only) runs
 alongside. Whole path targets the Owner's feature-flow spec (below).
 
-**⛔ BLOCKING DECISION — the surface (Owner's call):** the auto-captured transcript the Owner
+**✅ SURFACE DECISION — RESOLVED (Owner, 2026-09-06): Claude Code** (auto-transcript). The conversation runs as a Claude Code session in the control-plane repo; the app projects its local JSONL transcript. Launcher/projection shipped in console #32 ([[work-046]]/[[work-047]]). Original framing below.
+
+**⛔ (resolved) surface (Owner's call):** the auto-captured transcript the Owner
 wants only works ToS-clean from **Claude Code** sessions (local JSONL under `~/.claude/projects/`,
 readable with no Claude call) — **not** from **Claude Desktop / claude.ai** chats (server-side
 transcript, unreadable locally without a Claude call). Confirmed 2026-09-06:
