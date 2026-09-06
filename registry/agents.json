@@ -46,6 +46,13 @@
       "path": "agents/cto.md"
     },
     {
+      "name": "git-manager",
+      "kind": "core",
+      "status": "active",
+      "description": "The version-control operator — runs branch/PR lifecycle and lands approved work, executing merges on Scope-Creep repos once the Owner has approved. Owns merge hygiene (stacked order, retargeting, cleanup). Never deploys, spends, publishes, or waives a red gate.",
+      "path": "agents/git-manager.md"
+    },
+    {
       "name": "qa-tester",
       "kind": "core",
       "status": "active",

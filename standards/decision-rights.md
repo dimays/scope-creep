@@ -39,6 +39,14 @@ spin up employee/app-bound agents; the CoS ratifies (INVARIANTS §I).
 | Anything touching INVARIANTS, `.claude/`, or a core record set | CoS | relevant lead | CRO | CoS | **Yes** (always) |
 | Resource / budget (token, API, compute) | CoS | CTO | CRO | CoS | Spend increase: **yes** |
 | Routine ticket work | the ticket's `owner` agent | — | gate (green `test`) | PR merge | No — the [[ticket-cycle]] |
+| **Landing a PR (any Scope-Creep repo)** | [[git-manager]] | [[qa-tester]] (green) | gate (green CI) | Owner **approval** (implicit or explicit) | Approval required, keystroke not — [[adr-014]] |
+
+**Delegated merge ([[adr-014]]):** a merge is gated on a **green CI gate + Owner approval**,
+not the Owner's keystroke. Once the Owner approves (a conversational go-ahead or an explicit
+yes), the [[git-manager]] may execute the merge and records it. This does **not** loosen the
+`deploy` / spend / `delete` / publish gates ([[invariants]] §III.7) or let any agent waive a
+**red** gate (only the Owner does). Load-bearing/core-upgrade merges still carry their own
+Owner approval + CRO verification.
 
 ## When to convene the full C-suite (a dry run)
 - The Owner invites it, **or**

@@ -58,4 +58,6 @@ must not shatter against a moving core.
 
 ## 9. Change safety
 All work lands via branch + review + gated merge. Everything reversible via git +
-[[ledger]]. Agents propose; gates dispose.
+[[ledger]]. Agents propose; gates dispose. A PR merge is gated on a **green CI gate +
+Owner approval** — once approved, the [[git-manager]] may execute it ([[adr-014]]); the
+`deploy` / spend / `delete` / publish gates stay Owner-executed (`guard-gates` hook).
