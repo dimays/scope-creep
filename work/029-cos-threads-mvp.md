@@ -2,7 +2,7 @@
 id: work-029
 title: CoS-Threads MVP — unify Chat + Requests onto the conversation primitive
 type: feature
-status: active
+status: done
 priority: high
 owner: chief-product-officer
 spec: prd-cos-threads
