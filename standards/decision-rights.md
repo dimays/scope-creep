@@ -1,20 +1,35 @@
 ---
 name: decision-rights
-description: Who is in the room for each kind of decision — the decision-type → required-hats map that makes "the right people in the room" mechanical instead of ad hoc. Proposed.
+description: Who is in the room for each kind of decision — the decision-type → required-hats map that makes "the right people in the room" mechanical instead of ad hoc. Active; operationalized by the decision loop.
 metadata:
   type: reference
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 1.0.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-05
+  last_verified: 2026-09-06
 ---
 
-# Decision Rights (proposed)
+# Decision Rights
 
-**Proposed** by the Chief of Staff after the level-set ([[ledger-027-level-set-round]]).
-Today, who gets consulted on a decision is the CoS's ad-hoc judgment (e.g. convening the
-C-suite dry run). This standard makes it a rule: every load-bearing decision has a known
-set of hats, is empirically checked, ratified, and recorded.
+**Active.** Proposed by the Chief of Staff after the level-set
+([[ledger-027-level-set-round]]); ratified proposed → active on 2026-09-06 and wired into
+the [[decision]] loop by [[work-034]]. Today, who gets consulted on a decision would
+otherwise be the CoS's ad-hoc judgment (e.g. convening the C-suite dry run). This standard
+makes it a rule: every load-bearing decision has a known set of hats, is empirically
+checked, ratified, and recorded.
+
+> **Provisionally ratified under delegated authority (2026-09-06) — Owner confirmation
+> requested.** This proposed → active flip was **not** reviewed by the Owner directly. It
+> was made the first live subject of the [[decision]] loop it defines
+> ([[ledger-037-decision-loop-sample]]). At step 3 the [[chief-reality-officer]] **dissented**:
+> [[invariants]] §I.4 lists `standards/` as core, changeable only via [[core-upgrade]] with
+> explicit Owner approval, and this standard's own table Owner-gates a "core record set… always."
+> The CRO recommended keeping this `proposed`. The Chief of Staff ratified it **provisionally**
+> because [[ledger-036-overnight-crank]] explicitly names "decision-rights → active" as an
+> action taken under tonight's delegated authority and rollback-able in the morning — reading
+> that as the Owner's provisional approval, with reversibility (§III.10) as the guarantee.
+> Because a live CRO dissent stands, this **needs the Owner's explicit sign-off** at the next
+> review — confirm, or roll back (one line) per [[ledger-036-overnight-crank]] "Morning review".
 
 ## The roster
 Six core executives ([[chief-of-staff]], [[cto]], [[chief-product-officer]],
@@ -56,5 +71,5 @@ Otherwise the lead + CRO + CoS suffice — convening everyone for a routine call
 ## What this is not
 Not a bureaucracy layer on routine work: the [[ticket-cycle]] and [[request-intake]]
 loops already carry their own gates. This governs **load-bearing** decisions — the ones
-that, wrong, are expensive to unwind. See [[work-034]] for the loop that operationalizes
-this.
+that, wrong, are expensive to unwind. The [[decision]] loop operationalizes this map into a
+runnable sequence ([[work-034]]).
