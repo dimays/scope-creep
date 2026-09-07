@@ -2,14 +2,27 @@
 id: work-042
 title: Interactive live-serve preview (Vite HMR iframe) + portable diff-block in the work-013 shell
 type: feature
-status: proposed
+status: superseded
 priority: high
 owner: cto
 assignees: linus
 spec: prd-chatbot-extension
 created: 2026-09-06
-updated: 2026-09-06
+updated: 2026-09-07
 ---
+> **SUPERSEDED (2026-09-07) by [[adr-016]] + [[adr-019]].** Both pieces of this ticket are
+> premised on the in-app **agent-chat / propose** runtime — "the Owner describes a change in
+> chat → the agent proposes edits → diff + live preview appear **in chat**," rendered by the
+> [[work-013]] shell and driven by `propose.server.ts` / the `/chat/propose` loop. That
+> runtime was **retired**: [[adr-019]] removed the Console Propose surface, and [[adr-016]]
+> established that a self-built app makes **zero automated Claude calls** (the in-app
+> proposal loop is exactly the metered/ToS-disallowed path it forbids). Its spec,
+> [[prd-chatbot-extension]], is itself superseded. Building this as written would resurrect
+> the retired runtime — so it is not built.
+>
+> **If a live-serve preview is still wanted,** it should be re-specified against the current
+> **projection + launcher** model (the change is authored in a Claude Code session, not an
+> in-app chat), as a fresh ticket — not this one. Kept for history.
 The carved-out remainder of [[work-017]] (parts 1–2 landed via
 `scope-creep-console` PR #28 — agent-generated proposals + an in-Console diff
 render, all isolated behind [[adr-009]], merge still the [[work-016]] gated step).

@@ -2,7 +2,7 @@
 id: work-052
 title: Console Schedules surface — cadence, next/last run, self-tuning history, link-out mgmt
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 spec: prd-console-operations

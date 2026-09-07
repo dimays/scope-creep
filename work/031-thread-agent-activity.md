@@ -2,7 +2,7 @@
 id: work-031
 title: Inline agent activity in threads (ledger-projected)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-product-officer
 assignees: rae
@@ -23,3 +23,9 @@ Let the Owner watch the org work inside a thread.
 
 **Acceptance:** a thread that triggered agent work shows the spin-ups/delegations/confers
 inline, each deep-linking to its artifact. See [[prd-cos-threads]] and [[adr-013]].
+
+> **DONE — console read-side shipped (2026-09-06, console #50).** A thread now renders an
+> inline "Org activity" timeline of the [[work-036]] events logged against its `threadId`
+> (only when it has activity — no empty-state clutter), each deep-linking to its artifact,
+> built on the design `ActivityRow`. **Honest-empty** until [[work-036]]'s hook lands (Owner
+> action). See [[ledger-051-overnight-eng-loop]].

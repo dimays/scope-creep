@@ -3,10 +3,10 @@ name: prd-console-operations
 description: Console "Operations" — three projections that make the org's operating rhythm and its published outputs visible (and, where honestly possible, manageable) from inside the Console: the schedule/loop-management surface, generated release notes, and the CEO's roadmap presentations. Read-only projection + link-out over cloud routines that live in claude.ai (per ADR-016); never in-app control of those routines.
 metadata:
   type: project
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 0.2.0
   owner_agent: chief-product-officer
-  last_verified: 2026-09-06
+  last_verified: 2026-09-07
 ---
 
 # PRD — Console "Operations": Schedules, Release Notes & Roadmap
@@ -24,11 +24,14 @@ everywhere else ([[prd-console-explore]], [[prd-cos-threads]], [[adr-016]]): the
 *reflects* state it does not own, links out to the system of record, and never fabricates
 activity or makes an automated Claude call.
 
-> **Status: `proposed`.** This PRD defines the product; the tickets below build it. Two of
-> the three surfaces (release notes, roadmap presentations) depend on **loop-system design
-> the Chief of Staff is authoring in parallel (ADR-021, in flight)** — specifically *which
-> loop/step produces each artifact*. Those dependencies are called out per-surface and in
-> "Dependencies." Nothing here touches loops/standards/adr/agents; the CoS owns those.
+> **Status: `active` — all three surfaces shipped (2026-09-06/07).** **Schedules**
+> ([[work-052]], console #46), **Releases** ([[work-054]]) and **Roadmap** ([[work-056]])
+> (console #45) are live read-only projections + link-out, exactly as specified. A fourth,
+> adjacent surface — the org **Activity** feed ([[work-037]], console #49) — shipped
+> alongside as the entity lens of transparent delegation. ADR-021's loop system is now
+> ratified and the release-notes/roadmap artifacts exist ([[release-002]], [[roadmap-001]]);
+> the remaining open thread is *automated* generation of those artifacts at each version-bump
+> (still hand-seeded — see [[work-053]]). Nothing here touches loops/standards/adr/agents.
 
 ## The three surfaces at a glance
 

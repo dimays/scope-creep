@@ -2,7 +2,7 @@
 id: work-056
 title: Console Roadmap surface — latest CEO presentation + history, projected read-only
 type: feature
-status: proposed
+status: done
 priority: low
 owner: chief-designer
 spec: prd-console-operations
