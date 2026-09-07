@@ -2,7 +2,7 @@
 id: work-037
 title: Agents / delegation activity surface (Explore)
 type: feature
-status: proposed
+status: done
 priority: high
 owner: chief-designer
 spec: prd-transparent-delegation
@@ -24,3 +24,10 @@ the agent profiles + timeline, **not** the Work board (delegation is events, not
 **Acceptance:** an executive's page truthfully shows its recent delegations and its
 connected artifacts, each deep-linking to the ledger/ticket; the surface never invents
 activity or a rationale. See [[prd-transparent-delegation]].
+
+> **DONE — console read-side shipped (2026-09-06, console #49).** `/explore/activity`
+> (global feed) + a "Recent activity" section on every agent profile, built on the design
+> `ActivityRow` primitive, projecting the [[work-036]] log read-only and **honest-empty**.
+> Connected artifacts (staffing, loops, contributions) already render. **Live delegation
+> data lights up when [[work-036]]'s capture hook lands** (Owner action — the hook lives in
+> `.claude/`). See [[ledger-051-overnight-eng-loop]].
