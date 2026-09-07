@@ -1,23 +1,27 @@
 ---
 name: adr-022
-description: Owner-directed governance change (PROPOSED) moving the routine PR-merge gate from Owner-approval to independent org review, with a hard-line escalation checklist that HOLDS a PR for the Owner on any financial burden, security risk, substantial C-suite tradeoff, or change to the safety rails / core. Reinforces INVARIANTS §7 (spend absolute) and drafts a §10 amendment superseding-in-part ADR-014. Awaiting Owner ratification — only the Owner amends INVARIANTS.
+description: Owner-directed governance change moving the routine PR-merge gate from Owner-approval to independent org review, with a hard-line escalation checklist that HOLDS a PR for the Owner on any financial burden, security risk, substantial C-suite tradeoff, or change to the safety rails / core. DIRECTION accepted (Owner-ratified 2026-09-06) but NOT ACTIVE — the INVARIANTS amendment is held and merges stay Owner-gated until the mechanical enforcement (the CRO's required rails) is built and QA-verified. Reinforces INVARIANTS §7 (spend absolute).
 metadata:
   type: reference
-  status: proposed
-  version: 1.0.0
+  status: accepted
+  version: 1.1.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-06
 ---
 
 # ADR-022: Autonomous merge with escalation
 
-- **Status:** **proposed — awaiting Owner ratification.** The INVARIANTS §10 / §7
-  amendment drafted here is **not** ratified. **Only the Owner amends the
-  [[invariants]]** (§I.2); the exact wording below goes to the Owner. Authored by
-  the [[chief-of-staff]] on the Owner's explicit 2026-09-06 direction and
-  authorization of an INVARIANTS amendment. Needs (a) an independent
-  [[chief-reality-officer]] pass and (b) the Owner's explicit sign-off on the
-  exact invariant text **before** it lands.
+- **Status:** **DIRECTION ACCEPTED (Owner-ratified 2026-09-06) — but NOT ACTIVE.**
+  The Owner ratified the *model* and authorized the INVARIANTS amendment; an
+  independent [[chief-reality-officer]] pass then found the design textually sound but
+  **unsafe to activate until mechanical enforcement exists** (today the escalation is
+  reviewer-judgment with no backstop, and the catastrophic "org merges a change to its
+  own gates" case is reachable). Per the Owner's decision (*"ratify direction, build
+  the gates, then activate"*): the **INVARIANTS §10/§7 amendment below is NOT applied**
+  and **merges stay Owner-gated** until the **Activation gate** (below) is met and
+  QA-verified. Then the Owner applies the exact invariant text and flips this active.
+  **Only the Owner amends the [[invariants]]** (§I.2); `charter/INVARIANTS.md` stays
+  pristine until that step.
 - **Date:** 2026-09-06
 - **Deciders:** **Owner** (directed the change; authorized the INVARIANTS
   amendment; only the Owner amends INVARIANTS, §I.2), Chief of Staff (designed +
@@ -110,11 +114,18 @@ executive may raise a hold; only the Owner clears it.
 >   to [[decision]] / the Owner).
 > - [ ] **(d) A change to the safety rails or the core themselves.** Does the PR
 >   edit the **[[invariants]]**, the **`guard-gates` hook**, **`.claude/` gate or
->   permission config**, a **permission grant** (`settings*.json` allow-rules), the
+>   permission config**, a **permission grant** (`settings*.json` allow-rules),
+>   **`.github/workflows/**`** (CI/automation that runs with repo secrets — CRO fix),
+>   an **infra / paid-dependency manifest** (`package.json` + lockfiles, `Dockerfile`,
+>   `fly.toml`, `Procfile`/Heroku config, `*.tf` — these overlap trigger (a)), the
 >   **decision-rights / escalation model**, or **the core** ([[invariants]] §I.4 —
 >   charter / core agents / loops / standards / registries)? → **HOLD** (a
 >   core-touching PR escalates exactly like an INVARIANTS change). **The org may not
 >   autonomously weaken its own gates.**
+>   > **Carve-out (CRO fix):** a *routine ledger-append* — the completion record a
+>   > merge writes per [[adr-021]] — is **not** a "core record-set change" and does
+>   > **not** by itself trip (d); (d) fires on a change to the ledger *format/policy*
+>   > or a non-append rewrite, not on the ordinary append every merge makes.
 >
 > If **every** box is clear → the PR is **routine** and merges on independent review
 > (§1). If **any** box is checked → **HOLD for the Owner.** When in doubt, escalate;
@@ -135,6 +146,42 @@ executive may raise a hold; only the Owner clears it.
   core-touching PR escalates under trigger (d) and lands only under Owner approval,
   exactly as an INVARIANTS change does. The **core-vs-periphery line is the escalation
   line**: periphery self-merges; core escalates.
+
+## Activation gate — mechanical enforcement required before this goes live
+
+The independent [[chief-reality-officer]] review (2026-09-06, recorded in
+[[ledger-047-autonomous-merge-with-escalation]]) found the escalation checklist is
+**~100% reviewer judgment with no mechanical backstop**, in a system that today
+pre-grants un-prompted merge, has **no branch protection on `main`**, lets agents edit
+the gate files with the Edit tool, and keeps its strongest permission grants in a
+**gitignored** file the checklist can never see. So the catastrophic case — the org
+autonomously merging a change that weakens its own gates — is **currently reachable**.
+
+Per the Owner's decision, this model **does not activate** (and the INVARIANTS
+amendment is **not applied**) until these mechanical rails ship and are QA-verified.
+They are filed as work tickets and are the preconditions:
+
+1. **(floor) Path-based auto-escalation as a required CI check** — fail any merge whose
+   diff touches an escalation-class path (INVARIANTS, `.claude/**`, `standards/**`,
+   `agents/**`, `loops/**`, `registry/**`, `.github/workflows/**`, infra/paid-dependency
+   manifests) without an explicit Owner-approval marker. Makes trigger (d) — and much of
+   (a) — mechanical, not judgment. **The single most important rail.**
+2. **(floor) Gate `gh pr merge`** — extend `guard-gates` (or CI) so an autonomous merge
+   fires only when the required checks are green and the path-check is clean, and
+   **revoke the blanket `Bash(gh pr merge *)` grant**. Today the harness merges any PR
+   with no prompt; the policy must not be optional from the harness's view.
+3. **Block direct Edit/Write to the gate surface** (`.claude/**`, `charter/INVARIANTS.md`,
+   `guard-gates`) and **bring the gitignored `settings.local.json` permission grants
+   in-band** (a tracked, PR-reviewed file) so the review model can see them.
+4. **Branch protection on every Scope-Creep repo** — require PR + the status checks from
+   (1), block direct and force pushes. With all agents sharing one git identity, this is
+   the only mechanical author≠merger backstop.
+5. **QA spike (verify before trusting)** — prove author ≠ merger holds in practice and
+   the path-check actually blocks an escalation-class diff, before flipping active.
+
+**Rails #1 and #2 are the floor for activation; #3–#5 close the self-modification and
+independence holes.** Until they land, merges stay Owner-gated exactly as they are today
+([[adr-014]]) — the escalation checklist is a *promise* until it is a *gate*.
 
 ## The exact proposed INVARIANTS amendment (PROPOSED — awaiting Owner ratification)
 
