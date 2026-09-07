@@ -2,13 +2,25 @@
 id: work-053
 title: Release-notes artifact shape + storage convention (generated per version-bump)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-product-officer
 spec: prd-console-operations
 created: 2026-09-06
 updated: 2026-09-06
 ---
+> **Shipped 2026-09-06.** Artifact shape + storage convention defined:
+> [`releases/000-template.md`](../releases/000-template.md) (the shape below) +
+> [[release-001]] (a hand-seeded backfill covering 2026-09-04–06, grounded in git log +
+> the ledger — not invented). Per-app `CHANGELOG.md` stays canonical per-app; the
+> control-plane `releases/NNN-vX.Y.Z.md` set is for org-wide/cross-app roll-ups. **Not
+> shipped (deliberately out of scope):** the generator that produces an entry at each
+> real version-bump — that is the loop/step the CoS specs under [[adr-021]]; this ticket
+> only guarantees the generator has an exact shape to emit into. `docs:lint` doesn't yet
+> treat `releases/` as a manifest dir (would need a `scripts/docs-lint.ts` change, out of
+> this ticket's touched surface); the seed still carries a full manifest so it's ready
+> when that lands.
+
 Define and stand up the **release-notes artifact** for **Surface 2** of
 [[prd-console-operations]] — generated per release/version-bump, stored as a repo artifact,
 projectable by the Console.
