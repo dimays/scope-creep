@@ -2,7 +2,7 @@
 id: work-048
 title: Threads link-out cards (PRs, docs, tickets, PRDs, ledger)
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 assignees: ada

@@ -2,7 +2,7 @@
 id: work-044
 title: Threads projection + launcher build (ADR-016)
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 assignees: linus, vera
