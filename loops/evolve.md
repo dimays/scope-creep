@@ -60,8 +60,11 @@ time-scheduled loop, and itself:
   [[staffing-review]]'s bounds): step 3 reviews whether each is firing at the right rate.
   Moving a loop's **live** interval (the ledger value) is ordinary loop output, no gate;
   moving a loop's **seed/bounds** (the manifest policy) is a [[core-upgrade]] this loop
-  *proposes*, Owner-disposes. [[staffing-review]] self-tunes its own live value between
-  evolve rounds; this loop is the portfolio-level backstop, not a second hand on the same dial.
+  *proposes*, Owner-disposes. **Exception — [[staffing-review]]'s live value is
+  staffing-review's alone:** evolve touches staffing-review only at its **policy/bounds**
+  (a [[core-upgrade]]), never its ledger interval. staffing-review self-tunes its own live
+  value between evolve rounds; this loop is the portfolio-level backstop, not a second hand
+  on the same dial.
 
 ## Inputs (typed)
 - `since` (ledger entry ref) — the previous evolve round's ledger entry, or none on first run.
@@ -76,14 +79,22 @@ time-scheduled loop, and itself:
 2. **Scan for scaling pressure, read-only.** Where is the org repeatedly *improvising*?
    - **Recurring ad-hoc roles** → a new **employee template** (the Owner named **DevOps** and
      **Security** as likely-soon; seed a template when evidence warrants, per [[staffing]]).
+     **Tie-break with [[staffing-review]] (template creation):** a template for a
+     *not-yet-recurring, anticipated* role is **evolve's** to seed; a template for a role
+     *already summoned ad hoc N times* is **[[staffing-review]]'s gap to fill**. When both
+     could claim it, **staffing-review (reactive, evidence-based) wins and evolve stands down.**
    - **Recurring manual procedures** → a new **procedure or loop**.
    - **A capability the [[roadmap]] implies we'll need soon** → propose the machinery ahead
      of the crunch, not after.
 3. **Re-evaluate the scheduled-loop portfolio (the meta-cadence review).** For each
-   time-scheduled loop ([[level-set]], [[staffing-review]], [[roadmap]], and **evolve**
-   itself): is it firing at the **right cadence**? **Still needed**? Is any loop **missing**
-   that the org keeps needing? Record a cadence verdict per loop (hold / retune-live /
-   propose-policy-change).
+   scheduled loop ([[staffing-review]], [[roadmap]], and **evolve** itself — all
+   time-scheduled with a manifest seed/bounds + a ledger live value; **plus [[level-set]],
+   which is *hybrid*** — event-driven on ticket count *and* time, with its cadence homed in
+   prose, not a policy/state split): is it firing at the **right cadence**? **Still needed**?
+   Is any loop **missing** that the org keeps needing? Record a cadence verdict per loop
+   (hold / retune-live / propose-policy-change). **`retune-live` applies only to the loops
+   that carry a ledger live value; [[level-set]] has no live-retune path — its cadence moves
+   only by [[core-upgrade]].**
 4. **CRO reality-check** ([[chief-reality-officer]]). Anti-bloat is the point: is a proposed
    template/loop/procedure actually needed *by evidence* (a role summoned N times, a
    procedure improvised N times), or speculative? "Keep the shelf small and sharp"
