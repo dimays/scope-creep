@@ -2,13 +2,23 @@
 id: work-057
 title: Path-based auto-escalation as a required pre-merge CI check
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: adr-022
 created: 2026-09-06
 updated: 2026-09-06
 ---
+> **Shipped 2026-09-06.** `.github/workflows/escalation-check.yml` +
+> `scripts/escalation-check.sh` classify a PR's changed paths and FAIL (hold for
+> the Owner) on an escalation-class touch without the `owner-approved` label; the
+> routine ledger-append carve-out is implemented (append/new = pass, non-append
+> rewrite = escalation). Verified across 7 scenarios and confirmed the check flags
+> **its own PR** as escalation-class. **Remainder (not this ticket):** making this a
+> *required* status check at the GitHub branch-protection layer is [[work-060]]; the
+> harness-level merge block is [[work-058]]. **Honest gap:** the `owner-approved`
+> marker is agent-forgeable under the shared GitHub identity ([[work-059]] — token
+> separation); documented in the workflow, the script, and the PR.
 The floor rail for [[adr-022]] activation (CRO fix #1 — the single most important).
 A required CI status check that **fails any merge** whose diff touches an
 escalation-class path without an explicit Owner-approval marker, making trigger (d)

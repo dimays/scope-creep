@@ -1,0 +1,65 @@
+# Escalation check — the FLOOR mechanical rail for ADR-022 trigger (d) (work-057).
+#
+# Runs on every PR. Computes the changed paths and FAILS (holds the PR for the
+# Owner) if the diff touches an escalation-class path — the safety rails / core /
+# infra / paid-dependency manifests — WITHOUT the Owner-approval marker.
+#
+# The Owner-approval marker enforced today is the `owner-approved` label. HONEST
+# LIMITATION: under the current shared GitHub identity every agent acts as the
+# Owner, so an agent with `gh` can add that label itself and clear this hold. This
+# rail makes escalation MECHANICAL and AUDITABLE (it forces an explicit label
+# event and stops the accidental/unreviewed merge) but it is NOT un-spoofable
+# against a deliberate agent. True un-forgeability needs a restricted agent token
+# that cannot self-label, distinct from the Owner's token — work-059. See
+# scripts/escalation-check.sh and standards/adr/022-*.md.
+name: Escalation check
+
+on:
+  pull_request:
+    # `labeled`/`unlabeled` are included so adding/removing the owner-approved
+    # label re-runs this required check and flips it green/red without a re-push.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  escalation:
+    name: Path-based auto-escalation (ADR-022 trigger d)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the base sha and head sha are both present for the
+          # three-dot diff the classifier uses.
+          fetch-depth: 0
+
+      - name: Detect Owner-approval marker (owner-approved label)
+        id: marker
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Read the CURRENT labels live (not the event snapshot) so a label added
+          # after the PR opened is honored on a labeled-event re-run.
+          labels="$(gh pr view "${{ github.event.pull_request.number }}" \
+            --json labels --jq '.labels[].name' 2>/dev/null || true)"
+          if printf '%s\n' "$labels" | grep -qx 'owner-approved'; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "owner-approved label present."
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "owner-approved label absent."
+          fi
+
+      - name: Classify changed paths
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MARKER_PRESENT: ${{ steps.marker.outputs.present }}
+        run: |
+          if [ "$MARKER_PRESENT" = "true" ]; then
+            bash scripts/escalation-check.sh "$BASE_SHA" "$HEAD_SHA" --marker-present
+          else
+            bash scripts/escalation-check.sh "$BASE_SHA" "$HEAD_SHA"
+          fi
