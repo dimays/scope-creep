@@ -54,7 +54,8 @@ spin up employee/app-bound agents; the CoS ratifies (INVARIANTS §I).
 | Anything touching INVARIANTS, `.claude/`, or a core record set | CoS | relevant lead | CRO | CoS | **Yes** (always) |
 | Resource / budget (token, API, compute) | CoS | CTO | CRO | CoS | Spend increase: **yes** |
 | Routine ticket work | the ticket's `owner` agent | — | gate (green `test`) | PR merge | No — the [[ticket-cycle]] |
-| **Landing a PR (any Scope-Creep repo)** | [[git-manager]] | [[code-reviewer]] + [[qa-tester]] (green) | green CI **+ code-review cycle** ([[code-reviewer]]) | Owner **approval** (implicit or explicit) | Approval required, keystroke not — [[adr-014]] |
+| **Landing a routine PR (periphery / non-core)** | [[git-manager]] | [[code-reviewer]] + [[qa-tester]] (green) | green CI **+ code-review cycle + escalation checklist** ([[code-reviewer]]) | **independent org review** (author ≠ merger) | **No** — self-merges on review ([[adr-022]], PROPOSED) |
+| **Landing an *escalated* PR** (financial / security / substantial tradeoff / safety-rail-or-core) | [[git-manager]] | [[code-reviewer]] + relevant lead + CRO | green CI + review + **escalation trigger raised** | Owner **approval** (implicit or explicit) | **Yes** — held for the Owner ([[adr-022]] / [[adr-014]]) |
 
 **Delegated merge ([[adr-014]]):** a merge is gated on a **green CI gate + Owner approval**,
 not the Owner's keystroke. Once the Owner approves (a conversational go-ahead or an explicit
@@ -62,6 +63,21 @@ yes), the [[git-manager]] may execute the merge and records it. This does **not*
 `deploy` / spend / `delete` / publish gates ([[invariants]] §III.7) or let any agent waive a
 **red** gate (only the Owner does). Load-bearing/core-upgrade merges still carry their own
 Owner approval + CRO verification.
+
+**Autonomous merge with escalation ([[adr-022]] — PROPOSED, awaiting Owner ratification of the
+INVARIANTS §10 amendment; the two rows above are proposed and become active on ratification):**
+a **routine** PR (periphery / non-core) merges on **independent org review** — green CI + the
+[[code-reviewer]] cycle + [[qa-tester]] proof, **author ≠ merger** — with **no Owner
+approval**. Before every autonomous merge the [[code-reviewer]] applies the **escalation
+checklist**; if any trigger fires the PR is **held for the Owner**: **(a)** any financial
+burden / cost / spend (INVARIANTS §7 — absolute, no one drives cost without explicit Owner
+approval); **(b)** security risk (auth, secrets, attack surface, data exposure, permissions);
+**(c)** substantial tradeoff / C-suite concern (above the review's altitude); **(d)** a change
+to the safety rails or the core — INVARIANTS, `guard-gates`, `.claude/` gate/permission config,
+a permission grant, the decision-rights / escalation model, or core `standards`/agents/loops/
+registries (§I.4). A **core-touching PR always escalates** — it aligns with the "Anything
+touching INVARIANTS, `.claude/`, or a core record set" row above (**Yes**, always). The
+`deploy` / spend / `delete` / publish gates and the no-agent-waives-red rule are **unchanged**.
 
 **Landing gate refined ([[adr-021]]):** in the [[dev-cycle]], green CI is *necessary but not
 sufficient* to land — the diff must also clear the [[code-reviewer]] cycle (review → QA →

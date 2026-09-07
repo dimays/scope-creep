@@ -96,9 +96,12 @@ them all itself:
   it terminates; on budget exhaustion it escalates to the [[cto]] / [[chief-of-staff]]
   rather than lowering the bar.
 
-When the diff meets standards and is green, the [[code-reviewer]] **hands the PR to
-[[git-manager]]** to land. It never merges, waives a red gate, or ships (see its agent
-file).
+When the diff meets standards and is green, the [[code-reviewer]] applies the **escalation
+checklist** ([[adr-022]] §2) before hand-off — **(a)** financial burden/spend, **(b)**
+security risk, **(c)** substantial tradeoff / C-suite concern, **(d)** a change to the safety
+rails or the core. All-clear → routine → hand to [[git-manager]] to land on independent
+review. Any trigger → **HOLD for the Owner** (route to Stage 6's Owner-gated path). The
+Code Reviewer never merges, waives a red gate, or ships (see its agent file).
 
 ### 5. Documentation review ([[chief-knowledge-manager]] or its employees)
 Before land, the [[chief-knowledge-manager]] (or a summoned [[technical-writer]] /
@@ -107,13 +110,21 @@ current, cross-links resolve, the registry regenerates clean, the changelog/ADR 
 where the change warrants, and `docs:lint` is green ([[doc-standards]]). A doc that can
 drift silently is a bug — this stage is the guard.
 
-### 6. Land (the [[git-manager]], Owner-approved)
-Once Stages 4–5 pass and CI is green + mergeable, the [[git-manager]] executes the merge
-**under Owner approval** — a **green CI gate + Owner approval**, not the Owner's keystroke
-([[adr-014]]). Parent-first for stacks; children retargeted; merged branches cleaned up.
-The ticket flips to `done` with a [[ledger]] completion entry (per [[ticket-cycle]] step 5).
-`deploy` / spend / `delete` / publish are **out of scope** for this loop and stay
-Owner-gated at the moment of action ([[invariants]] §III.7).
+### 6. Land (the [[git-manager]])
+Once Stages 4–5 pass and CI is green + mergeable, the [[git-manager]] executes the merge —
+**parent-first for stacks; children retargeted; merged branches cleaned up** — and the ticket
+flips to `done` with a [[ledger]] completion entry (per [[ticket-cycle]] step 5). **Which gate
+applies is set by the escalation checklist ([[adr-022]]):**
+- **Routine PR (checklist all-clear):** lands on **independent org review** — green CI + the
+  [[code-reviewer]] cycle + [[qa-tester]] proof, author ≠ merger. **No Owner approval
+  required** ([[adr-022]] §1). This is the new default for periphery / non-core work.
+- **Escalated PR (any trigger fired):** **held for the Owner** and merged only on the Owner's
+  explicit approval ([[adr-014]] rule) — financial burden, security, substantial C-suite
+  tradeoff, or a safety-rail/core change. Core-touching PRs always take this path (§I.4).
+
+Until the Owner ratifies [[adr-022]], the [[adr-014]] gate (Owner approval on every merge)
+remains in force. `deploy` / spend / `delete` / publish are **out of scope** for this loop and
+stay Owner-gated at the moment of action ([[invariants]] §III.7), regardless of how code landed.
 
 ### 7. Close & cleanup (CoS)
 When **all** cohort tickets reach a terminal state (`done | superseded | dropped | blocked`):
@@ -136,9 +147,12 @@ ledger entry is recorded. It never runs a cohort open-endedly — an employee wh
 
 ## Notes
 - **`metadata.mode` = partially-autonomous:** standup / development / review / doc-review /
-  close run unattended; the hard human gate is Stage 6's **Owner approval to land**
-  ([[adr-014]]) plus any INVARIANTS §III action a ticket surfaces (which routes to
-  [[ticket-cycle]]'s STOP checklist, not around it).
+  close run unattended. Under [[adr-022]] a **routine** PR also **lands unattended** on
+  independent review; the hard human gate is Stage 5's **escalation checklist** — a triggered
+  PR (financial / security / substantial-tradeoff / safety-rail-or-core) **holds for the
+  Owner** — plus any INVARIANTS §III action a ticket surfaces (which routes to
+  [[ticket-cycle]]'s STOP checklist, not around it). Until [[adr-022]] is ratified, Stage 6
+  keeps the [[adr-014]] Owner-approval gate on every merge.
 - This loop **builds**; it does not decide load-bearing questions on its own authority. A
   judgment fork inside a ticket routes to [[decision]]; a new-app round routes to
   [[new-app]]; a failing gate routes to [[heal]]. The dev-cycle composes them, it does not

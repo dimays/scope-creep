@@ -11,6 +11,16 @@ metadata:
 
 # ADR-014: Delegated PR-merge execution
 
+> **Superseded in part by [[adr-022]] (PROPOSED — awaiting Owner ratification).**
+> ADR-014 delegated the merge **keystroke** while keeping **Owner approval** as the
+> gate. ADR-022 proposes to replace **Owner approval itself** with **independent org
+> review** for *routine periphery / non-core* PRs, holding a PR for the Owner only on
+> an escalation trigger (financial burden, security, substantial C-suite tradeoff, or
+> a change to the safety rails / core). Until the Owner ratifies ADR-022's INVARIANTS
+> §10 amendment, **this ADR's Owner-approval gate remains in force.** The delegated-
+> execution mechanics, preconditions, and the two-layer (policy ≠ harness) note below
+> carry forward unchanged.
+
 - **Status:** accepted
 - **Date:** 2026-09-06
 - **Deciders:** **Owner** (directed the amendment; only the Owner may amend
