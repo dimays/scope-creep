@@ -2,7 +2,7 @@
 id: work-060
 title: Branch protection on every Scope-Creep repo
 type: feature
-status: owner-action
+status: blocked
 priority: high
 owner: git-manager
 spec: adr-022
