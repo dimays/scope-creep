@@ -1,0 +1,44 @@
+{
+  "_generated": false,
+  "_source": "Owner/CoS-maintained by hand — NOT harvested by scripts/registry-build.ts. The system of record for cloud routines is claude.ai (Code Routines), not this repo, so there is no manifest to harvest from. Edit this file directly whenever a routine is created, rescheduled, or retired in claude.ai, and bump `updated`. `registry:check` never rewrites or drops this file — the harvester (scripts/registry-build.ts) does not reference `routines.json` at all.",
+  "schema_version": "1.0.0",
+  "system_of_record": "claude.ai",
+  "manage_all_url": "https://claude.ai/code/routines",
+  "updated": "2026-09-06",
+  "note": "Lists only TIME-SCHEDULED cloud routines — the recurring cron-fired runners created in claude.ai that clone this repo and open PRs. EVENT-DRIVEN loops (fired by triggers inside a session, not a wall clock — e.g. `dev-cycle`, `ticket-cycle`, `decision`, `level-set`, `request-intake`, `new-app`, `heal`, `core-upgrade`) have no routine and so have no entry here; see registry/loops.json for the full loop set. For each routine below, this file is memory + a link target ([[adr-016]] zero-Claude-call rule) — it does not imply in-app control. The LIVE (self-tuned) cadence and run history are NOT duplicated here: read the named loop's most recent [[ledger]] `cadence-decision` block (`ran_at`, `trigger`, `next_cadence_days`, `reason`) — see the loop's own manifest for the protocol.",
+  "routines": [
+    {
+      "name": "Staffing review",
+      "loop": "staffing-review",
+      "trigger_id": "trig_01D3wGKgqvTAwEV7Y5avk7tf",
+      "cron": "0 14 * * 1",
+      "cadence_bounds_days": [7, 42],
+      "model": "claude-sonnet-5",
+      "source": "github.com/dimays/scope-creep",
+      "manage_url": "https://claude.ai/code/routines/trig_01D3wGKgqvTAwEV7Y5avk7tf",
+      "status": "active"
+    },
+    {
+      "name": "Roadmap planning",
+      "loop": "roadmap",
+      "trigger_id": "trig_017Pa47QSG5qmb9gtQxfEbDR",
+      "cron": "0 14 1,15 * *",
+      "cadence_bounds_days": [14, 90],
+      "model": "claude-sonnet-5",
+      "source": "github.com/dimays/scope-creep",
+      "manage_url": "https://claude.ai/code/routines/trig_017Pa47QSG5qmb9gtQxfEbDR",
+      "status": "active"
+    },
+    {
+      "name": "Org evolve",
+      "loop": "evolve",
+      "trigger_id": "trig_01JviGNe4nFX63ZLoMWucMT6",
+      "cron": "0 14 1 * *",
+      "cadence_bounds_days": [30, 90],
+      "model": "claude-sonnet-5",
+      "source": "github.com/dimays/scope-creep",
+      "manage_url": "https://claude.ai/code/routines/trig_01JviGNe4nFX63ZLoMWucMT6",
+      "status": "active"
+    }
+  ]
+}
