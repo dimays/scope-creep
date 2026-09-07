@@ -1,31 +1,36 @@
 ---
 name: adr-022
-description: Owner-directed governance change moving the routine PR-merge gate from Owner-approval to independent org review, with a hard-line escalation checklist that HOLDS a PR for the Owner on any financial burden, security risk, substantial C-suite tradeoff, or change to the safety rails / core. DIRECTION accepted (Owner-ratified 2026-09-06) but NOT ACTIVE — the INVARIANTS amendment is held and merges stay Owner-gated until the mechanical enforcement (the CRO's required rails) is built and QA-verified. Reinforces INVARIANTS §7 (spend absolute).
+description: Owner-directed governance change moving the routine PR-merge gate from Owner-approval to independent org review, with a hard-line escalation checklist that HOLDS a PR for the Owner on any financial burden, security risk, substantial C-suite tradeoff, or change to the safety rails / core. ACTIVE (Owner-ratified 2026-09-06; the INVARIANTS §10/§7 amendment applied at v1.3.0) after all five mechanical rails (work-057–061) shipped and were QA-verified. Reinforces INVARIANTS §7 (spend absolute).
 metadata:
   type: reference
-  status: accepted
-  version: 1.1.0
+  status: active
+  version: 1.2.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-06
 ---
 
 # ADR-022: Autonomous merge with escalation
 
-- **Status:** **DIRECTION ACCEPTED (Owner-ratified 2026-09-06) — but NOT ACTIVE.**
+- **Status:** **ACTIVE (Owner-ratified 2026-09-06; activated 2026-09-06).**
   The Owner ratified the *model* and authorized the INVARIANTS amendment; an
-  independent [[chief-reality-officer]] pass then found the design textually sound but
-  **unsafe to activate until mechanical enforcement exists** (today the escalation is
-  reviewer-judgment with no backstop, and the catastrophic "org merges a change to its
-  own gates" case is reachable). Per the Owner's decision (*"ratify direction, build
-  the gates, then activate"*): the **INVARIANTS §10/§7 amendment below is NOT applied**
-  and **merges stay Owner-gated** until the **Activation gate** (below) is met and
-  QA-verified. Then the Owner applies the exact invariant text and flips this active.
-  **Only the Owner amends the [[invariants]]** (§I.2); `charter/INVARIANTS.md` stays
-  pristine until that step.
+  independent [[chief-reality-officer]] pass found the design textually sound but
+  **unsafe to activate until mechanical enforcement exists** (reviewer-judgment
+  escalation with no backstop, and the catastrophic "org merges a change to its own
+  gates" case reachable). Per the Owner's decision (*"ratify direction, build the
+  gates, then activate"*) the five mechanical rails were built and verified —
+  [[work-057]] (path-based escalation CI check, required on `main`), [[work-058]]
+  (gate `gh pr merge`), [[work-059]] (lock the gate surface + in-band permissions),
+  [[work-060]] (branch protection with `enforce_admins`, Owner-applied), [[work-061]]
+  (author≠merger + path-gate QA proof, 8/8) — then the Owner applied the **INVARIANTS
+  §10/§7 amendment** (`charter/INVARIANTS.md` v1.3.0). Autonomous merge on independent
+  review is now **live** for routine periphery work; escalation triggers still HOLD for
+  the Owner. **Residual (recorded honestly):** the escalation marker (`owner-approved`
+  label) remains **agent-forgeable under the shared GitHub identity** until [[adr-023]]
+  provisions a restricted agent identity — a hardening follow-up, not a floor blocker.
 - **Date:** 2026-09-06
-- **Deciders:** **Owner** (directed the change; authorized the INVARIANTS
-  amendment; only the Owner amends INVARIANTS, §I.2), Chief of Staff (designed +
-  drafted + will record). CRO independent review pending.
+- **Deciders:** **Owner** (directed the change; authorized *and applied* the INVARIANTS
+  amendment, §I.2), Chief of Staff (designed + drafted + recorded), [[chief-reality-officer]]
+  (independent review: RATIFY-WITH-FIXES → the five rails).
 - **Owner-gated:** **yes** — this is an INVARIANTS amendment **and** a
   [[core-upgrade]] (it edits `standards/`, core agents, and a core loop). Lands via
   **PR under Owner approval** only. Do **not** self-merge — and, pointedly, this
@@ -183,12 +188,15 @@ They are filed as work tickets and are the preconditions:
 independence holes.** Until they land, merges stay Owner-gated exactly as they are today
 ([[adr-014]]) — the escalation checklist is a *promise* until it is a *gate*.
 
-## The exact proposed INVARIANTS amendment (PROPOSED — awaiting Owner ratification)
+## The exact INVARIANTS amendment (APPLIED 2026-09-06 at v1.3.0)
 
-> **PROPOSED — awaiting Owner ratification; only the Owner amends INVARIANTS
-> ([[invariants]] §I.2).** The text below is a **draft for the Owner to apply**, not
-> a ratified edit. `charter/INVARIANTS.md` is deliberately **left untouched** in this
-> PR — the locked file stays locked; the Owner applies this text on ratification.
+> **APPLIED (Owner-ratified and Owner-applied 2026-09-06; [[invariants]] §I.2).** The
+> text below is the amendment the Owner applied to `charter/INVARIANTS.md` (v1.2.0 →
+> v1.3.0) when activating this ADR. The agent could not and did not write the locked
+> file — the gate-surface guard ([[work-059]]) + the harness classifier both block an
+> agent write to INVARIANTS at multiple layers; the Owner applied it directly (from a
+> staged copy that was then removed), exactly as §I.2 requires. The diff below is the
+> historical record.
 
 ### §10 — replace the ADR-014 clarification block with:
 

@@ -31,8 +31,9 @@ single agent carrying a single ticket from pick → execute → gate → land. T
 - The dev-cycle then **interposes** its review stages **into** [[ticket-cycle]] step 5
   ("Gate & land"): a green `test` gate is now **necessary but not sufficient** to land —
   the PR must also clear the **code-review cycle** (§ Stage 4) and **doc review**
-  (§ Stage 5) first. git-manager then executes the merge under Owner approval
-  ([[adr-014]]), exactly as [[ticket-cycle]] step 5 already routes.
+  (§ Stage 5) first. git-manager then executes the merge — on **independent org review**
+  for routine work ([[adr-022]], active), or under Owner approval when an escalation
+  trigger fires — exactly as [[ticket-cycle]] step 5 already routes.
 - The dev-cycle **tears the cohort down** (retire employees per [[staffing]]) once all
   its tickets reach a terminal state.
 
@@ -122,9 +123,10 @@ applies is set by the escalation checklist ([[adr-022]]):**
   explicit approval ([[adr-014]] rule) — financial burden, security, substantial C-suite
   tradeoff, or a safety-rail/core change. Core-touching PRs always take this path (§I.4).
 
-Until the Owner ratifies [[adr-022]], the [[adr-014]] gate (Owner approval on every merge)
-remains in force. `deploy` / spend / `delete` / publish are **out of scope** for this loop and
-stay Owner-gated at the moment of action ([[invariants]] §III.7), regardless of how code landed.
+[[adr-022]] is **active** (2026-09-06): routine PRs land on independent org review with **no
+Owner approval**; only escalation triggers hold for the Owner. `deploy` / spend / `delete` /
+publish are **out of scope** for this loop and stay Owner-gated at the moment of action
+([[invariants]] §III.7), regardless of how code landed.
 
 ### 7. Close & cleanup (CoS)
 When **all** cohort tickets reach a terminal state (`done | superseded | dropped | blocked`):
@@ -151,8 +153,8 @@ ledger entry is recorded. It never runs a cohort open-endedly — an employee wh
   independent review; the hard human gate is Stage 5's **escalation checklist** — a triggered
   PR (financial / security / substantial-tradeoff / safety-rail-or-core) **holds for the
   Owner** — plus any INVARIANTS §III action a ticket surfaces (which routes to
-  [[ticket-cycle]]'s STOP checklist, not around it). Until [[adr-022]] is ratified, Stage 6
-  keeps the [[adr-014]] Owner-approval gate on every merge.
+  [[ticket-cycle]]'s STOP checklist, not around it). [[adr-022]] is **active**, so Stage 6
+  self-merges routine work on independent review and reserves Owner approval for escalations.
 - This loop **builds**; it does not decide load-bearing questions on its own authority. A
   judgment fork inside a ticket routes to [[decision]]; a new-app round routes to
   [[new-app]]; a failing gate routes to [[heal]]. The dev-cycle composes them, it does not

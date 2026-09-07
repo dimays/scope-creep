@@ -4,7 +4,7 @@ description: The locked rules Scope Creep may never violate. Amendable only by t
 metadata:
   type: reference
   status: active
-  version: 1.2.0
+  version: 1.3.0
   owner_agent: human-owner
   last_verified: 2026-09-06
 ---
@@ -57,7 +57,13 @@ surface it to the owner, never to route around it.
    production, spending money, deleting data, and publishing require explicit
    owner confirmation at the moment of action. Agents may *propose*; only the
    owner *disposes*. These gates are enforced mechanically (hooks + branch/PR
-   flow), not by agent goodwill. See [[app-contract]] and [[tech-sops]].
+   flow), not by agent goodwill. **Merging code is not itself one of these
+   actions** — a routine merge lands on independent org review (§10) — **but a PR
+   that *enables or requires* spend, a deploy, a delete, or a publish escalates to
+   the Owner** ([[adr-022]]), and the actual `deploy` / spend / `delete` / publish
+   action stays Owner-gated at the moment of execution **regardless of how its code
+   landed**. **No agent — and no delegated role, the [[ceo]] included — may drive
+   cost without explicit Owner approval.** See [[app-contract]] and [[tech-sops]].
 8. **Every consequential action is recorded.** Loop runs, agent invocations,
    artifacts produced, and gate decisions append to the [[ledger]]. You cannot
    heal what you cannot replay.
@@ -65,17 +71,37 @@ surface it to the owner, never to route around it.
    secrets, or filesystem namespace. The default datastore is never production.
 10. **Every change is reversible.** All work lands via branch + review + gated
     merge. Nothing is destroyed without the owner and a ledger entry.
-    > **Clarification (Owner-approved 2026-09-06, [[adr-014]]):** The gate on a
-    > **PR merge** is (a) a **green CI gate** and (b) **Owner approval** — not the
-    > Owner's keystroke. Once the Owner approves a merge (in conversation, whether
-    > implicitly or explicitly), a **ratified git-manager / developer agent** may
-    > *execute* that merge on any Scope-Creep repo and record it in the [[ledger]].
-    > Approval is the gate; execution may be delegated. This refines §7's "only the
-    > owner disposes" for merges — the owner disposes by **approving**. It does
-    > **not** loosen §7's other gates: `deploy` / spend / `delete` / publish still
-    > require the Owner at the moment of action (the `guard-gates` hook still blocks
-    > them). A **red** gate is never waivable by an agent — only the Owner waives a
-    > red gate. See [[decision-rights]].
+    > **Clarification (Owner-ratified 2026-09-06, [[adr-022]] — supersedes in part
+    > the [[adr-014]] clarification):** A **routine PR merge** is gated on (a) a
+    > **green CI gate** and (b) an **independent org review** — no longer on Owner
+    > approval or the Owner's keystroke. *Independent* review means: the **author is
+    > never the merger**; the [[code-reviewer]] orchestrates the review to
+    > [[cto]]-set standards; the [[qa-tester]] proves it green **and** working with
+    > an artifact; and the [[git-manager]] executes the merge and records it in the
+    > [[ledger]]. This is the [[dev-cycle]] finish line — **verify → review → land**
+    > — and the org may self-merge **routine periphery / app / non-core** work.
+    >
+    > **Escalation — these HOLD the PR for the Owner and are NOT self-mergeable.**
+    > Before any autonomous merge the reviewer applies the escalation checklist; if
+    > **any** trigger fires the PR is **held** and routed to the Owner for explicit
+    > approval: **(a) any financial burden / cost / spend** — a PR that would
+    > purchase, provision paid infra, add a paid dependency, or otherwise drive cost
+    > (this is §7: **no one drives cost without explicit Owner approval — absolute
+    > and unchanged**); **(b) security risk** — auth, secrets, attack surface, data
+    > exposure, or permissions; **(c) substantial tradeoff / C-suite concern** — a
+    > load-bearing change with unresolved C-suite disagreement or above the review's
+    > altitude ([[decision-rights]]); **(d) a change to the safety rails or the core
+    > themselves** — the INVARIANTS, the `guard-gates` hook, `.claude/` gate or
+    > permission config, a permission grant, the decision-rights / escalation model,
+    > or the core (§I.4). The org **may not autonomously weaken its own gates.**
+    >
+    > This does **not** loosen §7's other gates: `deploy` / spend / `delete` /
+    > publish still require the Owner at the moment of action, and the `guard-gates`
+    > hook still blocks them mechanically. A **red** gate is never waivable by an
+    > agent — only the Owner waives red. Core-upgrades still require explicit Owner
+    > approval (§I.4). Execution may be delegated to a ratified [[git-manager]]; the
+    > **review**, not the Owner, now disposes of a routine merge. See
+    > [[decision-rights]], [[dev-cycle]], [[adr-014]].
 
 ## IV. The contract over the implementation
 
