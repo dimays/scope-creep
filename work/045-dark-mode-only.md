@@ -2,7 +2,7 @@
 id: work-045
 title: Dark-mode-only — drop light mode across design package + console
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-designer
 assignees: ada

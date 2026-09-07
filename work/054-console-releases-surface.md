@@ -2,7 +2,7 @@
 id: work-054
 title: Console Releases surface — project release notes newest-first with links to PRs/tickets
 type: feature
-status: proposed
+status: done
 priority: low
 owner: chief-designer
 spec: prd-console-operations
