@@ -54,7 +54,7 @@ spin up employee/app-bound agents; the CoS ratifies (INVARIANTS §I).
 | Anything touching INVARIANTS, `.claude/`, or a core record set | CoS | relevant lead | CRO | CoS | **Yes** (always) |
 | Resource / budget (token, API, compute) | CoS | CTO | CRO | CoS | Spend increase: **yes** |
 | Routine ticket work | the ticket's `owner` agent | — | gate (green `test`) | PR merge | No — the [[ticket-cycle]] |
-| **Landing a PR (any Scope-Creep repo)** | [[git-manager]] | [[qa-tester]] (green) | gate (green CI) | Owner **approval** (implicit or explicit) | Approval required, keystroke not — [[adr-014]] |
+| **Landing a PR (any Scope-Creep repo)** | [[git-manager]] | [[code-reviewer]] + [[qa-tester]] (green) | green CI **+ code-review cycle** ([[code-reviewer]]) | Owner **approval** (implicit or explicit) | Approval required, keystroke not — [[adr-014]] |
 
 **Delegated merge ([[adr-014]]):** a merge is gated on a **green CI gate + Owner approval**,
 not the Owner's keystroke. Once the Owner approves (a conversational go-ahead or an explicit
@@ -62,6 +62,14 @@ yes), the [[git-manager]] may execute the merge and records it. This does **not*
 `deploy` / spend / `delete` / publish gates ([[invariants]] §III.7) or let any agent waive a
 **red** gate (only the Owner does). Load-bearing/core-upgrade merges still carry their own
 Owner approval + CRO verification.
+
+**Landing gate refined ([[adr-021]]):** in the [[dev-cycle]], green CI is *necessary but not
+sufficient* to land — the diff must also clear the [[code-reviewer]] cycle (review → QA →
+debug until it meets [[cto]]-set standards) and the CKM doc review first. Approval is still
+the Owner's; the [[code-reviewer]] decides *ready*, [[qa-tester]] *proves*, and
+[[git-manager]] *lands*. The **Product scope / roadmap** row is operationalized by the
+[[roadmap]] loop (the [[ceo]] presents the plan to the Owner as the board); org **machinery**
+changes proposed by [[evolve]] route through [[core-upgrade]] (Owner-gated).
 
 ## When to convene the full C-suite (a dry run)
 - The Owner invites it, **or**

@@ -51,6 +51,23 @@
       "path": "agents/templates/design-systems-engineer.md"
     },
     {
+      "name": "devops-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Builds and tends the delivery machinery on the Golden Path — CI gates, the App-Contract lifecycle targets, environment promotion (dev → staging → prod), healthchecks, and edge-perimeter deploys — behind the gates, proposing never disposing.",
+      "owner_agent": "cto",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "ci",
+        "github-actions",
+        "app-contract",
+        "deploy",
+        "healthcheck",
+        "environments"
+      ],
+      "path": "agents/templates/devops-engineer.md"
+    },
+    {
       "name": "frontend-engineer",
       "kind": "template",
       "status": "active",
@@ -190,6 +207,22 @@
         "writing"
       ],
       "path": "agents/templates/researcher.md"
+    },
+    {
+      "name": "security-engineer",
+      "kind": "template",
+      "status": "active",
+      "description": "Hardens the org against its own mistakes and prompt injection — the instruction-source boundary, gate enforcement (guard-gates hook), secret hygiene, environment isolation, and dependency/supply-chain review — behind the gates, proposing never disposing.",
+      "owner_agent": "cto",
+      "default_model": "claude-sonnet-5",
+      "skills": [
+        "threat-modeling",
+        "secret-hygiene",
+        "dependency-audit",
+        "gate-enforcement",
+        "injection-defense"
+      ],
+      "path": "agents/templates/security-engineer.md"
     },
     {
       "name": "technical-writer",

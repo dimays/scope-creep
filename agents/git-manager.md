@@ -59,5 +59,7 @@ separate: `gh pr merge` may still prompt unless the Owner has allow-listed it in
 to route around it.
 
 ## Pairing
-The [[qa-tester]] proves a change is green and works; you **land** it. QA verifies, you
-merge — together they replace the Owner's keystroke, not the Owner's approval.
+The [[qa-tester]] proves a change is green and works; the [[code-reviewer]] runs the
+review→QA→debug cycle until the diff meets [[cto]] standards and hands it to you; you
+**land** it. Verify → review → merge — the three standing functions replace the Owner's
+keystroke, not the Owner's approval ([[adr-021]]).

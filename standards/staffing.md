@@ -4,7 +4,7 @@ description: How work gets staffed for consistent quality — the template→emp
 metadata:
   type: reference
   status: active
-  version: 1.0.1
+  version: 1.0.2
   owner_agent: chief-of-staff
   last_verified: 2026-09-06
 ---
@@ -22,9 +22,9 @@ template/employee model of [[adr-017]], and pins model selection to [[resource-b
 - **Executives** — the CEO + six C-suite ([[chief-of-staff]], [[cto]],
   [[chief-product-officer]], [[chief-designer]], [[chief-knowledge-manager]],
   [[chief-reality-officer]]). Permanent leadership; hold *direction* and domains.
-- **Standing function agents** ([[qa-tester]], [[git-manager]]) — permanent, cross-org
-  *functions* (`kind: function`); hold *execution*, not a domain. Not employees, not
-  executives; they are not summoned per-ticket.
+- **Standing function agents** ([[qa-tester]], [[code-reviewer]], [[git-manager]]) —
+  permanent, cross-org *functions* (`kind: function`); hold *execution*, not a domain. Not
+  employees, not executives; they are not summoned per-ticket.
 - **Employees** (`kind: employee`) — **ephemeral/transitory**. Instantiated from a
   template by an executive, staffed to specific tickets, and **dissolved** (retired) when
   the work is done. The default lifespan is "as long as the ticket(s)," not forever.
@@ -63,8 +63,8 @@ comes from the template, not from a long-lived worker.
   draws on. Improving a template is encouraged (it is mutable); forking a near-duplicate is
   not (it fragments the shelf).
 - **Don't summon an employee for standing-function work.** "Prove it" routes to
-  [[qa-tester]]; "land it" routes to [[git-manager]]. Those are permanent functions, not
-  per-ticket employees.
+  [[qa-tester]]; "review this diff" routes to [[code-reviewer]]; "land it" routes to
+  [[git-manager]]. Those are permanent functions, not per-ticket employees.
 
 ## 4. Model presets (per template, overridable per employee)
 Every template declares a **`default_model`** — the tier an instance *starts* on. Read the
@@ -102,8 +102,9 @@ Rules, straight from [[resource-budget]]:
   and `template` are required on every employee, and `work:check` fails if an `assignee`
   doesn't resolve. Existence (the agent file) and assignment (the ticket) are the two
   facts; the join is derived, never denormalized ([[adr-017]]).
-- **The standing functions guard the finish line.** [[qa-tester]] proves green/works and
-  [[git-manager]] lands it — the quality gate on *every* employee's output, regardless of
+- **The standing functions guard the finish line.** [[qa-tester]] proves green/works,
+  [[code-reviewer]] runs the review→QA→debug cycle until the diff meets [[cto]] standards,
+  and [[git-manager]] lands it — the quality gate on *every* employee's output, regardless of
   which executive summoned it.
 
 ## 6. This is an ongoing project

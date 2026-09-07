@@ -22,8 +22,8 @@ or amend INVARIANTS — those stay with the Owner. See
 
 **Four agent tiers** ([ADR-020](standards/adr/020-agent-taxonomy-and-staffing-model.md),
 see [`standards/staffing.md`](standards/staffing.md)): **Executives** (`kind: core`, above)
-· **Standing function agents** (`kind: function`: QA Tester, Git Manager — permanent,
-cross-org *execution*, not C-suite and not employees) · **Employees** (`kind: employee`,
+· **Standing function agents** (`kind: function`: QA Tester, Code Reviewer, Git Manager —
+permanent, cross-org *execution*, not C-suite and not employees) · **Employees** (`kind: employee`,
 ephemeral — summoned from a template, staffed to a ticket, retired when done) ·
 **Templates** (`kind: template`, the stable-but-mutable per-executive catalog to summon
 from). The CoS drives staffing for consistent quality via the
