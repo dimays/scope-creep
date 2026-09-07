@@ -11,3 +11,7 @@ build/
 
 # Human-Input Log — local-only (Owner's choice, ADR-011): never pushed to the public repo.
 human-input/
+
+# Org-activity log (work-036) — local-only, mirrors human-input/. The capture hook
+# writes activity/YYYY-MM.ndjson; empty on a fresh clone, never pushed.
+activity/
