@@ -3,9 +3,9 @@ description: The Scope Creep control plane — a single-user, Agent-SDK-native s
 metadata:
   type: project
   status: active
-  version: 0.1.0
+  version: 0.2.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-04
+  last_verified: 2026-09-07
 kind: control-plane
 single_user: true
 blessed_stack: typescript
