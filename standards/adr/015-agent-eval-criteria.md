@@ -3,16 +3,20 @@ name: adr-015
 description: Defines per-role success criteria — what "good" means for the six C-suite executives (the CEO is deliberately scoped out) plus the three standing functional agents (qa-tester, git-manager, code-reviewer) — and sketches a grounded eval method that derives any score only from real, in-repo signal (authored ledger entries and ADRs, landed PRs, QA verdicts, CRO verifications, the activity graph), never from invented metrics or parsed prose. This is the gating prerequisite for work-007: no agent score may be claimed until the criteria exist as an accepted ADR, and transparent contribution history precedes any quantitative score.
 metadata:
   type: reference
-  status: proposed
-  version: 1.1.0
+  status: accepted
+  version: 1.2.0
   owner_agent: chief-product-officer
   last_verified: 2026-09-07
 ---
 
 # ADR-015: Per-role agent-eval criteria + a grounded eval method
 
-- **Status:** proposed — **CRO-verified 2026-09-07: ACCEPT-WITH-FIXES; the required fixes
-  (1–5 below) are applied, so it is ready for CoS ratification.** Authored by the CPO (with the
+- **Status:** **ACCEPTED — CoS-ratified 2026-09-07 on the Owner's explicit go ("ratify evals").**
+  CRO-verified 2026-09-07 (ACCEPT-WITH-FIXES); the required fixes (1–5 below) are applied.
+  The per-role criteria now exist as an accepted ADR, so [[work-007]]'s gate is met — a
+  transparent contribution history may be built against them. **Still no score is computed
+  until it is actually surfaced (a separate console ticket), and the readiness caveat below
+  stands (this ratification does not close the Owner's open [[decision-rights]] question).** Authored by the CPO (with the
   CKM's discoverability lens) under the overnight crank ([[ledger-036-overnight-crank]]).
   Acceptance is the gate: per [[decision-rights]] a docs/knowledge standard is **CRO-verified
   and CoS-ratified**, and the agent-eval design is jointly owned by the
