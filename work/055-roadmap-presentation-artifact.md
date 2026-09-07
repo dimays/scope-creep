@@ -2,13 +2,23 @@
 id: work-055
 title: CEO roadmap-presentation artifact shape + storage convention
 type: feature
-status: proposed
+status: done
 priority: low
 owner: chief-product-officer
 spec: prd-console-operations
 created: 2026-09-06
 updated: 2026-09-06
 ---
+> **Shipped 2026-09-06.** Artifact shape + storage convention defined:
+> [`roadmap/000-template.md`](../roadmap/000-template.md) (the shape below), storage at
+> `roadmap/NNN-YYYY-MM-DD-*.md` with a manifest, supersede-not-destroy per
+> [[doc-standards]]. No seed presentation is included — unlike [[work-053]]'s
+> release-notes backfill, fabricating a CEO board deck's themes/traces would violate the
+> no-fabrication rule ([[invariants]] §III.8); the first real entry is the [[roadmap]]
+> loop's own finale run. **Not shipped (deliberately out of scope):** the Roadmap
+> Planning Loop itself, which is the CoS's [[adr-021]] design and runs as the capstone
+> after this ticket.
+
 Define and stand up the **roadmap-presentation artifact** for **Surface 3** of
 [[prd-console-operations]] — the CEO's board decks, stored as repo artifacts, projectable by
 the Console.
