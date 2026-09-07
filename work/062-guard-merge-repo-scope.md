@@ -2,7 +2,7 @@
 id: work-062
 title: guard-gates gh-pr-merge check is repo-ambiguous (cross-repo PR-number collision)
 type: bug
-status: proposed
+status: done
 priority: medium
 owner: cto
 spec: adr-022
@@ -30,3 +30,7 @@ gate blocks the wrong PR: merging console **#49** (green) was refused because sc
 **Acceptance:** the merge gate verifies the checks of the PR actually being merged, in the
 correct repo, regardless of CWD or PR-number collisions; a green cross-repo PR is not blocked
 by a same-numbered red control-plane PR. See [[work-058]], [[ledger-051-overnight-eng-loop]].
+
+> **DONE (2026-09-07).** The fix landed in `guard-gates.sh` (control-plane #60): the
+> `gh pr merge` gate now parses `--repo` and passes it to `gh pr checks`, so it verifies the
+> right repo's checks. Owner-applied (gate surface); verified live.

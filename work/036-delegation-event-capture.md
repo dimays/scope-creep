@@ -2,7 +2,7 @@
 id: work-036
 title: Delegation event capture (structured activity log + control-plane hook)
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-transparent-delegation
@@ -24,3 +24,9 @@ project them — decisions stay sourced from the [[ledger]], never inferred.
 **Acceptance:** a real CoS→executive delegation appends a well-formed line to
 `activity/*.ndjson`; capture is mechanical (a hook), not goodwill; no decision or rationale
 is ever inferred. See [[adr-013]].
+
+> **DONE (2026-09-07).** The PreToolUse:Task capture hook (`.claude/hooks/log-activity.{py,sh}`)
+> + its settings.json wiring landed (control-plane #60) and the Owner **verified** it live —
+> a fresh session's spawn appended a well-formed line to `activity/*.ndjson`. The read side
+> (the Console Activity feed + per-agent/per-thread projection) shipped in [[work-037]] /
+> [[work-031]]. The feed populates as hook-enabled sessions run in the control-plane dir.
