@@ -1,26 +1,35 @@
 ---
 name: adr-015
-description: Defines per-role success criteria — what "good" means for each of the six core executives plus the two standing functional agents (qa-tester, git-manager) — and sketches a grounded eval method that derives any score only from real, in-repo signal (authored ledger entries and ADRs, landed PRs, QA verdicts, CRO verifications, the activity graph), never from invented metrics or parsed prose. This is the gating prerequisite for work-007: no agent score may be claimed until the criteria exist as an accepted ADR, and transparent contribution history precedes any quantitative score.
+description: Defines per-role success criteria — what "good" means for the six C-suite executives (the CEO is deliberately scoped out) plus the three standing functional agents (qa-tester, git-manager, code-reviewer) — and sketches a grounded eval method that derives any score only from real, in-repo signal (authored ledger entries and ADRs, landed PRs, QA verdicts, CRO verifications, the activity graph), never from invented metrics or parsed prose. This is the gating prerequisite for work-007: no agent score may be claimed until the criteria exist as an accepted ADR, and transparent contribution history precedes any quantitative score.
 metadata:
   type: reference
   status: proposed
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-product-officer
-  last_verified: 2026-09-06
+  last_verified: 2026-09-07
 ---
 
 # ADR-015: Per-role agent-eval criteria + a grounded eval method
 
-- **Status:** proposed — authored by the CPO (with the CKM's discoverability lens) under the
-  overnight crank ([[ledger-036-overnight-crank]]). Acceptance is the gate: per
-  [[decision-rights]] a docs/knowledge standard is **CRO-verified and CoS-ratified**, and the
-  agent-eval design is jointly owned by the [[chief-product-officer]] and the
-  [[chief-knowledge-manager]] ([[adr-004]]). **No agent score may be computed or surfaced
-  until this ADR is accepted.**
-- **Date:** 2026-09-06
-- **Deciders:** CPO (lead), CKM (co-owner, discoverability); CRO to verify; CoS to ratify.
+- **Status:** proposed — **CRO-verified 2026-09-07: ACCEPT-WITH-FIXES; the required fixes
+  (1–5 below) are applied, so it is ready for CoS ratification.** Authored by the CPO (with the
+  CKM's discoverability lens) under the overnight crank ([[ledger-036-overnight-crank]]).
+  Acceptance is the gate: per [[decision-rights]] a docs/knowledge standard is **CRO-verified
+  and CoS-ratified**, and the agent-eval design is jointly owned by the
+  [[chief-product-officer]] and the [[chief-knowledge-manager]] ([[adr-004]]). **No agent score
+  may be computed or surfaced until this ADR is accepted.**
+- **Date:** 2026-09-06 · **CRO-verified:** 2026-09-07 ([[ledger-052-evals-cro-verified]]).
+- **Deciders:** CPO (lead), CKM (co-owner, discoverability); CRO **verified** (ACCEPT-WITH-FIXES,
+  fixes landed); CoS to ratify.
 - **Owner-gated:** no (a measurement standard, not new product scope or a core-record change).
   Surfacing a score in the Console is ordinary ticket work behind this gate.
+  > **Readiness caveat (CRO, recorded not resolved):** this "not Owner-gated" classification
+  > follows the [[decision-rights]] "docs/knowledge standard → No" row — but that standard is
+  > itself only *provisionally* ratified, with a standing CRO dissent awaiting the Owner's
+  > explicit sign-off on whether a `standards/` file is a core record-set that [[invariants]]
+  > §I.4 makes Owner-gated. CoS ratification of this ADR does **not** close that Owner question;
+  > it is reasonable here only because this ADR changes no core behavior, computes no score, and
+  > is fully reversible.
 
 ## Context
 [[work-007]] wants to move agent profiles "from transparent contribution history to real
@@ -32,7 +41,11 @@ history before claiming quantitative scores."
 Two hard facts from [[adr-013]] constrain any eval built here, and this ADR treats them as
 load-bearing:
 1. **The [[ledger]] is deliberate prose, not a typed metric stream.** Deriving a number by
-   NLP-parsing prose would be *inventing* the metric — forbidden ([[invariants]] §III.8).
+   NLP-parsing prose would be *inventing* the metric. The ban is grounded in [[invariants]]
+   §III.8 (only **recorded, real actions** are admissible — a parsed-from-prose count is not a
+   recorded action) plus the [[chief-reality-officer]] mandate against ungrounded claims — not
+   in a verbatim invariant that forbids "metrics" (§III.8 reads "every consequential action is
+   recorded"; the older [[adr-013]] cites it the same loose way — worth tightening in both).
 2. **The activity log (`activity/*.ndjson`) is local, gitignored, and empty on a fresh
    clone.** Any count drawn from it must say "no activity captured yet" honestly rather than
    render an authoritative-looking zero as if it were a real score.
@@ -49,7 +62,9 @@ Each role's "good" is stated as an **observable behavior** tied to a **grounded 
 real artifact already produced in-repo, not a proxy we would have to fabricate. Criteria are
 role-specific because the roles are; a single universal score would flatten them.
 
-**The six core executives**
+**The six C-suite executives** (the **[[ceo]]** is deliberately scoped out: it holds
+Owner-delegated *direction* ([[adr-018]]) and is judged by the Owner, who appointed and can
+revoke it — an org-eval of the CEO would invert that line. Add it only if the Owner asks.)
 
 - **[[chief-of-staff]]** — *good* = load-bearing decisions reach the **right room** and get
   **ratified and recorded**; org changes ([[adr-002]]) are ratified with a ledger entry;
@@ -76,11 +91,18 @@ role-specific because the roles are; a single universal score would flatten them
   verifications recorded against decisions; corrections that changed an outcome (e.g. the
   ADR-013 undercount and the lying `/healthz`).
 
-**The two standing functional agents**
+**The three standing functional agents** ([[adr-020]] · [[glossary]])
 
 - **[[qa-tester]]** — *good* = "done/works" is turned into observed fact with an attached
   artifact, and **couldn't-verify is distinguished from failed**. *Signal:* PASS / FAIL /
   INCONCLUSIVE verdicts with the command + output/screenshot; throwaway spikes cleaned up.
+- **[[code-reviewer]]** — *good* = a pushed diff is driven to **meets-standards-and-green**
+  through a real review→QA→debug cycle (never a rubber-stamp), the **escalation checklist
+  ([[adr-022]] §2) is applied before hand-off**, and the review **terminates within budget** —
+  escalating to the CTO/CoS rather than lowering the bar when it can't. *Signal:* recorded
+  ready-judgments / review verdicts on PRs it processed; escalations it correctly raised (a
+  held PR that should have been held); it is never the author of a diff it clears (author ≠
+  reviewer). *(Distinct from qa-tester, who proves green/works, and git-manager, who lands.)*
 - **[[git-manager]]** — *good* = approved work **lands green and mergeable**, stacks are
   parent-first with children retargeted, merged branches are cleaned up, and **no red gate or
   missing approval is ever routed around** ([[adr-014]]). *Signal:* PRs landed with the
@@ -106,9 +128,15 @@ role-specific because the roles are; a single universal score would flatten them
    explicit (manifest `owner_agent`, a ledger byline, an ADR decider, a PR author). Where
    attribution is ambiguous, it is **unattributed**, never guessed onto an agent to inflate a
    count.
-4. **Show the denominator and the provenance.** Any surfaced figure links to the underlying
+4. **Show the denominator and the provenance.** Any surfaced *figure* links to the underlying
    artifacts (the ledger entry, the PR, the verdict) so the Owner can audit it. A number the
-   Owner cannot click through to its evidence is not shippable.
+   Owner cannot click through to its evidence is not shippable. **Absence signals are not
+   figures.** Several criteria above are the *absence* of a bad event — "no orphaned/mis-routed
+   PRs," "no invariant or gate routed around," "zero red-gate merges." A non-event has no
+   artifact to link, so it is **never rendered as a clickable score**; it is qualitative
+   context, and where shown at all it links to the *population that would contain a violation*
+   (e.g. the full merged-PR set that demonstrably has none orphaned), never a bare "0" dressed
+   as an earned number. Empty-is-empty (§B.5) governs it too.
 5. **Empty is empty, and it says so.** On a fresh clone or a quiet week the history is thin or
    the activity log is empty; the surface renders "no contributions captured yet," never a
    fabricated or zero-dressed-as-earned score.
@@ -126,6 +154,12 @@ role-specific because the roles are; a single universal score would flatten them
   delegation happened, never *that a decision was right* ([[adr-013]]).
 - **No cross-agent leaderboard ranking** in Phase 1. Contribution history is per-agent and
   descriptive; ranking is a Phase-2 decision that needs its own acceptance.
+- **No rewarding narration-by-volume.** Counts (ledger entries authored, ADRs led, PRs landed)
+  measure **quantity, not quality**, and are gameable — padding thin entries or splitting a PR
+  inflates them. The surface must present counts as volume only; the quality backstop is
+  provenance + clickthrough (§B.4) and CRO validation of the history against reality (§C.4 and
+  the [[chief-reality-officer]] mandate), so a high count of hollow artifacts never reads as
+  merit — the exact failure the org exists to catch.
 
 ## Consequences
 - **The ticket's gate is satisfiable:** per-role criteria now exist as a recorded ADR, so a
@@ -152,5 +186,3 @@ role-specific because the roles are; a single universal score would flatten them
   can't be audited by clicking through to a hard artifact.
 - **Self-assessment questionnaires per agent.** Rejected: self-report is not grounded signal;
   it rewards confident narration over produced work.
-</content>
-</invoke>
