@@ -68,6 +68,14 @@
       "path": "loops/request-intake.md"
     },
     {
+      "name": "request-triage",
+      "kind": "loop",
+      "status": "proposed",
+      "description": "The scheduled cloud routine that closes the Request Loop — sweeps new Owner request threads, runs request-intake per thread, writes tickets and the outcome back to the thread, and pulls the Owner in only when a call is theirs. Hourly to start, self-tuning. The time-scheduled sibling of request-intake.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/request-triage.md"
+    },
+    {
       "name": "roadmap",
       "kind": "loop",
       "status": "active",
