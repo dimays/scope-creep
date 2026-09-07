@@ -56,14 +56,14 @@
       "name": "code-reviewer",
       "kind": "function",
       "status": "active",
-      "description": "The review orchestrator — a standing function agent that drives the code-review cycle in the dev loop. Reads a pushed PR diff against CTO-set standards, delegates QA to the qa-tester and fixes/debugging to employees, iterates (bounded) until the diff meets standards and gates are green, then hands the PR to the git-manager to land. Never merges, ships, or waives a red gate.",
+      "description": "The review orchestrator — a standing function agent that drives the code-review cycle in the dev loop. Reads a pushed PR diff against CTO-set standards, delegates QA to the qa-tester and fixes/debugging to employees, iterates (bounded) until the diff meets standards and gates are green, applies the escalation checklist (financial / security / substantial-tradeoff / safety-rail-or-core), then either hands a routine PR to the git-manager to land or HOLDS an escalated PR for the Owner. Never merges, ships, or waives a red gate.",
       "path": "agents/code-reviewer.md"
     },
     {
       "name": "git-manager",
       "kind": "function",
       "status": "active",
-      "description": "The version-control operator — runs branch/PR lifecycle and lands approved work, executing merges on Scope-Creep repos once the Owner has approved. Owns merge hygiene (stacked order, retargeting, cleanup). Never deploys, spends, publishes, or waives a red gate.",
+      "description": "The version-control operator — runs branch/PR lifecycle and lands reviewed work, executing merges on Scope-Creep repos once a routine PR passes independent org review (or, when an escalation trigger fires, once the Owner has approved). Owns merge hygiene (stacked order, retargeting, cleanup). Never deploys, spends, publishes, or waives a red gate.",
       "path": "agents/git-manager.md"
     },
     {
