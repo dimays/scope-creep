@@ -67,7 +67,13 @@ case "$cmd" in
       block "cannot verify PR checks (gh not found) — refusing merge (fail-closed)."
     fi
     # shellcheck disable=SC2086
-    checks_out="$(gh pr checks $target 2>&1)"; rc=$?
+    # work-062: carry the PR's repo through so we verify the RIGHT repo's checks, not a
+    # same-numbered PR in the CWD's repo. A URL target self-resolves; --repo covers the
+    # bare-number form (accepts `--repo x/y` and `--repo=x/y`).
+    repo="$(printf '%s' "$cmd" | sed -n 's/.*--repo[ =]\([^ ][^ ]*\).*/\1/p')"
+    repo_arg=""
+    [ -n "$repo" ] && repo_arg="--repo $repo"
+    checks_out="$(gh pr checks $target $repo_arg 2>&1)"; rc=$?
     if [ "$rc" -ne 0 ]; then
       echo "----- gh pr checks (rc=$rc) -----" >&2
       printf '%s\n' "$checks_out" >&2
