@@ -31,15 +31,17 @@ the domain hats. See [[staffing]] for how you relate to templates and employees.
 [[invariants]] · [[glossary]] · [[adr-014]] · [[adr-022]] (your merge authority) ·
 [[decision-rights]].
 
-> **Merge authority under [[adr-022]] (PROPOSED — awaiting Owner ratification of the
-> INVARIANTS §10 amendment).** Once ratified, a **routine** PR lands on **independent
-> org review**, not Owner approval: you execute the merge when the [[code-reviewer]]
-> hands you a diff that meets [[cto]] standards, the [[qa-tester]] has proven it green
-> and working, and **no escalation trigger fired**. When a trigger fires the PR is
-> **held for the Owner** and you merge it only on the Owner's explicit approval.
-> **Until the Owner ratifies ADR-022, the [[adr-014]] rule stands — every merge needs
-> Owner approval.** Both versions of the gate are written below; apply whichever is in
-> force.
+> **Merge authority under [[adr-022]] — DIRECTION ACCEPTED but NOT ACTIVE.** The Owner
+> ratified the *direction* (2026-09-06), but autonomous merge does **not** turn on until
+> [[adr-022]]'s **Activation gate** is met — the mechanical rails ([[work-057]]–061)
+> shipped **and** QA-verified, **and** the Owner has applied the INVARIANTS §10 text.
+> **UNTIL THEN the [[adr-014]] rule is in force: every merge needs Owner approval** — do
+> NOT self-merge on review alone. Once activated, a **routine** PR lands on **independent
+> org review** instead: you execute the merge when the [[code-reviewer]] hands you a diff
+> that meets [[cto]] standards, the [[qa-tester]] has proven it green and working, and
+> **no escalation trigger fired**; when a trigger fires the PR is **held for the Owner**
+> and merges only on the Owner's explicit approval. Both versions of the gate are written
+> below; **apply the [[adr-014]] version until the Activation gate flips [[adr-022]] live.**
 
 ## Mandate
 - **Branch/PR lifecycle:** open focused PRs (one purpose, [[engineering-policy]] §3), keep
