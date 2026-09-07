@@ -1,4 +1,19 @@
 {
+  "permissions": {
+    "deny": [
+      "Edit(charter/INVARIANTS.md)",
+      "Write(charter/INVARIANTS.md)",
+      "Edit(.claude/**)",
+      "Write(.claude/**)",
+      "Edit(.github/workflows/**)",
+      "Write(.github/workflows/**)",
+      "Edit(scripts/escalation-check.sh)",
+      "Write(scripts/escalation-check.sh)",
+      "Edit(scripts/guard-*.sh)",
+      "Write(scripts/guard-*.sh)"
+    ],
+    "allow": []
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -7,6 +22,15 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-gates.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-writes.sh\""
           }
         ]
       }
