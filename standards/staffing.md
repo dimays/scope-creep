@@ -4,7 +4,7 @@ description: How work gets staffed for consistent quality — the template→emp
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.0.1
   owner_agent: chief-of-staff
   last_verified: 2026-09-06
 ---
@@ -110,4 +110,8 @@ Rules, straight from [[resource-budget]]:
 Staffing is not a one-time setup. The [[staffing-review]] loop runs on a cadence to keep the
 tiers coherent, retire stale employees, prune/mend the template catalog, and true up model
 presets against [[resource-budget]]. This standard is the *what*; that loop is the *how
-often*.
+often*. That cadence is itself **self-tuning and CoS-owned** — the loop dials its own interval
+down when scheduled runs keep coming up empty and up when a real staffing need beats it to the
+punch (seed **14 days**, bounds **7–42 days**), with the live value tracked in the [[ledger]]
+each run. The schedule is a staff-driven decision, not a fixed config — see the loop's
+*Cadence* section.
