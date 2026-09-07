@@ -134,7 +134,10 @@ equal the current value); the *fact* of the ad-hoc run is what the next schedule
    Flag **gaps** (a role repeatedly summoned ad hoc with no template), **duplicates** (two
    near-identical templates that should merge), and **stale operating manuals** (a template
    whose guidance drifted from current standards). Templates are mutable — improving one is
-   the expected outcome here.
+   the expected outcome here. **Tie-break with [[evolve]] (template creation):** filling a
+   gap for a role **already summoned ad hoc N times** is *this loop's* (reactive,
+   evidence-based); seeding a template for a **not-yet-recurring, anticipated** role is
+   [[evolve]]'s. When both could claim it, **staffing-review wins and evolve stands down.**
 4. **True up model presets.** For every template `default_model` and every per-employee
    override, confirm it (a) resolves in `reference/models.json` (a retired ID must fail hard
    and fall back to the tier default — [[work-018]]) and (b) still sits on the *cheapest

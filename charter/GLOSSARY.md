@@ -4,7 +4,7 @@ description: The locked lexicon of Scope Creep. Every agent uses these terms wit
 metadata:
   type: reference
   status: active
-  version: 1.1.0
+  version: 1.2.0
   owner_agent: chief-knowledge-manager
   last_verified: 2026-09-06
 ---
@@ -60,9 +60,10 @@ definition is a Charter-level change, not a casual edit.
   Knowledge Manager, Chief Product Officer, Chief Reality Officer.
 - **Standing function agent** (`kind: function`) — a **permanent, cross-org function**
   that holds *execution*, not a domain, and is **not** summoned per-ticket like an employee:
-  the **QA Tester** (proof-by-running) and the **Git Manager** (lands approved work). They
-  live in the core repo and change only by [[core-upgrade]], like the executives; `function`
-  names the role type, not a weaker governance class. See [[adr-020]].
+  the **QA Tester** (proof-by-running), the **Code Reviewer** (runs the review→QA→debug
+  cycle on a diff until it meets standards), and the **Git Manager** (lands approved work).
+  They live in the core repo and change only by [[core-upgrade]], like the executives;
+  `function` names the role type, not a weaker governance class. See [[adr-020]], [[adr-021]].
 - **Employee agent** (`kind: employee`) — an **ephemeral/transitory** Agent spun up by an
   executive for a scoped need, **instantiated from an Employee template** and **reporting
   to** the executive that created it; its creation is ratified by the Chief of Staff. It is

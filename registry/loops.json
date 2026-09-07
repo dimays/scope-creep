@@ -20,6 +20,22 @@
       "path": "loops/decision.md"
     },
     {
+      "name": "dev-cycle",
+      "kind": "loop",
+      "status": "active",
+      "description": "The primary development loop — the outer cohort loop that staffs a round of work, drives each employee's per-ticket build through the ticket-cycle inner loop, then interposes a code-review cycle (code-reviewer) and a documentation review (CKM) into the land step before git-manager merges and the cohort is retired. Event-driven, not scheduled.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/dev-cycle.md"
+    },
+    {
+      "name": "evolve",
+      "kind": "loop",
+      "status": "active",
+      "description": "The org self-improvement / evolution loop (meta) — on a monthly-to-quarterly cadence the org generates the new machinery scaling demands (procedures, employee templates such as DevOps and Security, new loops/functions) AND re-tunes the whole portfolio of scheduled loops (are they firing at the right cadence, still needed, any missing?). Distinct from level-set: generativity + meta-cadence governance, not debt paydown. Time-scheduled; it re-tunes every other loop's cadence.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/evolve.md"
+    },
+    {
       "name": "heal",
       "kind": "loop",
       "status": "active",
@@ -50,6 +66,14 @@
       "description": "The Owner's request-intake loop — submit → triage → decide → respond. Feeds ticket-cycle.",
       "owner_agent": "chief-of-staff",
       "path": "loops/request-intake.md"
+    },
+    {
+      "name": "roadmap",
+      "kind": "loop",
+      "status": "active",
+      "description": "The roadmap-planning loop — on a monthly cadence the full C-suite reviews the user experiences, releases, and version-bumps since the last roadmap against the existing roadmap, plans the next one in detail (user stories, PRDs, ADRs), and the CEO presents it to the board (the Owner); the presentation + release notes are stored and shown in the Console. Time-scheduled.",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/roadmap.md"
     },
     {
       "name": "staffing-review",

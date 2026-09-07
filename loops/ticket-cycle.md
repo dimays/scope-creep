@@ -16,6 +16,12 @@ The operating model. Retro-driven continuous flow over the `work/` backlog, safe
 run semi-autonomously and resumable across a hard stop. Ratified from CPO + CTO
 review ([[adr-006]]).
 
+> **The per-ticket inner loop.** This is the single-stream engine each staffed employee
+> runs on its own ticket. When a *round* of work is staffed across a cohort of employees,
+> the [[dev-cycle]] is the outer loop that drives many of these in parallel and interposes a
+> code-review + doc-review gate into step 5's "Gate & land" before [[git-manager]] merges
+> ([[adr-021]]). A lone ticket with no cohort runs this loop bare.
+
 ## Run modes
 - **Propose-PR (default now):** every merge to `main` is the Owner's action — the
   human gate is the merge. No branch protection required.

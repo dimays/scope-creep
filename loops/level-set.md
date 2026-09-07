@@ -36,8 +36,9 @@ The `mode` field anticipates [[work-038]]'s registry lint (not yet wired — see
 - `since` (ledger entry ref) — the previous level-set's ledger entry, or none on the
   first run.
 - `tickets_done_count` (int) — tickets landed since `since`; the cadence counter.
-- `domain_hats` (list, default: full C-suite minus [[git-manager]]/[[qa-tester]], who
-  execute and verify rather than hold a domain) — which executives assess this round.
+- `domain_hats` (list, default: full C-suite minus the standing functions
+  [[git-manager]]/[[qa-tester]]/[[code-reviewer]], who execute/verify/review rather than
+  hold a domain) — which executives assess this round.
   The Owner or CoS may scope to a subset for a lighter pass (e.g. CTO + CKM only, for
   a debt-focused check with no reflection mining).
 
