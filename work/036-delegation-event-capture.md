@@ -29,4 +29,11 @@ is ever inferred. See [[adr-013]].
 > + its settings.json wiring landed (control-plane #60) and the Owner **verified** it live —
 > a fresh session's spawn appended a well-formed line to `activity/*.ndjson`. The read side
 > (the Console Activity feed + per-agent/per-thread projection) shipped in [[work-037]] /
-> [[work-031]]. The feed populates as hook-enabled sessions run in the control-plane dir.
+> [[work-031]]. Capture is mechanical and works as specified; 036 stays `done`.
+>
+> **Correction (2026-09-07).** The earlier line "the feed populates as hook-enabled sessions
+> run in the control-plane dir" was over-broad. The hook writes to the *session's own working
+> copy* (`$CLAUDE_PROJECT_DIR/activity/`), so **worktree**-rooted sessions — the common case
+> for the org's loops — write to an `activity/` the Console never reads (it tails the main
+> checkout via `SCOPE_CREEP_HOME`) and which is ephemeral. Capture is met; the *visibility*
+> gap is a write-path vs. read-path mismatch, scoped to [[work-077]] (Owner-applied hook fix).
