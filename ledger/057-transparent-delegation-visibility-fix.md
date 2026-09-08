@@ -70,6 +70,23 @@ approves, please just push and merge") + the CTO's technical sign-off.
   the harness runs under one shared GitHub identity (`dimays`), so the separation is an
   org-role one, not yet per-identity ([[adr-023]] pending).
 
+## Update (2026-09-08) — verification found two more causes; backfill shipped
+While verifying live capture, two further facts surfaced (recorded here for replayability):
+- **Wrong hook matcher (primary cause in the desktop app).** `settings.json` matches
+  `PreToolUse: "Task"`, but the Claude Desktop / Code app names the spawn tool **`Agent`** (CLI
+  uses `Task`). Across 10 scope-creep* transcripts: 65 `Agent` spawns, 0 `Task` — so the hook
+  never fired here. Second Owner-applied core change: matcher → `"Task|Agent"`. And both hook
+  files must be **committed** (not just working-tree-edited) to reach git worktrees, where the
+  loops run. Full instructions folded into `docs/owner-apply-activity-write-path.md`.
+- **The first owner-apply edit did not persist** — no `log-activity.sh` on disk carried the
+  patch at verification time; it must be re-applied. Live capture is therefore still pending the
+  Owner re-applying + committing both `.claude/**` changes.
+- **Historical backfill shipped (independent of the hook).** `scripts/backfill-activity.py`
+  reconstructed **63** past spawns from session transcripts (matches `Agent`+`Task`, live schema
+  + `backfill:true`, idempotent) into `activity/2026-09.ndjson` at `SCOPE_CREEP_HOME` — so the
+  Console's Activity surface renders the real org history now, including the 2026-09-06
+  four-themes round the [[prd-transparent-delegation]] success signal was written around.
+
 ## Residual (honest)
 - Still captures only **in-session `Task` spawns** — blind to a separate `claude` terminal, a
   cloud routine, or an SDK process (same limitation human-input carries; backfill is the net).
