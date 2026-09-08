@@ -24,9 +24,14 @@ environment, not shared across apps).
 2. **Mint a scoped auth token** for that database only (least privilege — it must not reach
    any other system's DB). Keep it in the console's deploy environment, **never in the
    repo**.
-3. **Set the console's env:** `DATABASE_URL=libsql://<db>.turso.io` and the auth-token var
-   the `@libsql` client expects. Same client, same Drizzle sqlite dialect, same 8
-   migrations — no rewrite ([[adr-024]]).
+3. **Set the console's env — the exact vars ([[work-065]]):**
+   - `DATABASE_URL=libsql://<db>.turso.io`
+   - `DATABASE_AUTH_TOKEN=<the scoped token from step 2>`
+
+   Same `@libsql` client, same Drizzle sqlite dialect, same 8 migrations (applied at boot by
+   `ensureSchema()`) — no rewrite ([[adr-024]]). The console **refuses to boot** if
+   `DATABASE_URL` is remote but `DATABASE_AUTH_TOKEN` is unset (no silent tokenless connect,
+   no fallback to an empty local db).
 4. **Migrate your existing local rows.** Your current `file:./data/app.db` holds real
    thread history. Either copy it into the new instance (one-time dump/restore) or start
    clean — your call. `work-065` carries the exact steps + the honest-degradation behavior
@@ -47,6 +52,17 @@ environment, not shared across apps).
 The routine is a **claude.ai Code Routine** — the system of record for cloud routines is
 claude.ai, not this repo ([[adr-016]]). It's registered once the loop code from [[work-066]]
 lands.
+
+> **Runner topology ([[adr-025]], CTO-decided).** The routine is **sourced from
+> `github.com/dimays/scope-creep`** (its centre of gravity: triage judgment reads the
+> charter/roadmap/specs; tickets + PRs land here). It runs with **the console checked out as a
+> sibling** — its `app/lib/triage.server.ts` + `scripts/triage.ts` are the read/write-back
+> code — and the **same [[adr-024]] env from step 1** (`DATABASE_URL` +
+> `DATABASE_AUTH_TOKEN`) so the console's writers hit the shared store directly with no
+> launched session. This is the mirror image of how the console already runs with
+> `SCOPE_CREEP_HOME` pointed at a `scope-creep` sibling. The runner **stages** ticket PRs and
+> never self-merges — a simple accept merges through the [[adr-022]] independent-review finish
+> line; a judgment call parks the thread at `needs-you`.
 
 > **You don't have to hand-click this.** A Code Routine can be registered
 > **programmatically** from Claude Code via the schedule tooling — so the CoS can do it for
