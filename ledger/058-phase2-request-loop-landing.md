@@ -87,7 +87,8 @@ or an Owner instruction through a trusted channel).
   (`.claude/hooks/log-activity.sh`, `.claude/settings.json`) — the one INVARIANTS §III.10
   names explicitly ("`.claude/` gate or permission config"). Also `BEHIND`. **Status: HELD —
   awaiting Owner approval.** (Note: the related out-of-band hook fix is already recorded in
-  [[ledger-057]]; this PR is a further `Task|Agent` matcher + write-path converge change.)
+  [[ledger-057-transparent-delegation-visibility-fix]]; this PR is a further `Task|Agent`
+  matcher + write-path converge change.)
 
 ## Forgeable-marker caveat
 The `owner-approved` label remains **agent-forgeable** until [[adr-023]] makes it unforgeable.
