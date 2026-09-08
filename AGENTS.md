@@ -41,6 +41,10 @@ from). The CoS drives staffing for consistent quality via the
 ## Conventions
 - Every first-class thing carries a manifest (front-matter). See
   [`standards/doc-standards.md`](standards/doc-standards.md).
+- **Writing a doc? It must be presentation-graded** — scannable in 20 seconds: lead
+  with the answer, use headers/tables/callouts, break up walls of text. The seven
+  checks are [`doc-standards §9`](standards/doc-standards.md#9-docs-are-presentation-graded-the-scannability-standard);
+  start from the matching `000-template.*` so the structure is the default.
 - Cross-link docs with `[[name]]` (the manifest `name:` slug).
 - Don't hand-edit `registry/*.json` — it's generated.
 - New app? Follow [`loops/new-app.md`](loops/new-app.md). Failing check? Follow
