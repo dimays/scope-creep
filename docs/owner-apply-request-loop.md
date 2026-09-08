@@ -45,8 +45,13 @@ environment, not shared across apps).
 ## Owner-manual step 2 — register the `request-triage` cloud routine (activates [[work-066]])
 
 The routine is a **claude.ai Code Routine** — the system of record for cloud routines is
-claude.ai, not this repo ([[adr-016]]). It cannot be created from a PR; you (or the CoS on
-your behalf) register it once the loop code from [[work-066]] lands.
+claude.ai, not this repo ([[adr-016]]). It's registered once the loop code from [[work-066]]
+lands.
+
+> **You don't have to hand-click this.** A Code Routine can be registered
+> **programmatically** from Claude Code via the schedule tooling — so the CoS can do it for
+> you, and you just approve. The manual UI steps below are the fallback / reference. (The
+> exact repo-bound-routine flow will be confirmed when Phase 2 lands.)
 
 1. At **https://claude.ai/code/routines**, create a routine pointing at
    `github.com/dimays/scope-creep`, running the [[request-triage]] loop.
