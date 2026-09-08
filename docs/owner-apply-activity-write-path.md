@@ -1,11 +1,27 @@
-# Owner-manual step — converge the activity write path onto the Console's read path (work-077)
+# Owner-manual steps — make delegation-activity capture actually fire + reach the Console (work-077)
 
-**Why this is Owner-applied, not in a PR diff:** the fix edits `.claude/hooks/log-activity.sh`,
-which is on the **locked gate-enforcement surface** (`.claude/**`). `guard-writes.sh` + the
-`permissions.deny` rules block any agent file-writing tool there, fail-closed, and the rule is
-explicit: *the Owner applies `.claude/**` changes directly; an agent only proposes them here.*
-So this one file is yours to apply by hand. The rest of work-077 (the follow-up ticket, the
-work-036 DONE-note correction) ships in the PR.
+**Why this is Owner-applied, not in a PR diff:** the fixes edit `.claude/hooks/log-activity.sh`
+and `.claude/settings.json`, both on the **locked gate-enforcement surface** (`.claude/**`).
+`guard-writes.sh` + the `permissions.deny` rules block any agent file-writing tool there,
+fail-closed, and the rule is explicit: *the Owner applies `.claude/**` changes directly; an
+agent only proposes them here.* So these files are yours to apply by hand.
+
+> **Status (verified 2026-09-08) — there are now TWO problems, and the first patch didn't take.**
+> 1. **The earlier hook edit is not on disk.** Every `log-activity.sh` on the machine (main
+>    checkout, all worktrees, the `scripts/owner-runbook/` copy) still has the old `ROOT=` line,
+>    and `git status` shows no modification. Re-apply **Fix 1** below and save.
+> 2. **The hook matcher is wrong for this harness (the real reason it's empty).** In the Claude
+>    **Desktop / Code app**, the sub-agent spawn tool is named **`Agent`**, not `Task` — 65
+>    real spawns across your sessions are all `Agent`, zero are `Task`. But `settings.json`
+>    matches `"Task"` (the Claude Code *CLI* name), so the capture hook **never fires** in the
+>    desktop app. Apply **Fix 2** below so it matches both.
+> 3. **Commit them (see Fix 3)** — an uncommitted working-tree edit does not reach git
+>    worktrees (each has its own checkout), and worktrees are where the org's loops run.
+>
+> Independently, the **historical** data is already populated: `scripts/backfill-activity.py`
+> reconstructed 63 past spawns into `activity/2026-09.ndjson`, so the Console's Activity tab is
+> no longer empty even before these hook fixes land. The fixes are what make *new* activity
+> capture going forward.
 
 ## The bug (confirmed, not a guess)
 The capture hook writes to **the session's own working copy** — `ROOT` is derived relative to
@@ -21,8 +37,8 @@ worktree, not the checkout.)
 This is **not** a gitignore/public-repo/deploy problem — the log stays local + gitignored, as
 ADR-013 §6 intends. It is purely a write-path vs. read-path mismatch.
 
-## The fix
-Edit `.claude/hooks/log-activity.sh`. After the existing `ROOT=…` line, strip a worktree suffix
+## Fix 1 — converge the write path (edit `.claude/hooks/log-activity.sh`)
+After the existing `ROOT=…` line, strip a worktree suffix / prefer `SCOPE_CREEP_HOME`
 so every scope-creep-rooted session appends to the one checkout the Console reads.
 
 **Before (line 8):**
@@ -53,6 +69,41 @@ is created on first write and stays gitignored — no accidental commit.
 
 > **When it takes effect:** hooks load at **session start**. This takes effect in your **next**
 > scope-creep session after you apply it; it does not alter a running session.
+
+## Fix 2 — match the spawn tool this harness actually uses (edit `.claude/settings.json`)
+In the `PreToolUse` array, the entry that wires `log-activity.sh` currently has
+`"matcher": "Task"`. Change it to match both harness names:
+
+```json
+{ "matcher": "Task|Agent",
+  "hooks": [ { "type": "command",
+    "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/log-activity.sh\"" } ] }
+```
+
+`Task` = Claude Code CLI; `Agent` = Claude Desktop / Code app. Matching both means capture
+fires wherever you work. (`log-activity.py` already reads `tool_input.subagent_type` /
+`description` / `prompt`, which both tools provide — no Python change needed; verified against a
+real `Agent` payload.)
+
+## Fix 3 — commit both files so worktrees inherit them
+`.claude/**` is **tracked** in git, and a git **worktree** has its own checkout — an uncommitted
+working-tree edit in the main checkout does **not** reach worktree sessions, which is exactly
+where the org's loops run. So after applying Fix 1 + Fix 2, commit them (you, by hand — an agent
+cannot write `.claude/**`):
+
+```bash
+cd /Users/davidmays/code/scope-creep
+git checkout -b owner/activity-hook-fix
+git add .claude/hooks/log-activity.sh .claude/settings.json
+git commit -m "activity capture: match Agent|Task, converge write path on SCOPE_CREEP_HOME (work-077)"
+git push -u origin owner/activity-hook-fix
+gh pr create --fill
+```
+
+`.claude/**` is escalation-class, so the PR's escalation-check will be red until **you** add the
+`owner-approved` label (your hand-commit + label *is* the §I.4 approval); then merge. New
+worktrees created after the merge inherit the fix. (Applying to your working tree alone is
+enough for **main-checkout** sessions immediately; the commit is what covers worktrees.)
 
 ## How to verify after applying
 1. In your **next** session (from the main checkout or any worktree), run one real delegation.

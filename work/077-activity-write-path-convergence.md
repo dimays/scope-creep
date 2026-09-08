@@ -13,6 +13,22 @@ The [[prd-transparent-delegation]] surface ([[work-037]]) is permanently empty o
 not because of gitignore/deploy, but because [[work-036]]'s capture hook writes to the
 **session's own working copy** while the Console reads only the **main checkout**.
 
+## Update (2026-09-08) — two more causes found while verifying
+1. **Wrong hook matcher (the primary cause in the desktop app).** `settings.json` matches
+   `PreToolUse: "Task"`, but in the Claude Desktop / Code app the spawn tool is named **`Agent`**
+   (the CLI uses `Task`). Across 10 scope-creep* session transcripts: **65 `Agent` spawns, 0
+   `Task`.** So the capture hook never fired in the desktop app at all — independent of the
+   write-path bug below. Fix: matcher → `"Task|Agent"`. (`log-activity.py` needs no change;
+   verified against a real `Agent` payload.)
+2. **Worktree propagation.** `.claude/**` is tracked; a git worktree has its own checkout, so an
+   uncommitted owner-apply edit never reaches worktree sessions (where the loops run). The hook
+   fixes must be **committed**, not just applied to the working tree.
+3. **Historical backfill shipped.** `scripts/backfill-activity.py` reconstructs past spawns from
+   session transcripts (matches `Agent`+`Task`, live schema + `backfill:true`, idempotent) and
+   populated 63 events into the checkout's `activity/2026-09.ndjson` — the Console's Activity
+   surface is no longer empty even before the hook fixes land. Going-forward capture still needs
+   fixes 1+2 committed (see `docs/owner-apply-activity-write-path.md`).
+
 ## Root cause (confirmed 2026-09-07)
 - `.claude/hooks/log-activity.sh` sets `ROOT` relative to the hook script's own path
   (`$CLAUDE_PROJECT_DIR/.claude/hooks/..`). A **worktree**-rooted session therefore writes to
