@@ -1,23 +1,26 @@
 ---
 name: prd-autonomous-execution-loop
-description: The capstone — a scheduled routine (the time-scheduled sibling of dev-cycle) that pulls ready work-board tickets in priority order and drives them through dev-cycle/ticket-cycle autonomously and continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone. Closes the execution side of "run the roadmap autonomously" the way the Request Loop closed the intake side. Extends roadmap-001 Theme 3. Proposed; Owner-gated (ADR-021 loop creation).
+description: The capstone — a scheduled routine (the time-scheduled sibling of dev-cycle) that pulls ready work-board tickets in priority order and drives them through dev-cycle/ticket-cycle autonomously and continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone. Closes the execution side of "run the roadmap autonomously" the way the Request Loop closed the intake side. Extends roadmap-001 Theme 3. GREENLIT via PR #78 (roadmap-001 Theme 3 dispositioned as extended); accepted-but-not-yet-built — build is work-086/087/088, with work-088 (GitHub write access) the hard activation blocker.
 metadata:
   type: project
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 0.2.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-08
+  last_verified: 2026-09-20
 ---
 
 # PRD — The Autonomous Execution Loop
 
-> **Status: `proposed` — Owner-gated, and the capstone of the September cycle.** This
-> is the **execution** half of the Owner's vision; the Request Loop ([[prd-request-loop]])
-> already shipped the **intake** half. It **extends [[roadmap-001]] Theme 3** — it is not a
-> separate track (see *Reconcile with Theme 3*). **One decision** is asked of the Owner:
-> disposition [[roadmap-001]] accepting Theme 3 *as extended by this PRD*, which greenlights
-> the loop. Creating the loop is an **Owner-gated core-upgrade** ([[adr-021]]); this is a
-> proposal, never self-authorized.
+> **Status: `active` (GREENLIT) — accepted-but-not-yet-built, the capstone of the
+> September cycle.** The Owner dispositioned [[roadmap-001]] Theme 3 *as extended by this
+> PRD* by **merging PR #78** (2026-09-20) — the one decision this PRD asked for — which
+> **greenlights the loop**. This is the **execution** half of the Owner's vision; the
+> Request Loop ([[prd-request-loop]]) already shipped the **intake** half. **What remains is
+> the build, not the decision:** [[work-086]] (the [[work-sweep]] runner) and [[work-087]]
+> (cadence + milestone governance), gated on [[work-088]] — **GitHub write access for the
+> cloud routine, the hard activation blocker** (Owner-only provisioning; see the
+> `docs/owner-apply-github-write-access.md` checklist, PR #79). Registering the claude.ai
+> routine remains an Owner-gated core-upgrade step ([[adr-021]]).
 
 ## The user problem — the intake loop closes; the execution loop doesn't exist yet
 

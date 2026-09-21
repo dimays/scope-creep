@@ -3,17 +3,20 @@ name: prd-request-loop
 description: The Request Loop — submit-and-forget request handling. Autonomous triage into the roadmap, the thread as the async system of record, and in-app notifications so the Owner is pulled back only when a call is theirs. Supersedes request-intake v1.
 metadata:
   type: project
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 0.2.0
   owner_agent: chief-product-officer
-  last_verified: 2026-09-07
+  last_verified: 2026-09-20
 ---
 
 # PRD — The Request Loop
 
-> **Owner-approved 2026-09-07** (dispositions recorded below). The flagship feature of
-> the September cycle. Turns [[request-intake]] v1 (async-in-operator-session, no
-> trigger, no write-back) into a closed loop the Owner can walk away from.
+> **Status: `active` — SHIPPED & LIVE.** Owner-approved 2026-09-07 (dispositions recorded
+> below); as of 2026-09-08 the [[request-triage]] runner is a **registered hourly cloud
+> routine** (`registry/routines.json`, status `active`, cron `17 * * * *`) — the loop is
+> closed and running, not proposed. The flagship feature of the September cycle. Turns
+> [[request-intake]] v1 (async-in-operator-session, no trigger, no write-back) into a closed
+> loop the Owner can walk away from.
 
 ## The problem — it isn't missing pieces, it's unconnected ones
 

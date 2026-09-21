@@ -1,12 +1,12 @@
 ---
 name: adr-023
-description: Design for a restricted agent GitHub identity, distinct from the Owner's, so the ADR-022 escalation marker (owner-approved) becomes un-forgeable — an agent identity that cannot self-approve reviews, add the owner-approved label, or merge escalation-class PRs. PROPOSED — the design is accepted but requires Owner GitHub infra (a separate token/app + branch protection) to activate; until then the marker stays agent-forgeable and merges stay Owner-gated. Closes the residual named in ADR-022, guard-gates.sh, escalation-check.sh, and ledger-048.
+description: Design for a restricted agent GitHub identity, distinct from the Owner's, so the ADR-022 escalation marker (owner-approved) becomes un-forgeable — an agent identity that cannot self-approve reviews, add the owner-approved label, or merge escalation-class PRs. PROPOSED (design accepted, not yet provisioned) — and, per the Owner's 2026-09-20 decision, now a PRECONDITION of granting the cloud routine GitHub write access (work-088), NOT a later hardening follow-up: its substance is folded into that grant (a separate bot identity). Until the Owner provisions it the marker stays agent-forgeable and merges stay Owner-gated. Closes the residual named in ADR-022, guard-gates.sh, escalation-check.sh, and ledger-048.
 metadata:
   type: reference
   status: proposed
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: cto
-  last_verified: 2026-09-06
+  last_verified: 2026-09-20
 ---
 
 # ADR-023: Restricted agent identity (make the escalation marker un-forgeable)
@@ -16,7 +16,17 @@ metadata:
   restricted token/app and branch protection, [[work-060]]). Until it lands, the
   ADR-022 escalation marker stays agent-forgeable and merges stay Owner-gated
   ([[adr-014]] / [[adr-022]] activation gate).
-- **Date:** 2026-09-06
+  > **Reframe (Owner decision 2026-09-20) — this is NOT a "later follow-up"; it is the
+  > PRECONDITION of write access / next up.** Granting the unattended cloud routine GitHub
+  > write access ([[work-088]]) makes the "org merges a change to its own gates" path
+  > reachable end-to-end (any credential that can open PRs can add the `owner-approved`
+  > label). So the Owner's decision is to **activate this ADR's substance as part of that
+  > grant** — a **separate bot identity** shipped *together with* the write access, not after
+  > it. The residual below remains factually true **until the Owner provisions** the identity;
+  > what changed is priority, not the hole. See `docs/owner-apply-github-write-access.md`
+  > (PR #79), [[work-088]]. Status stays `proposed` until provisioned. *This
+  > reframe is escalation-class ([[adr-022]] trigger (d)) and HOLDS for the Owner marker.*
+- **Date:** 2026-09-06 (authored) · 2026-09-20 (reframed to precondition of [[work-088]])
 - **Deciders:** **Owner** (must provision the identity/infra), CTO (design).
 - **Owner-gated:** **yes** — a safety-rail + core change (ADR-022 trigger (d)); and
   the activation step is literally Owner-only GitHub account/token setup.
