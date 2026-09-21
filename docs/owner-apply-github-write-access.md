@@ -7,7 +7,7 @@
 > access for the cloud routine** ([[work-088]]) — read-only today, so an unattended push
 > `403`s and no PR can open.
 >
-> This checklist was drafted by the **C-suite convened 2026-09-21** — Chief of Staff
+> This checklist was drafted by the **C-suite convened 2026-09-20** — Chief of Staff
 > (sequencing), CTO (credential mechanism), Chief Reality Officer (independent safety pass).
 > **The CRO pass found the naïve "just grant a token" path unsafe under the live config.**
 > The steps below are ordered so you never grant an unattended agent a path it shouldn't have.
@@ -72,7 +72,7 @@ Owner-side (repo settings + a new identity). Do them **before** Part 2.
 
 ### 1a. Provision the write credential as a *separate* machine identity — not the shared token
 
-**DECIDED (Owner, 2026-09-21): a dedicated bot identity — a GitHub App installation (or a
+**DECIDED (Owner, 2026-09-20): a dedicated bot identity — a GitHub App installation (or a
 dedicated machine account), not a fine-grained PAT under `dimays`.** This is the safe path;
 the PAT bridge below was explicitly *not* taken.
 
@@ -97,7 +97,7 @@ the PAT bridge below was explicitly *not* taken.
 > *Footnote (decision record): the CTO's original position was a fine-grained PAT now with the
 > GitHub App deferred to [[adr-023]], to unblock faster. The CRO demonstrated that deferring
 > the separate identity while granting write to an unattended cron agent is what opens the
-> forge+merge path. The Owner chose the separate identity (2026-09-21), which folds
+> forge+merge path. The Owner chose the separate identity (2026-09-20), which folds
 > [[adr-023]]'s "separate principal" into this step — so the write grant and its mechanical
 > backstop ship together.*
 
@@ -218,7 +218,7 @@ work flows out and gets built — autonomously, stopping only where you said to 
 
 ## Decision record — credential identity
 
-**DECIDED (Owner, 2026-09-21): separate bot identity now.** The C-suite surfaced a genuine
+**DECIDED (Owner, 2026-09-20): separate bot identity now.** The C-suite surfaced a genuine
 tradeoff — a separate bot identity now (CRO/reconciled) vs. a fine-grained PAT now with the
 separate identity deferred (CTO's speed path). The Owner chose the **separate identity**: the
 entire point of this loop is that it runs **unattended**, which is exactly when a process
