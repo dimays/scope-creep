@@ -16,26 +16,26 @@
 
 ## ⚠️ Read first — why this is not a one-step token grant (CRO finding)
 
-The CRO checked the **live** GitHub state, not the docs. Two facts reshape everything:
+The two facts below were the CRO's **original** finding on the **pre-hardening** baseline.
+They **motivated** this checklist — and have **since been closed** by [[adr-023]] Phase 1 +
+branch protection. **Part 0 carries the current live state; read these as history, not today.**
 
-1. **Branch protection on `main` requires `0` approving reviews and there is no CODEOWNERS
-   file** (verified on both `dimays/scope-creep` and `dimays/scope-creep-console`). So for a
-   single write-capable identity, **write access = merge access** — GitHub is *not*
-   mechanically enforcing author≠merger or any human review today. The "verify → review →
-   land" finish line is currently a **process convention** carried by the agent roles, not a
-   server-side gate.
-2. **`scope-creep-console` has no escalation rail at all** — its only required check is
-   `App Contract test gate`; it has **no** path-based escalation check and no CODEOWNERS. A
-   write-capable routine could merge a console PR touching any sensitive path with just the
-   test gate green.
+1. **[Pre-hardening] `main` required `0` approving reviews and there was no CODEOWNERS file**
+   on either repo, so for a single write-capable identity **write access = merge access**.
+   **[Now: 1 required review + code-owner review by `@scope-creep-review` + last-push-approval
+   on both repos — Part 0.]**
+2. **[Pre-hardening] `scope-creep-console` had no escalation rail** (only the `App Contract
+   test gate`). **[Now: it also requires the `Path-based auto-escalation (ADR-022 trigger d)`
+   check and carries `* @scope-creep-review` CODEOWNERS — Part 0.]**
 
-Composed with the known **[[adr-023]] residual** (the `owner-approved` label is forgeable
-under the shared `dimays` identity, and **any credential that can open PRs can also add
-labels**), granting write to the *unattended, scheduled* routine makes this path reachable
-end-to-end with no human:
+The residual that **remains** after hardening (the [[adr-023]] **Phase-2** gap): the
+escalation marker is still forgeable by any **label-capable** write identity — now
+specifically the **unattended reviewer PAT** (`@scope-creep-review`, classic `repo` scope,
+which includes label write). The bot author **cannot** (Issues: No access). So the end-to-end
+self-merge path is **narrowed to the reviewer identity, not eliminated**:
 
-> open an escalation-class PR → check goes RED → `gh pr edit --add-label owner-approved` →
-> check re-runs GREEN → `gh pr merge` (0 required reviews) → **merged.**
+> escalation-class PR → **reviewer PAT** adds `owner-approved` → check GREEN → reviewer
+> approves (sole code owner) → merge → **merged, no human.**
 
 This is precisely the "the org autonomously merges a change to its own gates" case
 ([[ledger-048-autonomous-merge-cro-and-decision]], [[adr-022]] activation gate). **So the write grant must ship together with
@@ -44,24 +44,49 @@ that.
 
 ---
 
-## Part 0 — verify the baseline (do this before anything; ~5 min)
+## Part 0 — the live baseline (queried 2026-09-21)
 
-The read-only `403` is **documented but not independently confirmed** (the CRO holds the
-interactive `dimays` token, not the routine's cloud credential; and PR authorship can't
-distinguish routine from human under the shared identity). Confirm reality before scoping a
-fix to an assumption:
+> **Rewritten against the LIVE GitHub state.** The pre-hardening baseline this section used to
+> describe (0 required reviews, no CODEOWNERS, console with no escalation rail) is **no longer
+> true** — [[adr-023]] Phase 1 + branch protection have landed. What is **actually set now**,
+> on both repos:
 
-- [ ] Trigger the live **request-triage** routine manually (or wait for its `:17` run) and
-  read its logs for the push/PR step. Confirm it currently **`403`s on push / can't open a
-  PR** (or, if it *can* already, the write-access question is narrower than [[work-088]]
-  assumes and this checklist is trued-up against that).
-- [ ] Confirm live branch protection matches the CRO's finding, so the Part 1 hardening is
-  scoped right:
-  ```bash
-  gh api repos/dimays/scope-creep/branches/main/protection
-  gh api repos/dimays/scope-creep-console/branches/main/protection
-  ```
-  Expect `required_approving_review_count: 0` and (separately) `gh api repos/dimays/scope-creep/contents/.github/CODEOWNERS` → 404 on both repos.
+| Setting | `dimays/scope-creep` | `dimays/scope-creep-console` |
+|---|---|---|
+| `.github/CODEOWNERS` | `* @scope-creep-review` | `* @scope-creep-review` |
+| Required approving reviews | **1** | **1** |
+| Require code-owner review | **true** | **true** |
+| Require last-push approval | **true** | **true** |
+| Dismiss stale reviews | **true** | **true** |
+| Enforce for admins | **true** | **true** |
+| Required status checks | Path-based auto-escalation (ADR-022 trigger d); Registry sync + work-item schema | **App Contract test gate; Path-based auto-escalation (ADR-022 trigger d)** |
+
+So **author≠merger is mechanically enforced now**: the sole code owner is `@scope-creep-review`
+(not the Owner, not the bot), last-push-approval blocks the pusher from self-approving, and the
+**console now carries its own escalation rail — §1c is DONE.** Re-confirm before acting:
+
+```bash
+gh api repos/dimays/scope-creep/branches/main/protection
+gh api repos/dimays/scope-creep-console/branches/main/protection
+gh api repos/dimays/scope-creep/contents/.github/CODEOWNERS         -H "Accept: application/vnd.github.raw"
+gh api repos/dimays/scope-creep-console/contents/.github/CODEOWNERS -H "Accept: application/vnd.github.raw"
+```
+
+Still confirm the routine's **write path** separately (it is the open item, not the gates):
+the cloud routine still **`403`s on `git push`** through the read-only Claude App, so the fix
+is REST authoring (Part 2 / `docs/runbook-work-sweep-cloud-routine.md` §4), and that chain is
+**expected-but-unverified** end-to-end (only run-1 JWT app-auth succeeded).
+
+> **Known Phase-2 gap — do NOT paper over it.** The control-plane `scripts/escalation-check.sh`
+> `is_escalation()` (inspected 2026-09-21) has **no `.github/CODEOWNERS` case** — its
+> escalation set is `charter/INVARIANTS.md`, `.claude/*`, `standards/*`, `agents/*`, `loops/*`,
+> `registry/*`, `.github/workflows/*`, infra/lock manifests, and non-append `ledger/*`. So a PR
+> that **rewrites `.github/CODEOWNERS` itself is classified ROUTINE**, and the sole code owner
+> `@scope-creep-review` could approve a change to the gate's own ownership as routine work —
+> **unattended, via the reviewer PAT.** The fix is to add a `.github/CODEOWNERS` case to
+> `is_escalation()` (and mirror it in the console's copy), but that script is a **locked gate
+> surface an agent may not edit** ([[adr-023]] Phase 2 / `docs/owner-apply-reviewer-identity.md`
+> Phase 4). It is **flagged here, not fixed here.**
 
 ---
 
@@ -104,13 +129,19 @@ private key** (downloads a `.pem`).
 
 **C. Install it, scoped to two repos** — **Install App** → on `dimays` → **Only select
 repositories** → tick **`scope-creep`** and **`scope-creep-console`** (the two [[adr-025]]
-checks out — *not* the design/extension repos) → **Install**. The URL ends in
-`/settings/installations/<INSTALLATION_ID>` — note the **Installation ID**.
+checks out — *not* the design/extension repos) → **Install**. The installation id is **not a
+stored secret** — the runner **derives it per repo at runtime** (see E). You do not need to
+copy the `<INSTALLATION_ID>` from the URL.
 
-**D. Land three secrets in the `scope-creep-local` cloud env** (same place as `DATABASE_URL` /
-`DATABASE_AUTH_TOKEN`):
+> **Correction (first-run finding, [[work-093]]).** The first run stored the App's
+> **client_id** in a `GH_APP_INSTALLATION_ID` env var; the client_id is a valid **JWT
+> issuer** but the **wrong value** for the installation-token endpoint, so the mint failed.
+> The fix is to **derive** the installation id at runtime, not hardcode it — so this env var
+> is **removed**, not corrected.
+
+**D. Land two secrets in the `scope-creep-local` cloud env** (same place as `DATABASE_URL` /
+`DATABASE_AUTH_TOKEN`) — **no `GH_APP_INSTALLATION_ID`:**
 - `GH_APP_ID` = the App ID
-- `GH_APP_INSTALLATION_ID` = the Installation ID
 - `GH_APP_PRIVATE_KEY_B64` = the `.pem` **base64-encoded to a single line** — a `.env`-format
   value can't hold the PEM's real line breaks, so encode it first (macOS):
   ```bash
@@ -120,16 +151,28 @@ checks out — *not* the design/extension repos) → **Install**. The URL ends i
   PEM at startup. (Base64 avoids the `\n`-escaping fragility of pasting a raw PEM into a
   key=value block.)
 
-**E. Token minting (runner impl — [[work-086]]/[[work-088]], not an Owner step; stated so the
-wiring is complete):** at run start the routine mints a ~1h installation token from the three
-secrets and exports it, then `git` / `gh` authenticate as `scope-creep-routine[bot]`:
+**E. Token minting + authoring (runner impl — [[work-086]]/[[work-088]]/[[work-093]], not an
+Owner step; stated so the wiring is complete):** at run start the routine mints a JWT from the
+**two** secrets, **derives the installation id per repo**, mints a ~1 h installation token, and
+authors **over the REST API** as `scope-creep-routine[bot]` — it does **not** `git push` (see
+the callout below):
 ```
-// @octokit/auth-app
+// JWT from the private key (node:crypto RS256, or @octokit/auth-app), iss = App ID:
 const privateKey = Buffer.from(process.env.GH_APP_PRIVATE_KEY_B64, "base64").toString("utf8");
-const auth = createAppAuth({ appId: GH_APP_ID, privateKey, installationId: GH_APP_INSTALLATION_ID });
-process.env.GH_TOKEN = (await auth({ type: "installation" })).token;
-// then: gh auth setup-git  →  git push + gh pr create both act as the bot
+// DERIVE the installation id at runtime — never a stored GH_APP_INSTALLATION_ID:
+//   GET /repos/{owner}/{repo}/installation  ->  .id
+// then mint the installation token:
+//   POST /app/installations/{id}/access_tokens  ->  .token
+// then author OVER REST with that token (Authorization: Bearer <token>):
+//   POST /repos/{o}/{r}/git/refs (branch) -> git-data blobs/tree/commit -> PATCH ref
+//   POST /repos/{o}/{r}/pulls (open the PR)
 ```
+
+> **`git push` does NOT work in the cloud sandbox (first-run finding, [[work-093]]).** The
+> sandbox proxies `git push` through the **read-only Claude GitHub App** and returns **403**,
+> regardless of any local `gh auth setup-git`. `api.github.com` REST **is** reachable with the
+> bot's own bearer token — so the routine **authors entirely over REST** (refs / contents /
+> pulls). The step-by-step sequence is in `docs/runbook-work-sweep-cloud-routine.md` §4.
 
 **F. Expiry / rotation posture:**
 - **Installation tokens auto-expire (~1h)** — minted fresh each run, never stored. A leaked
@@ -186,6 +229,36 @@ pusher (the bot) can't be the approver, so a different principal must approve;
   JSON
   ```
 
+### 1d. Keep the newly-installed **Claude GitHub App** read-only [Owner]
+
+> **Recommendation (CTO, [[work-093]]): the Claude GitHub App stays READ-ONLY. Do not grant
+> it write to "fix" the push 403.** The 403 is routed *around*, not escalated.
+
+You installed the **Claude GitHub App** (the principal behind the MCP `github` tools). It is a
+**third, distinct** identity — and the one the sandbox's `git push` proxy authenticates as.
+Treat it as **read-only**:
+
+| Principal | Posture | Why |
+|---|---|---|
+| **Claude GitHub App** (MCP tools) | **Read-only** — Contents / Pull requests / Issues / Metadata: **Read** | A **shared, general-purpose** identity behind every interactive Claude session. Giving it write would re-create the "one shared identity authors *and* could merge" hole that [[adr-023]] exists to close — and its permission set is Anthropic's to define, outside our least-privilege control. |
+| **`scope-creep-routine[bot]`** (this App) | **Write, scoped** (1a) | The **dedicated** author; a non-code-owner principal that mechanically cannot approve or merge. |
+
+**Why the read-only Claude App does not block us:** the routine authors over **REST with the
+bot's own token**, which hits `api.github.com` directly and never touches the git-push proxy.
+So the push 403 is irrelevant to the write path — **do not raise the Claude App's grant to
+work around it.**
+
+**For a stable Claude-App connection (the MCP tools), the Owner's exact actions:**
+- **Scope the installation** to **only** `scope-creep` and `scope-creep-console` (Install App →
+  Only select repositories) — same two repos as the bot, not the whole account.
+- **Repository permissions: Contents / Pull requests / Issues / Metadata → Read** (the read
+  side the MCP tools need). Leave **everything else at No access.**
+- **Do not grant Pull requests: Write** unless a concrete need appears — write there would let
+  an interactive-Claude path add labels / reviews, widening the trusted set. Read-only is the
+  least-privilege default; revisit only on a named requirement.
+
+---
+
 > **What 1a–1c close (and don't).** They make the *unattended cloud routine* "propose, never
 > dispose" **mechanically, server-side** (independent of the local `guard-gates` hook, which
 > isn't guaranteed in the cloud env): the bot can push branches and open PRs but is the
@@ -203,15 +276,18 @@ pusher (the bot) can't be the approver, so a different principal must approve;
 ## Part 2 — grant the scoped write access
 
 - [ ] Provision the identity from **1a** with exactly the scopes listed there, on exactly the
-  two repos. Store its credential **only** as a secret named **`GH_TOKEN`** in the existing
-  **`scope-creep-local`** claude.ai cloud environment (the same place `DATABASE_URL` /
-  `DATABASE_AUTH_TOKEN` live, `*.turso.io` allowlisted). Never in the repo, a committed
-  `.env`, a ledger entry, or an Artifact ([[tech-sops]] §6).
-- [ ] The runner wires `git push` to the same token via `gh auth setup-git` in its setup step
-  (impl detail of [[work-086]]; your action is only pasting the secret).
-- [ ] Set a **bounded expiry** (90 days recommended) and a rotation reminder. An expired
-  credential surfaces as a `needs-you` **blocker** (honest-degradation below), never a silent
-  drop.
+  two repos. The stored secrets are the **App ID + base64 private key** from **1D**
+  (`GH_APP_ID`, `GH_APP_PRIVATE_KEY_B64`) in the existing **`scope-creep-local`** claude.ai
+  cloud environment — **not** a static `GH_TOKEN`. The runtime `GH_TOKEN` is the ~1 h
+  installation token the runner **mints each run** (1E) and never stores. Never put the key in
+  the repo, a committed `.env`, a ledger entry, or an Artifact ([[tech-sops]] §6).
+- [ ] The runner **authors over REST** with the minted token (1E) — it does **not** `git push`
+  (403 through the read-only Claude App). Your action is only pasting the two 1D secrets.
+- [ ] **Expiry/rotation** is the **1F** posture: installation tokens auto-expire (~1 h, minted
+  fresh); the **private key** is the only standing secret (rotate annually, or on suspicion). A
+  revoked/expired credential surfaces as a `needs-you` **blocker** (honest-degradation below),
+  never a silent drop. *(The reviewer credential `GH_REVIEW_PAT` is a separate, already-correct
+  secret — see `docs/owner-apply-reviewer-identity.md`; do not repaste or regenerate it.)*
 
 **Honest-degradation (required behavior, [[work-088]] acceptance):** a `403`/permission error
 on push or PR-open is a **hard, non-zero failure**; the ticket stays `ready` (never marked
