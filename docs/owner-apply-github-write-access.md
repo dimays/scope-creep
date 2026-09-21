@@ -1,14 +1,25 @@
 # Owner-manual steps — grant GitHub write access & activate the Autonomous Execution Loop ([[prd-autonomous-execution-loop]])
 
-> **⛔ ACTIVATION BLOCKED by the sandbox proxy (2026-09-21).** The identity model this checklist
-> builds (bot author + `@scope-creep-review` merger) **cannot run in the cloud sandbox**: its egress
+> **⛔ WRITE-PATH SUPERSEDED by [[adr-026]] (2026-09-21) — follow Part 1′, not the bot path.**
+> The cloud write path is now **PROPOSE-ONLY**: grant the **shared Claude GitHub App** scoped
+> `Contents` + `Pull requests` **write** on both repos — it is the sandbox proxy's **forced
+> identity**, so it is the only identity that can author in-sandbox. The separate
+> `scope-creep-routine[bot]` is **moot for the cloud path** (its token is overwritten by the
+> proxy). **§1d's "keep the Claude App read-only" is REVERSED.** The bot-path steps (Part 1a–1f)
+> are kept as **historical** (supersede-not-destroy, [[doc-standards]] §5) — do **not** follow
+> them for the cloud path. **Start at [Part 1′](#part-1-adr-026-propose-only-grant-the-current-path).**
+
+> **✅ RESOLUTION (was: ⛔ ACTIVATION BLOCKED by the sandbox proxy).** The block this checklist hit —
+> the bot-author / reviewer-merger identity model **cannot run in the cloud sandbox** (its egress
 > proxy overrides the `Authorization` header and forces its own read-only GitHub App identity for all
-> `api.github.com` traffic ([[ledger-066-cloud-sandbox-proxy-identity-wall]], proven diagnostic).
-> The reviewer-identity build (CODEOWNERS + branch protection, [[adr-023]]) is **done and correct and
-> still governs local/human merges** — it is only the *cloud unattended write path* that is blocked.
-> Do not treat this checklist as "activatable" until [[work-096]] redesigns the write path (likely
-> propose-only). The reviewer credential was **never** the problem — see the correction in
-> [[ledger-066-cloud-sandbox-proxy-identity-wall]].
+> `api.github.com` traffic, [[ledger-066-cloud-sandbox-proxy-identity-wall]]) — is now **resolved by
+> [[adr-026]]**, which redesigns the write path to **propose-only** (Part 1′). The reviewer-identity
+> build (CODEOWNERS + branch protection, [[adr-023]]) is **done, correct, and still governs
+> local/human merges** — and is exactly what makes propose-only safe (a code-owner review the proxy
+> identity can't present). The reviewer credential was **never** the problem — see
+> [[ledger-066-cloud-sandbox-proxy-identity-wall]]. **Security incident RESOLVED:** the Owner rotated
+> the leaked `scope-creep-routine` App private key on 2026-09-21 — do **not** treat rotation as an
+> open action.
 
 > **What this file is.** PR #78 merged the capstone as plan of record (the PRD, the
 > [[work-sweep]] loop manifest, `work-086`…`089`). Your merge was the greenlight — it
@@ -100,7 +111,68 @@ is REST authoring (Part 2 / `docs/runbook-work-sweep-cloud-routine.md` §4), and
 
 ---
 
-## Part 1 — close the merge gate BEFORE granting write (the safety preconditions)
+## Part 1′: ADR-026 propose-only grant (the current path)
+
+> **This is the write path to follow now ([[adr-026]]).** It replaces the bot-author path in
+> Part 1a–1f (kept below as historical). The Owner does **one** thing: grant the **shared Claude
+> GitHub App** scoped write on the two repos. Everything else (the merge gate) is **already live**
+> — Part 0.
+
+**Why this and not the bot:** the cloud sandbox proxy re-authenticates every `api.github.com`
+call as the **shared Claude GitHub App** ([[ledger-066-cloud-sandbox-proxy-identity-wall]]), so a
+custom bot token **never resolves in-sandbox**. The Claude App is the only identity that *can*
+author from the cloud — so grant **it** the minimum to *propose*, and let the merge stay
+off-sandbox as `@scope-creep-review` (Part 0), a code owner the proxy can never present.
+
+### Owner steps (the only manual action)
+
+- [ ] **Install / configure the Claude GitHub App on both repos.** GitHub → the Claude GitHub App
+  installation → **Only select repositories** → tick **`scope-creep`** and **`scope-creep-console`**
+  (not the design/extension repos).
+- [ ] **Grant it write:** **Repository permissions → Contents: Read and write** and **Pull requests:
+  Read and write**. Leave **Administration / Workflows / Actions / Environments / Secrets** at
+  **No access**. (Issues/label write is the residual below — see the caveat.)
+- [ ] **Record the ACTUAL granted permissions** the App holds on both repos (installation settings /
+  `gh api repos/dimays/scope-creep/installation`). This is un-pause criterion #3 — see the caveat.
+
+> **⚠️ Residual — the Claude App's permission set is Anthropic's manifest, not ours to trim.**
+> Unlike our own `scope-creep-routine` App, you **cannot** hand-pick "Contents + Pull-requests only";
+> you consent to whatever the Claude App requests. **So the scope above is a request, not a
+> guarantee — verify it.** **IF the Claude App carries `Issues`/label write,** a cloud/interactive
+> session could **pre-apply the `owner-approved` label**, degrading that marker's integrity — the
+> live **[[adr-023]] Phase-2 marker-integrity concern**. It still **cannot merge** (the code-owner
+> review it cannot produce is an independent required gate), but the un-pause criteria **must
+> capture** whether `Issues:write` is present. See [[adr-026]] Consequences + un-pausing criteria.
+
+### What this closes (and doesn't)
+
+- **Merge stays impossible from the cloud** — the proxy identity is **not** the sole code owner
+  `@scope-creep-review`, and `require_code_owner_reviews` + `require_last_push_approval` (Part 0)
+  hold server-side regardless of the App's scopes. **Author (cloud) ≠ merger (off-sandbox).**
+- **Blast radius:** every interactive claude.ai session gains push/open-PR on the two repos — but
+  **cannot merge, approve as code owner, or edit protection/workflows.** Worst case is spurious,
+  non-merging, reviewable PRs. Accepted for a single-user, fully-trusted-Owner system.
+- **Reversible:** uninstall the Claude App (or drop its write) → the routine falls back to
+  read-only, degrading to `needs-you`, never a silent action.
+
+### Un-pause the routine only after (ADR-026 / runbook §4a)
+
+`POST /git/refs` → 201 · `POST /pulls` → 201 **as the proxy identity** · permission surface recorded
+· `PUT /merge` from the sandbox → **405/409 blocked** · local `@scope-creep-review` merge intact ·
+403 → `needs-you` blocker (never silent). **Only then** flip `registry/routines.json` (a separate
+PR). The decisive test is **gated on this grant and not reachable locally** — do not assert it
+proven.
+
+---
+
+## Part 1 (HISTORICAL — superseded for the cloud path by [[adr-026]] / Part 1′) — close the merge gate BEFORE granting write (the safety preconditions)
+
+> **⛔ Superseded for the CLOUD write path (supersede-not-destroy, [[doc-standards]] §5).** Part 1a–1f
+> below build the **`scope-creep-routine[bot]` author** identity, which the sandbox proxy overwrites —
+> so it is **moot for the cloud path** ([[adr-026]]). Kept as the historical record and because the
+> bot App remains valid for any future **non-sandbox** author path (a local runner / GitHub Action).
+> **The branch-protection substance (1b) is LIVE and still governs local/human merges — see Part 0.**
+> For the current path, use **Part 1′** above.
 
 These make "propose but not dispose" a **mechanical** property instead of a hope. All are
 Owner-side (repo settings + a new identity). Do them **before** Part 2.
@@ -239,10 +311,19 @@ pusher (the bot) can't be the approver, so a different principal must approve;
   JSON
   ```
 
-### 1d. Keep the newly-installed **Claude GitHub App** read-only [Owner]
+### 1d. ~~Keep the newly-installed **Claude GitHub App** read-only~~ [Owner] — **REVERSED by [[adr-026]]**
 
-> **Recommendation (CTO, [[work-093]]): the Claude GitHub App stays READ-ONLY. Do not grant
-> it write to "fix" the push 403.** The 403 is routed *around*, not escalated.
+> **⛔ REVERSED by [[adr-026]] (2026-09-21) — do NOT keep the Claude App read-only for the cloud
+> path.** ledger-066 proved the Claude App is the sandbox's **forced identity**, so it is the *only*
+> identity that can author in-sandbox — the write path **requires** granting it scoped write
+> (Part 1′). §1d's original reasoning was correct under its **pre-hardening** baseline ("one shared
+> identity authors *and could merge*"); post-[[adr-023]] Phase 1 (sole code owner `@scope-creep-review`,
+> Part 0), **write ≠ merge for any non-code-owner**, so that hole is closed and the recommendation no
+> longer applies. The read-only text below is kept as historical record.
+
+> **[Historical] Recommendation (CTO, [[work-093]]): the Claude GitHub App stays READ-ONLY. Do not grant
+> it write to "fix" the push 403.** The 403 is routed *around*, not escalated. *(Superseded — see the
+> reversal callout above and [[adr-026]].)*
 
 You installed the **Claude GitHub App** (the principal behind the MCP `github` tools). It is a
 **third, distinct** identity — and the one the sandbox's `git push` proxy authenticates as.
