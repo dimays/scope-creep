@@ -150,7 +150,7 @@ failure never touches it, and vice-versa).
 |---|---|---|---|
 | 1 | Owner granted the Claude App `Contents`+`Pull requests` write on both repos | `POST /repos/{o}/{r}/git/refs` (no-op branch) → **201** | ref URL; acting `.login` |
 | 2 | `POST /pulls` succeeds as the proxy identity | `POST /repos/{o}/{r}/pulls` → **201** | PR URL; `user.login` == proxy identity, **not** `@scope-creep-review` |
-| 3 | Actual Claude-App permission surface recorded | Owner reads the real granted permissions | list; **whether `Issues:write` is present** |
+| 3 | Permission surface recorded AND gated (**HARD BLOCK**) | Owner records the **full** granted permissions on both repos | **HARD-BLOCK if `Administration`/`Workflows`/`Actions` write present**; `Issues:write` = recorded residual, not a blocker |
 | 4 | Merge is server-side BLOCKED from the sandbox | `PUT /pulls/{n}/merge` → **405/409** | blocked response; acting `.login` (**not** `@scope-creep-review`) |
 | 5 | Local merge path intact *(local, not sandbox)* | `@scope-creep-review` approves as code owner + green checks → merge | approver == `@scope-creep-review`; merge SHA |
 | 6 | Honest degradation holds | a 403 leaves the ticket `ready` + writes a `needs-you` card | the card; ticket still `ready` |
@@ -182,15 +182,18 @@ Locally there is **no proxy**, so `@scope-creep-review` resolves correctly. The 
 approval from `@scope-creep-review` (≠ the cloud author, ≠ the last pusher) satisfies branch
 protection's `require_code_owner_reviews` + `require_last_push_approval`. **The cloud routine
 never takes this path** — it opens the PR and stops. **Escalation-class PRs** hold at
-`needs-you` for the Owner; the routine cannot label or approve (it has no `Issues:write` and
-is not a code owner), so it **cannot self-clear an escalation hold** — see §7.
+`needs-you` for the Owner; the routine is **not a code owner** (cannot approve), so it **cannot
+self-clear an escalation hold from the cloud** — see §7. (Whether it can *label* depends on the
+Claude App manifest carrying `Issues:write` — verified, not assumed, at §4a #3.)
 
-> **Why identity, not token scoping, is the safety property.** The proxy will force whatever
-> identity it forces; we do not control the Claude App's exact permission set (it is Anthropic's
-> manifest — [[adr-026]] blast-radius caveat). **Merge is blocked anyway** because merging
-> requires being `@scope-creep-review`, a principal the proxy **can never present.** That holds
-> regardless of the grant's tightness — which is why the empirical block-test (§4a #4) is the
-> gate, not an assumption about scopes.
+> **Why identity, not token scoping — and its ONE precondition.** The proxy forces whatever
+> identity it forces; we do not control the Claude App's permission set (Anthropic's manifest —
+> [[adr-026]] caveat). **Merge is blocked because merging requires being `@scope-creep-review`, a
+> principal the proxy can never present** — this holds for any scope up to `Contents`/`Pull
+> requests`/`Issues` write. **The one thing that breaks it is `Administration` or
+> `Workflows`/`Actions` write** (the identity could rewrite branch protection or the required
+> checks), which is why §4a #3 **HARD-BLOCKS** un-pause if any of those is present. The empirical
+> block-test (§4a #4) confirms it end-to-end.
 
 ---
 
@@ -263,15 +266,21 @@ of record is claude.ai, not this repo ([[adr-016]]); the Owner's approval is the
   cannot hand-pick the Claude App's scopes (it is Anthropic's manifest). **If it turns out to
   hold `Issues:write`,** a cloud/interactive session could **pre-apply `owner-approved`,
   degrading that marker's integrity** — but it **still cannot merge** (the independent
-  code-owner review it cannot produce). Un-pausing criterion §4a #3 requires the Owner to
-  **record the actual permission surface** so this is known, not assumed. The full close is
-  still **[[adr-023]] Phase 2**: a human-only code owner on core/escalation paths + CI that
-  checks the *approver's identity*, not just a label's presence.
+  code-owner review it cannot produce). Un-pausing criterion §4a #3 **HARD-BLOCKS** un-pause if
+  the manifest carries `Administration`/`Workflows`/`Actions` write (any of those could rewrite
+  the gate itself); `Issues:write` is a recorded residual, not a blocker.
+- **[[adr-026]] does NOT close the [[adr-023]] Phase-2 residual.** Propose-only stops the
+  **cloud author** from merging — it says nothing about the **off-sandbox merger**. The
+  code-owner review is satisfied **identically** by the **unattended `@scope-creep-review` PAT**
+  as by a human; GitHub can't tell them apart. So *an unattended reviewer identity clearing an
+  escalation hold and merging escalation-class work with no human* **stays open.** The full
+  close is still **[[adr-023]] Phase 2**: a human-only code owner on core/escalation paths + CI
+  that checks the *approver's identity*, not just a label's presence.
 - **Blast radius of the grant (interactive sessions).** Granting the shared Claude App write
   means **every interactive claude.ai session** can push branches / open PRs on the two repos.
-  It cannot merge, approve as code owner, or edit protection/workflows. Worst case is
-  **spurious, non-merging, reviewable PRs.** Accepted for a single-user, fully-trusted-Owner
-  system; see [[adr-026]] Consequences.
+  **Given §4a #3 passes** (no Administration/Workflows/Actions write), it cannot merge, approve
+  as code owner, or rewrite the gate. Worst case is **spurious, non-merging, reviewable PRs.**
+  Accepted for a single-user, fully-trusted-Owner system; see [[adr-026]] Consequences.
 - **Local harness gates don't travel to the cloud.** `guard-gates` and the local
   `gh pr merge` revocation are per-checkout; server-side branch protection is the only rail
   that constrains the routine.

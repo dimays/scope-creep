@@ -129,39 +129,54 @@ off-sandbox as `@scope-creep-review` (Part 0), a code owner the proxy can never 
 - [ ] **Install / configure the Claude GitHub App on both repos.** GitHub → the Claude GitHub App
   installation → **Only select repositories** → tick **`scope-creep`** and **`scope-creep-console`**
   (not the design/extension repos).
-- [ ] **Grant it write:** **Repository permissions → Contents: Read and write** and **Pull requests:
-  Read and write**. Leave **Administration / Workflows / Actions / Environments / Secrets** at
-  **No access**. (Issues/label write is the residual below — see the caveat.)
-- [ ] **Record the ACTUAL granted permissions** the App holds on both repos (installation settings /
-  `gh api repos/dimays/scope-creep/installation`). This is un-pause criterion #3 — see the caveat.
+- [ ] **Grant the install, scoped to the two repos.** The Claude App requests a fixed permission
+  manifest (you consent to it — you **cannot** trim it per-install), so this grant gives whatever
+  the App asks for. What you need present is **Contents: write** + **Pull requests: write**; what
+  must be **absent** is **Administration / Workflows / Actions** write (the hard gate below). You
+  control this by **verifying the manifest**, not by unticking boxes.
+- [ ] **Record the FULL granted permission surface** the App holds on both repos (installation
+  settings / `gh api repos/dimays/scope-creep/installation`) — un-pause criterion #3, now a **hard
+  gate** (below).
 
-> **⚠️ Residual — the Claude App's permission set is Anthropic's manifest, not ours to trim.**
-> Unlike our own `scope-creep-routine` App, you **cannot** hand-pick "Contents + Pull-requests only";
-> you consent to whatever the Claude App requests. **So the scope above is a request, not a
-> guarantee — verify it.** **IF the Claude App carries `Issues`/label write,** a cloud/interactive
-> session could **pre-apply the `owner-approved` label**, degrading that marker's integrity — the
-> live **[[adr-023]] Phase-2 marker-integrity concern**. It still **cannot merge** (the code-owner
-> review it cannot produce is an independent required gate), but the un-pause criteria **must
-> capture** whether `Issues:write` is present. See [[adr-026]] Consequences + un-pausing criteria.
+> **⚠️ Residual — the Claude App's permission set is Anthropic's manifest, not ours to trim; the
+> merge-block is CONDITIONAL on it.** Unlike our own `scope-creep-routine` App, you **cannot**
+> hand-pick "Contents + Pull-requests only"; you consent to whatever the Claude App requests. **So
+> the scope above is a request, not a guarantee — verify it, and gate on it:**
+> - **`Administration` OR `Workflows`/`Actions` write present → HARD BLOCK, do not un-pause.** Any of
+>   these lets the identity **rewrite branch protection or the required checks** and dismantle the
+>   code-owner gate — the merge-block guarantee no longer holds.
+> - **`Issues`/label write present → accepted, recorded residual (not a blocker).** A cloud/interactive
+>   session could **pre-apply `owner-approved`**, degrading that marker's integrity (the live
+>   **[[adr-023]] Phase-2 marker concern**) — but it still **cannot merge** (the code-owner review it
+>   cannot produce is an independent required gate).
 
 ### What this closes (and doesn't)
 
 - **Merge stays impossible from the cloud** — the proxy identity is **not** the sole code owner
   `@scope-creep-review`, and `require_code_owner_reviews` + `require_last_push_approval` (Part 0)
-  hold server-side regardless of the App's scopes. **Author (cloud) ≠ merger (off-sandbox).**
-- **Blast radius:** every interactive claude.ai session gains push/open-PR on the two repos — but
-  **cannot merge, approve as code owner, or edit protection/workflows.** Worst case is spurious,
-  non-merging, reviewable PRs. Accepted for a single-user, fully-trusted-Owner system.
+  hold server-side **for any scope up to Contents/Pull-requests/Issues write** (the merge-block
+  breaks only if the App holds Administration/Workflows/Actions — the hard gate above).
+  **Author (cloud) ≠ merger (off-sandbox).**
+- **Does NOT make the merger human.** "Off-sandbox" secures the cloud **author** boundary; the
+  **unattended `@scope-creep-review` PAT** satisfies the code-owner review identically to a human.
+  So **[[adr-026]] does not close the [[adr-023]] Phase-2 residual** (an unattended reviewer can
+  clear an escalation hold and merge) — that stays open.
+- **Blast radius:** every interactive claude.ai session gains push/open-PR on the two repos —
+  but (given the hard gate passes) **cannot merge, approve as code owner, or rewrite the gate.**
+  `Contents:write` lets a session push to an in-flight PR branch, but `require_last_push_approval`
+  + `dismiss_stale_reviews` keep that **non-merging**. Worst case is spurious, non-merging,
+  reviewable PRs. Accepted for a single-user, fully-trusted-Owner system.
 - **Reversible:** uninstall the Claude App (or drop its write) → the routine falls back to
   read-only, degrading to `needs-you`, never a silent action.
 
 ### Un-pause the routine only after (ADR-026 / runbook §4a)
 
-`POST /git/refs` → 201 · `POST /pulls` → 201 **as the proxy identity** · permission surface recorded
-· `PUT /merge` from the sandbox → **405/409 blocked** · local `@scope-creep-review` merge intact ·
-403 → `needs-you` blocker (never silent). **Only then** flip `registry/routines.json` (a separate
-PR). The decisive test is **gated on this grant and not reachable locally** — do not assert it
-proven.
+`POST /git/refs` → 201 · `POST /pulls` → 201 **as the proxy identity** · **full permission surface
+recorded + HARD-BLOCK on Administration/Workflows/Actions write** · `PUT /merge` from the sandbox →
+**405/409 blocked** · local `@scope-creep-review` merge **works** (proves the path, not that a human
+did it) · 403 → `needs-you` blocker (never silent). **Only then** flip `registry/routines.json` (a
+separate PR). The decisive test is **gated on this grant and not reachable locally** — do not assert
+it proven.
 
 ---
 
