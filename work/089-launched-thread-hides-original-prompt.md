@@ -2,10 +2,11 @@
 id: work-089
 title: Bug — a launched thread's view hides the Owner's original prompt
 type: bug
-status: active
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/66
 created: 2026-09-08
 updated: 2026-09-21
 ---
