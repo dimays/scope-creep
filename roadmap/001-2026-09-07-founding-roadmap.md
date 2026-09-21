@@ -134,7 +134,7 @@ _Recorded on the Owner's response ([[roadmap]] step 7 — **accepted** / **revis
 
 | Theme | Disposition | Evidence |
 |---|---|---|
-| **Theme 3 — the self-improving loop system** | **ACCEPTED, as extended** | Dispositioned via the merge of **PR #78** (2026-09-20), which greenlit the Autonomous Execution Loop ([[prd-autonomous-execution-loop]]) as the execution-side extension of this theme. Build pending: [[work-086]]/[[work-087]], gated on [[work-088]] (GitHub write access). See [[ledger-059-capstone-merge-and-reconciliation]]. |
+| **Theme 3 — the self-improving loop system** | **ACCEPTED, as extended** | Dispositioned via the merge of **PR #78** (2026-09-20), which greenlit the Autonomous Execution Loop ([[prd-autonomous-execution-loop]]) as the execution-side extension of this theme. **Built + merged** (2026-09-21): [[work-086]]/[[work-087]] landed (console #70/#67, scope-creep #87; reconciled to `done` in **PR #90**). The `work-sweep` cloud routine is **REGISTERED but PAUSED** (`trig_01Aw7cBgWjGTER2FeAe9tyeT`, `registry/routines.json`) and had its **first supervised run — BLOCKED safely** ([[ledger-062-work-sweep-first-run]]): it read the board, verified identities, and fail-closed on the read-only GitHub write path. Remaining activation is Owner-side write access ([[work-088]]) + the [[work-093]] hardening (PR #91). See [[ledger-059-capstone-merge-and-reconciliation]], [[ledger-065-checkpoint-reconciliation]]. |
 | Themes 1, 2, 4, 5 | Pending the Owner | No disposition recorded yet; these stand as presented. |
 
 > **Note (reconciliation, 2026-09-20).** This block records the Theme 3 disposition
