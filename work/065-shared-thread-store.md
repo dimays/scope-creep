@@ -2,13 +2,20 @@
 id: work-065
 title: Shared remote libSQL thread store (cloud-writable conversations DB)
 type: debt
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: adr-024
+pr: https://github.com/dimays/scope-creep-console/pull/57
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** The
+> remote-capable libSQL thread store shipped via console PR #57 (ADR-024), with the HTTP-transport
+> fix in console PR #60. It is live: the `request-triage` routine and the console read/write the
+> same store, and the DB write-back path was confirmed working in the work-sweep first run
+> ([[ledger-062-work-sweep-first-run]]). The remaining spend/provisioning switch is Owner-gated
+> (as designed — code lands behind the env var). Acceptance met; closing.
 Implement [[adr-024]] — the **first activation of the remote-datastore standard**. Point the
 console's `DATABASE_URL` at a **dedicated** remote libSQL (Turso) instance so the console and
 the [[request-triage]] routine — **one system, two processes** — read/write the **same**

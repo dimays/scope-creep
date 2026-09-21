@@ -2,13 +2,17 @@
 id: work-064
 title: Wire the org's async write-back into threads (critical-update / needs-input types)
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-request-loop
+pr: https://github.com/dimays/scope-creep-console/pull/53
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** Shipped
+> via console PR #53 — the org's async write-back is wired into threads (critical-update /
+> needs-input typed cards). Acceptance met; closing.
 The thread writers `createOrgThread` / `orgFollowup` / `addGeneratedRequest` exist in
 `threads.server.ts` with **zero production callers** — the org *can* post an update and flip
 a thread to `needs-you`, but nothing invokes it. Today the org's side of a thread exists
