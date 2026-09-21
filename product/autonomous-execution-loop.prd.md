@@ -21,6 +21,14 @@ metadata:
 > cloud routine, the hard activation blocker** (Owner-only provisioning; see the
 > `docs/owner-apply-github-write-access.md` checklist, PR #79). Registering the claude.ai
 > routine remains an Owner-gated core-upgrade step ([[adr-021]]).
+>
+> **Update 2026-09-21 — the blocker is deeper than "provision write access."** The runner
+> was built ([[work-086]]/[[work-087]]) and supervised-run once, but activation hit a hard
+> architectural wall: the cloud sandbox's egress proxy overrides GitHub auth and forces its
+> own read-only identity, so **no distinct bot/reviewer identity can write from the sandbox**
+> ([[ledger-066-cloud-sandbox-proxy-identity-wall]]). Activation now depends on the
+> [[work-096]] write-path redesign (likely **propose-only**: routine proposes, human/local
+> merges), **not** merely on granting a token. The routine is **paused** until then.
 
 ## The user problem — the intake loop closes; the execution loop doesn't exist yet
 
