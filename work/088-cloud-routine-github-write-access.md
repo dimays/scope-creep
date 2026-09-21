@@ -44,9 +44,9 @@ the target repos. See [[prd-autonomous-execution-loop]], [[work-086]], [[adr-025
 
 ---
 
-> **Update (2026-09-21) — checklist delivered; mechanism decided; awaiting Owner
+> **Update (2026-09-20) — checklist delivered; mechanism decided; awaiting Owner
 > provisioning.** The acceptance deliverable is written: `docs/owner-apply-github-write-access.md`
-> (PR #79), drafted by the C-suite convened 2026-09-21 (Chief of Staff · CTO · Chief Reality
+> (PR #79), drafted by the C-suite convened 2026-09-20 (Chief of Staff · CTO · Chief Reality
 > Officer). **Owner decision:** activation uses a **separate bot identity** — the substance of
 > [[adr-023]] (a restricted principal that cannot forge the `owner-approved` marker or merge an
 > escalation-class PR) is **folded into this grant as a precondition**, no longer deferred as a

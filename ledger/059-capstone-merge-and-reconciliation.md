@@ -52,7 +52,7 @@ are live or greenlit:
 - **[[adr-022]] is ACTIVE** (Owner-ratified 2026-09-06), and the [[adr-021]] loop system it
   relies on is live/registered — but ADR-021 still said `proposed`.
 - **The capstone greenlit via #78** — but the PRD/roadmap still read as an open proposal.
-- **[[adr-023]]** was framed as a "later hardening follow-up"; the Owner's **2026-09-21**
+- **[[adr-023]]** was framed as a "later hardening follow-up"; the Owner's **2026-09-20**
   decision makes it a **precondition of write access** (folded into the [[work-088]] grant as
   a separate bot identity).
 
