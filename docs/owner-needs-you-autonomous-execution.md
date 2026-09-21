@@ -1,109 +1,111 @@
 # Owner needs-you — unlock unattended autonomous execution
 
-> **The answer up front:** **5 ordered Owner-only actions** stand between today and the roadmap
-> building itself unattended. Key rotation is **already done** (you rotated the leaked
-> `scope-creep-routine` App key 2026-09-21 — closed). Everything the org could build is built and
-> **holds for you** in two PRs. This page is the milestone hand-off.
+> **The answer up front — it's a TWO-TIER milestone.**
+> **Tier 1 unlocks now:** the matured board, the self-healing `board-hygiene` routine, and
+> `work-sweep` **scoped to non-escalation periphery** — all safe under the write grant you already
+> made. **Tier 2 is gated:** before `work-sweep` may drive anything that can reach
+> **escalation-class / core / gate-touching** paths, one more Owner-provisioned control must land
+> (close [[adr-023]] Phase-2). Key rotation is **done**. The grant itself is **safe to keep** — this
+> is only about what runs **unattended**.
 
-**What changed since [[work-088]]:** the sandbox proxy makes the old "separate bot author" path
-impossible in the cloud ([[ledger-066-cloud-sandbox-proxy-identity-wall]]). [[adr-026]] replaces it
-with **propose-only**: grant the **shared Claude GitHub App** scoped write; the routine proposes as
-that identity; **merge stays yours/local** because that identity can never present as the sole
-code-owner `@scope-creep-review`. The write-provisioning checklist
-(`docs/owner-apply-github-write-access.md`) is amended to **Part 1′** for this.
+**What changed:** the sandbox proxy makes a separate bot author impossible in-cloud
+([[ledger-066-cloud-sandbox-proxy-identity-wall]]), so [[adr-026]] uses **propose-only** — the routine
+proposes as the shared Claude GitHub App; **merge stays gated** by the `@scope-creep-review`
+code-owner identity no cloud session can present. You granted that App write; the CRO independently
+verified the merge-block holds against automated bypass — with one sharp caveat that creates Tier 2.
 
 ---
 
-## The 5 steps (in order)
+## Verified grant + config (CRO-blessed, both repos)
+| Fact | State | Consequence |
+|---|---|---|
+| Administration / branch-protection write | **ABSENT** (your GitHub-UI manifest read) | Branch protection is uneditable by any claude.ai session — **please double-confirm Administration is not listed** |
+| workflows / actions / checks / issues write | **PRESENT, accepted** | Signal/CI tampering only — reviewable and **non-merging** (see the sharp truth below) |
+| Repo Actions secrets / environments | **EMPTY / none** | No `@scope-creep-review` credential stored for a rogue workflow to steal |
+| Branch protection on `main` | code-owner review + last-push-approval + dismiss-stale + 1 review + enforce_admins; required checks **pinned to app_id 15368** | A check posted under the Claude App's own app_id does **not** satisfy them |
+| CODEOWNERS | `* @scope-creep-review` (User, non-admin, can't self-approve; `can_approve=false`) | Merge needs a code-owner approval the cloud identity can't present |
 
-### (a) FIRST — verify the Claude App permission manifest. This is a safety gate, not a formality.
-**Why:** propose-only is safe **only if** the shared Claude GitHub App cannot edit the gates
-themselves. If its manifest carries **Administration**, **Workflows**, or **Actions** write, an
-interactive/injected claude.ai session could rewrite branch protection or `.github/workflows/*` and
-the entire code-owner merge-block collapses. That manifest is Anthropic's, **not ours to trim** — so
-it must be **checked**, never assumed.
-**Do:** inspect the Claude GitHub App installation's repository permissions for `dimays/scope-creep`
-and `dimays/scope-creep-console`.
-- **`Administration` / `Workflows` / `Actions` write present → HARD STOP.** Do not grant write; the
-  propose-only guarantee does not hold. Bring it back to the CTO/CRO.
-- **`Issues` write present → acceptable, recorded residual.** Merge is still blocked; it is noted only
-  for the [[adr-023]] Phase-2 marker-integrity concern.
-- **Clean (only Contents/PR/Metadata) → proceed to (b).**
+**All automated bypass probes FAIL CLOSED** (checks-forge under a different app_id doesn't count;
+workflow-disable → stuck "Expected"; Actions-token self-merge triple-blocked; no feature→main path
+without code-owner review).
 
-### (b) Grant the Claude App scoped write — `docs/owner-apply-github-write-access.md` **Part 1′**
-**Why:** the routine (forced to act as this identity in-sandbox) needs write to open PRs.
-**Do:** grant the Claude GitHub App **Contents: Read+write** and **Pull requests: Read+write**,
-scoped to **only** `scope-creep` + `scope-creep-console`. Leave everything else at No access. No new
-token to store — installation tokens are minted per run.
+## The sharp truth (why Tier 2 exists)
+Because workflows:write lets a cloud session **rewrite a check workflow on a PR branch** (github-actions
+then posts it green → the pinned required check is satisfied) and issues:write lets it **forge the
+`owner-approved` label**, **both of ADR-022's non-identity signals — green CI and the escalation label
+— are forgeable** by a deliberate/prompt-injected cloud session. The **only trustworthy merge-gate
+left is the `@scope-creep-review` code-owner identity**, with no defense-in-depth beneath it. It holds
+against a cloud session — but the moment the **unattended** `@scope-creep-review` PAT auto-approves
+([[adr-023]] Phase-2, **still open**), a cloud session could have pre-staged everything else, **including
+a change to the gates themselves.** So work-sweep must not touch escalation/core unattended until a
+**human-trustworthy, non-auto-approving** code owner guards those paths.
 
-### (c) Run the strengthened un-pause criteria in-sandbox — [[adr-026]]
-**Why:** the decisive test (does `POST /pulls` succeed under the proxy *with* write, and is the
-resulting PR held from merge?) **cannot be run without the grant** — so it is the acceptance test,
-run once write is live. Do **not** un-pause on assertion.
-**Do:** run the **6 machine-checkable un-pause criteria** in ADR-026. Note especially **criterion #3
-is now a hard gate**: it records the *full* granted permission surface and **blocks un-pause** if
-Administration/Workflows/Actions write is present (this is the mechanical backstop for step (a)).
-Un-pause only when all six pass — including an actual throwaway PR opened by the proxy identity and
-confirmed **unmergeable** by branch protection.
+---
 
-### (d) Register / un-pause the routines — **board-hygiene FIRST (canary), then work-sweep**
-**Why:** `board-hygiene` is the lowest-blast-radius routine (it only edits `work/*.md` status
-fields). Un-pausing it first **proves the propose-only path end-to-end** — routine opens a PR →
-you/local merge — **before** `work-sweep` is trusted to drive real builds.
-**Do:** register/un-pause per the **registration spec** below. Registration is programmatic (the CoS
-can drive the schedule tooling); **your approval is the gate** ([[adr-021]]) — it turns on recurring
-API spend ([[invariants]] §III).
+## Tier 1 — do now (safe under the current grant)
 
-### (e) Merge the two held PRs — **#96** then **#97**
-**Why:** both are escalation-class core changes ([[adr-022]] trigger (d)) and correctly **hold for
-you**; nothing self-merged.
-**Do:** merge **PR #96** (PM maturity — the `review` state + board-hygiene loop) and **PR #97**
-(ADR-026 write-path + corrected runbook + amended owner-apply). Glance at PR #97's rendered top-banner
-anchor link while you're there (a cosmetic check).
+1. **Confirm the manifest** — double-check the Claude App's permissions on both repos show **no
+   Administration / branch-protection write** (you read this in the UI; a CLI check needs the App JWT).
+   If Administration ever appears → stop and bring it back to the CTO/CRO.
+2. **Merge the three held PRs — #96 → #97 → #99.** All are escalation-class core and correctly held
+   for you: #96 (PM maturity: `review` state + `board-hygiene` loop), #97 (ADR-026 + runbook +
+   amended provisioning doc), #99 (this checklist + ledger-068). *board-hygiene must be on `main`
+   before it can be registered.*
+3. **Register `board-hygiene`** per `docs/owner-apply-board-hygiene-routine.md` (registration spec
+   below). Registration is programmatic; **your approval is the gate** ([[adr-021]]) — it turns on
+   recurring spend.
+4. **Supervised canary run** — board-hygiene's first run **is** the in-sandbox test of un-pause
+   criteria 1/2/4/6. Watch for: proxy-identity **opens a PR** (criteria 1&2 pass); a `PUT …/merge`
+   from the sandbox is **blocked** by the code-owner gate (criterion 4 pass); a 403 surfaces to
+   **needs-you**, never a silent drop (criterion 6 pass). **All pass → proceed; any fail → both stay
+   paused, routed to needs-you.**
+5. **Un-pause `board-hygiene` + `work-sweep` SCOPED to non-escalation periphery.** Board-hygiene edits
+   only `work/*.md` status and opens a non-escalation PR — lowest blast radius. Non-escalation routine
+   periphery work is safe because a routine merge still needs the code-owner identity and touches no
+   gate.
+
+## Tier 2 — gate before work-sweep may drive escalation/core-reachable work
+6. **Close [[adr-023]] Phase-2** — provision a **human-trustworthy, non-auto-approving** code owner on
+   the escalation/core path set. Concretely:
+   - a **CODEOWNERS split** so the escalation set (`charter/INVARIANTS.md`, `.claude/**`,
+     `standards/**`, `agents/**`, `loops/**`, `registry/**`, `.github/workflows/**`, gate scripts,
+     non-append `ledger/**`, **and `.github/CODEOWNERS` itself**) requires review from a code owner the
+     unattended work-sweep reviewer identity is **not** — i.e. `@dimays` (human) or a human-only team —
+     while `@scope-creep-review` stays code owner for routine periphery;
+   - the companion fix: add a `.github/CODEOWNERS` case to `scripts/escalation-check.sh`
+     `is_escalation()` (CODEOWNERS rewrites currently classify **routine** — a hole) — a locked
+     gate-surface change, Owner-only.
+   Until this lands, work-sweep stays **scoped to non-escalation periphery**. The full ADR-023 residual
+   is stated in [[adr-026]] §residuals.
 
 ---
 
 ## Registration spec (you execute; the org specifies — never fabricated ahead of a real trigger)
-
-| Field | **board-hygiene** (register first) | **work-sweep** (un-pause after canary proves out) |
+| Field | **board-hygiene** (Tier 1, register first) | **work-sweep** (un-pause, scope-limited until Tier 2) |
 |---|---|---|
-| Loop | `loops/board-hygiene.md` | `loops/work-sweep.md` (already registered, `paused`) |
-| Source | `github.com/dimays/scope-creep` | same |
-| Topology | `scope-creep-console` sibling checkout; env `scope-creep-local` ([[adr-025]]) | same |
-| Runtime | Node (`npm run …`), **not bun** (proxy drops bun's fetch) | same |
-| Cron seed | `0 15 * * *` (daily; offset from work-sweep's `0 16` and the 14:00 planning cluster) | `0 16 * * *` (unchanged) |
-| `cadence_bounds_days` | `[0.5, 7]` | `[0.5, 7]` (unchanged) |
+| Loop | `loops/board-hygiene.md` | `loops/work-sweep.md` (registered, `paused`) |
+| Source / topology | `github.com/dimays/scope-creep`; console sibling; env `scope-creep-local` ([[adr-025]]) | same |
+| Runtime | **Node** (`npm run …`, **not bun** — proxy drops bun fetch) | same |
+| Cron seed | `0 15 * * *` | `0 16 * * *` (unchanged) |
+| `cadence_bounds_days` | `[0.5, 7]` | `[0.5, 7]` |
 | Model | `claude-sonnet-5` | `claude-sonnet-5` |
-| Write path | Propose-only per ADR-026 (opens one hygiene PR; you/local merge) | Propose-only per ADR-026 |
-| Un-pause gate | ADR-026's 6 criteria (criterion #3 = hard manifest gate) | same, **and** board-hygiene canary proven first |
+| Write path | Propose-only (ADR-026): opens one hygiene PR; you/local merge | Propose-only (ADR-026) |
+| Un-pause gate | supervised canary criteria 1/2/4/6 | canary proven **and** scope = non-escalation until Phase-2 |
 
-After each is live, record its real `trigger_id` / `cron` / `cadence_bounds_days` in
-`registry/routines.json` (a small follow-up PR — never a fabricated `trigger_id`) and log it in the
-[[ledger]].
+Record each real `trigger_id`/`cron`/`cadence_bounds_days` in `registry/routines.json` (small
+follow-up PR — never a fabricated `trigger_id`) and log it in the [[ledger]].
 
----
-
-## What you get to poke around at once done
-
-- **A matured board.** Tickets move **to-do → in-progress → in-review → done**, with the new
-  **in-review** column surfacing what is code-complete and awaiting merge (Console column is
-  ticketed as [[work-099]]). [[work-097]] already dogfoods it.
-- **A board that keeps itself honest.** `board-hygiene` wakes daily, reconciles status↔reality,
-  flags WIP-cap breaches and stale backlog, and proposes one tidy hygiene PR — routine backlog
-  pruning, running on its own.
-- **The roadmap building itself.** Once `work-sweep` un-pauses, ready tickets are picked up in
-  priority order and driven ticket-by-ticket to `review`/`done` on independent review, pausing to
-  `needs-you` **only** at a real blocker or a defined milestone — and you find the whole story
-  in-thread.
-
-## Known residual (stated plainly)
-Propose-only **relocates** the [[adr-023]] Phase-2 risk off-sandbox; it does **not** close it. An
-unattended `@scope-creep-review` reviewer identity can still satisfy the code-owner merge, and (if the
-Claude App carries Issues/label write) forge the escalation marker. Closing it is a human-only
-code-owner on core/escalation paths — a separate follow-up, named in ADR-026 §residuals.
+## What you get to poke around at
+- **After Tier 1:** a matured board with an **in-review** column (Console column ticketed as
+  [[work-099]]; [[work-097]] already dogfoods it); a board that **keeps itself honest** daily
+  (`board-hygiene` proposes tidy status-reconciliation PRs — routine backlog pruning on its own); and
+  `work-sweep` landing **non-escalation periphery** roadmap tickets unattended, pausing to `needs-you`
+  only at a blocker or milestone.
+- **After Tier 2:** `work-sweep` cleared to drive the **full** ready backlog, including core/loop work,
+  with the gates provably human-held.
 
 ---
 
-Reference: [[adr-026]] · `docs/owner-apply-github-write-access.md` (Part 1′) ·
-`docs/runbook-work-sweep-cloud-routine.md` · [[ledger-068-scheduled-execution-automation-cycle]] ·
-PRs #96, #97.
+Reference: [[adr-026]] · `docs/owner-apply-board-hygiene-routine.md` ·
+`docs/owner-apply-github-write-access.md` (Part 1′) · `docs/runbook-work-sweep-cloud-routine.md` ·
+[[ledger-068-scheduled-execution-automation-cycle]] · PRs #96, #97, #99.

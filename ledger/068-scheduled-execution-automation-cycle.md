@@ -104,6 +104,33 @@ criterion.
   chief-of-staff`). No failure mode; backward-compatible (all 99 validate). qa did not merge —
   escalation-class disposition stays with the Owner.
 
+## Real-grant reconciliation (second pass — the two-tier outcome)
+After the Owner made the actual Claude App grant and reported the manifest, a second
+[[chief-reality-officer]] pass verified it against live config: **CONFIRMED-WITH-CONCERNS.**
+- **Verified (both repos):** Administration/branch-protection write **ABSENT** (Owner UI read; CLI
+  can't verify without the App JWT); workflows/actions/checks/issues write **present**; Actions
+  secrets **empty** + environments **0**; branch protection strong with required checks **pinned to
+  app_id 15368**; CODEOWNERS `@scope-creep-review` (User, non-admin, `can_approve=false`);
+  `default_workflow_permissions=read`. **Every automated bypass probe FAILS CLOSED** — the grant is
+  **safe to keep.**
+- **The sharp concern (recorded, and it gates work-sweep):** workflows:write makes **green CI**
+  forgeable (rewrite a check workflow on a PR branch → github-actions posts green under the pinned
+  app_id) and issues:write makes the **`owner-approved` label** forgeable. So ADR-022's two
+  non-identity signals are **no longer trustworthy** against a deliberate/injected cloud session; the
+  **sole trustworthy merge-gate is the `@scope-creep-review` code-owner identity**, with no
+  defense-in-depth beneath it. It holds against a cloud session, but if the **unattended** reviewer
+  PAT auto-approves ([[adr-023]] Phase-2, **still open**), a cloud session could pre-stage everything
+  else — including a merge of a gate change.
+- **Decision — two-tier un-pause** (in [[adr-026]] + the Owner checklist):
+  **Tier 1 (now):** board-hygiene (edits only `work/*.md` status; non-escalation PR) + non-escalation
+  routine periphery — safe under the current posture.
+  **Tier 2 (gated):** work-sweep for any **escalation/core/gate-touching-reachable** path requires
+  **closing ADR-023 Phase-2** first — concretely a **CODEOWNERS split** putting a human-only /
+  non-auto-approving code owner (`@dimays` or a human-only team) on the escalation set (incl.
+  `.github/CODEOWNERS` itself), plus adding a `.github/CODEOWNERS` case to
+  `scripts/escalation-check.sh` `is_escalation()` (currently a hole — CODEOWNERS rewrites classify
+  routine). Both Owner-provisioned.
+
 ## Security incident — RESOLVED
 [[ledger-066-cloud-sandbox-proxy-identity-wall]] recorded a self-caused leak of
 `GH_APP_PRIVATE_KEY_B64` (the `scope-creep-routine` App private key) into a claude.ai transcript.
