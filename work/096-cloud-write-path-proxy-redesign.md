@@ -1,7 +1,7 @@
 ---
 id: work-096
 title: Redesign the cloud write path around the sandbox proxy identity wall (propose-only vs. alternate execution)
-type: spike
+type: debt
 status: proposed
 priority: high
 owner: cto
