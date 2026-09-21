@@ -102,8 +102,8 @@
     {
       "name": "work-sweep",
       "kind": "loop",
-      "status": "proposed",
-      "description": "The scheduled cloud routine that closes the execution side of \"run the roadmap autonomously\" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Proposed; Owner-gated loop creation (ADR-021).",
+      "status": "active",
+      "description": "The scheduled cloud routine that closes the execution side of \"run the roadmap autonomously\" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Created + registered (Owner-gated, ADR-021) and supervised-run once; PAUSED for unattended runs pending the cloud write-path redesign (ledger-066, work-096).",
       "owner_agent": "chief-of-staff",
       "path": "loops/work-sweep.md"
     }

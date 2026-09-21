@@ -1,14 +1,20 @@
 ---
 name: work-sweep
-description: The scheduled cloud routine that closes the execution side of "run the roadmap autonomously" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Proposed; Owner-gated loop creation (ADR-021).
+description: The scheduled cloud routine that closes the execution side of "run the roadmap autonomously" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Created + registered (Owner-gated, ADR-021) and supervised-run once; PAUSED for unattended runs pending the cloud write-path redesign (ledger-066, work-096).
 metadata:
   type: reference
-  status: proposed
-  version: 0.2.0
+  status: active
+  version: 0.3.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-21
   mode: autonomous
 ---
+
+> **Created and registered, but PAUSED for unattended runs (2026-09-21).** The loop exists as a
+> claude.ai Code Routine and passed a supervised first run ([[ledger-062-work-sweep-first-run]]),
+> but it **must not run unattended** until the cloud write path is redesigned: the sandbox proxy
+> blocks every distinct GitHub identity ([[ledger-066-cloud-sandbox-proxy-identity-wall]],
+> [[work-096]]). It is `paused` in `registry/routines.json`.
 
 # Loop: work-sweep
 

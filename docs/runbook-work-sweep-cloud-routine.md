@@ -1,5 +1,16 @@
 # Runbook — the `work-sweep` cloud routine (register, credentials, GitHub write path)
 
+> **⛔ SUPERSEDED WRITE PATH — do not follow the credential/write contract below (2026-09-21).**
+> A definitive diagnostic ([[ledger-066-cloud-sandbox-proxy-identity-wall]]) proved the cloud
+> sandbox's egress proxy **overrides the outbound `Authorization` header** and re-authenticates
+> every `api.github.com` request as its **own** GitHub App identity (`dimays`, read-only). A valid
+> PAT, an invalid token, and no token all returned the same identity. So the **author-as-bot /
+> review-as-`@scope-creep-review` over REST** contract this runbook describes **cannot function in
+> the sandbox** — no custom identity survives the proxy, and there is no working write path from the
+> sandbox today. The registration mechanics and the CLI/env notes below are still accurate; the
+> **identity + write-path sections are frozen** pending the [[work-096]] redesign. The routine stays
+> **paused**. (Also: the Owner must rotate the App private key — see ledger-066 §security incident.)
+
 > **What this is.** The single, corrected operating contract for the scheduled
 > **[[work-sweep]]** cloud routine, distilled from the first supervised run
 > ([[ledger-062-work-sweep-first-run]]) and the hardening ticket [[work-093]]. It is

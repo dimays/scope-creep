@@ -2,15 +2,22 @@
 id: work-093
 title: Harden the work-sweep cloud routine — prompt + env + REST git path (first-run findings)
 type: chore
-status: active
+status: blocked
 priority: high
 owner: cto
 spec: prd-autonomous-execution-loop
 created: 2026-09-21
 updated: 2026-09-21
 ---
-> **In-flight — lands via PR #91; flips to `done` on merge.** The routine hardening (prompt + env
-> + REST git path, runtime installation-ID derivation) is staged and holds for review.
+> **Code landed via PR #91, but end-to-end acceptance is BLOCKED and superseded (2026-09-21).** The
+> prompt/env/REST-path/installation-id-derivation changes merged and are correct code. But the
+> acceptance criterion — *"author a PR as `scope-creep-routine[bot]`, review + merge as
+> `@scope-creep-review`"* — is **not achievable in the cloud sandbox**: the egress proxy overrides
+> the `Authorization` header and forces its own read-only identity for all `api.github.com` traffic
+> ([[ledger-066-cloud-sandbox-proxy-identity-wall]]). The two "Owner-side env fixes" below
+> (`GH_REVIEW_PAT`, installation id) were **misdiagnoses** — the token was always correct; the proxy
+> is the cause. Superseded by the [[work-096]] write-path redesign; do not act on the credential
+> instructions below.
 The first `work-sweep` run ([[ledger-062-work-sweep-first-run]]) proved the loop **safe** (it built
 nothing, routed around no gate, diagnosed precisely, parked at `needs-you`) but surfaced concrete
 reliability gaps. Fix them before the routine is trusted unattended.

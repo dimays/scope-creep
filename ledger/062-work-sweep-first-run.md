@@ -39,8 +39,18 @@ no PR opened, nothing merged.**
    console's `bun.lock` (fell back to `npm install`); the prompt's `sweep <base> <head>` example
    was inaccurate (real: `sweep [--floor …]`). → [[work-093]].
 
+## Correction (2026-09-21) — findings #1 and #2 were misdiagnoses
+> Findings **#1 (`GH_REVIEW_PAT` reads as `dimays`)** and **#2 (`GH_APP_INSTALLATION_ID` wrong)**
+> were read as misconfiguration. They are **not.** A definitive diagnostic
+> ([[ledger-066-cloud-sandbox-proxy-identity-wall]]) proved the cloud sandbox's egress proxy
+> **overrides the outbound `Authorization` header** and forces its own read-only GitHub App identity
+> (`dimays`) — a valid PAT, an invalid token, and no token all returned the same identity. The
+> Owner's `GH_REVIEW_PAT` was **always correct** (= `scope-creep-review`); repasting/regenerating it
+> would have changed nothing. Finding **#3 (no working write path)** stands and is now explained by
+> the same proxy. The real fix is a write-path **redesign**, [[work-096]] — not an env change.
+
 ## Disposition
-Fixes queued as **[[work-092]]** (reconcile the board) and **[[work-093]]** (harden the routine
-env + prompt + REST git path). The two credential fixes (1, 2) are Owner-side env changes and
-are the hard blockers — the routine must not run unattended again until they land. See
-[[prd-autonomous-execution-loop]].
+Board reconciliation shipped as **[[work-092]]** (done, PR #90). Routine hardening **[[work-093]]**
+landed its code (PR #91) but its end-to-end acceptance is **blocked** by the proxy wall above and
+superseded by **[[work-096]]**. The routine must not run unattended until [[work-096]] lands. See
+[[ledger-066-cloud-sandbox-proxy-identity-wall]], [[prd-autonomous-execution-loop]].

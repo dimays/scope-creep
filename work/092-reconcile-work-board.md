@@ -2,15 +2,16 @@
 id: work-092
 title: Reconcile the work board — flip completed tickets to done so the sweep reflects reality
 type: chore
-status: active
+status: done
 priority: high
 owner: chief-knowledge-manager
 spec: prd-autonomous-execution-loop
 created: 2026-09-21
 updated: 2026-09-21
 ---
-> **In-flight — lands via PR #90; flips to `done` on merge.** The board reconciliation is staged
-> (8 tickets flipped, `ledger/063-work-board-reconciliation`) and holds for review.
+> **Done — merged via PR #90** (`ledger/063-work-board-reconciliation`). The board was reconciled
+> (8 tickets flipped to reflect merged reality). This ticket itself is flipped to `done` in the
+> 2026-09-21 session-close reconciliation ([[ledger-066-cloud-sandbox-proxy-identity-wall]] pass).
 The first `work-sweep` run ([[ledger-062-work-sweep-first-run]]) surfaced a **stale work board**:
 the sweep's ready set and the ticket-cycle WIP cap are computed from ticket `status`, and several
 tickets carry `active`/`proposed` while their work is actually **done and merged**. Concretely the

@@ -1,5 +1,15 @@
 # Owner-manual steps — grant GitHub write access & activate the Autonomous Execution Loop ([[prd-autonomous-execution-loop]])
 
+> **⛔ ACTIVATION BLOCKED by the sandbox proxy (2026-09-21).** The identity model this checklist
+> builds (bot author + `@scope-creep-review` merger) **cannot run in the cloud sandbox**: its egress
+> proxy overrides the `Authorization` header and forces its own read-only GitHub App identity for all
+> `api.github.com` traffic ([[ledger-066-cloud-sandbox-proxy-identity-wall]], proven diagnostic).
+> The reviewer-identity build (CODEOWNERS + branch protection, [[adr-023]]) is **done and correct and
+> still governs local/human merges** — it is only the *cloud unattended write path* that is blocked.
+> Do not treat this checklist as "activatable" until [[work-096]] redesigns the write path (likely
+> propose-only). The reviewer credential was **never** the problem — see the correction in
+> [[ledger-066-cloud-sandbox-proxy-identity-wall]].
+
 > **What this file is.** PR #78 merged the capstone as plan of record (the PRD, the
 > [[work-sweep]] loop manifest, `work-086`…`089`). Your merge was the greenlight — it
 > dispositioned [[roadmap-001]] Theme 3 as extended by the PRD, clearing prerequisite (b)
