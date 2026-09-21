@@ -4,9 +4,9 @@ description: The scheduled cloud routine that closes the execution side of "run 
 metadata:
   type: reference
   status: proposed
-  version: 0.1.0
+  version: 0.2.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-08
+  last_verified: 2026-09-21
   mode: autonomous
 ---
 
@@ -63,11 +63,26 @@ milestone. The execution-side mirror of [[request-triage]], and the runner for
 
 Self-tuning, [[ledger]]-tracked — the [[request-triage]] / [[staffing-review]] / [[roadmap]] /
 [[evolve]] protocol. Each run emits a `cadence-decision` block (`ran_at`, `trigger`,
-`next_cadence`, `reason`); the live cadence is read from the most recent such block, not
+`next_cadence_days`, `reason`); the live cadence is read from the most recent such block, not
 duplicated in `registry/routines.json`. Tuning signal: ready-backlog depth, blocker/milestone
 hit-rate, and the WIP cap. **Policy** (seed cadence + `cadence_bounds`) lives here and moves
-only by [[core-upgrade]]; **state** (the live interval) lives in the ledger. The seed and
-bounds and their governance are [[work-087]].
+only by [[core-upgrade]]; **state** (the live interval) lives in the ledger.
+
+**Policy — seed + bounds ([[work-087]], Owner-gated).** This is a heavier, build-shaped loop
+than the hourly [[request-triage]] sweep, so its cadence is measured in **days**:
+
+| Knob | Value | Rationale |
+|---|---|---|
+| **Seed cadence** | `1 day` | The starting interval before any `cadence-decision` block exists — wake daily. |
+| **`cadence_bounds_days`** | `[0.5, 7]` | Floor **0.5 d** (≈12 h) when the ready backlog is deep; ceiling **7 d** (weekly) when it is dry. The self-tune never steps outside these. |
+
+The mechanics ([[work-087]] predicate, `app/lib/work-sweep.ts` in the console) take these
+`cadence_bounds` as **injected** input and clamp every decision into them — the numbers are
+*policy*, changeable only here by [[core-upgrade]]; the response-curve *shape* is loop
+mechanism. When the routine is registered ([[adr-016]]), `cadence_bounds_days` is copied into
+its `registry/routines.json` entry (alongside `next_cadence_days` state read from the ledger).
+The seed and bounds above are **proposals held for the Owner** — creating/tuning core-loop
+cadence policy is Owner-gated ([[invariants]] §I.4, [[adr-021]]).
 
 ## Termination
 
