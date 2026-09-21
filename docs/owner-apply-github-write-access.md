@@ -16,26 +16,26 @@
 
 ## ⚠️ Read first — why this is not a one-step token grant (CRO finding)
 
-The CRO checked the **live** GitHub state, not the docs. Two facts reshape everything:
+The two facts below were the CRO's **original** finding on the **pre-hardening** baseline.
+They **motivated** this checklist — and have **since been closed** by [[adr-023]] Phase 1 +
+branch protection. **Part 0 carries the current live state; read these as history, not today.**
 
-1. **Branch protection on `main` requires `0` approving reviews and there is no CODEOWNERS
-   file** (verified on both `dimays/scope-creep` and `dimays/scope-creep-console`). So for a
-   single write-capable identity, **write access = merge access** — GitHub is *not*
-   mechanically enforcing author≠merger or any human review today. The "verify → review →
-   land" finish line is currently a **process convention** carried by the agent roles, not a
-   server-side gate.
-2. **`scope-creep-console` has no escalation rail at all** — its only required check is
-   `App Contract test gate`; it has **no** path-based escalation check and no CODEOWNERS. A
-   write-capable routine could merge a console PR touching any sensitive path with just the
-   test gate green.
+1. **[Pre-hardening] `main` required `0` approving reviews and there was no CODEOWNERS file**
+   on either repo, so for a single write-capable identity **write access = merge access**.
+   **[Now: 1 required review + code-owner review by `@scope-creep-review` + last-push-approval
+   on both repos — Part 0.]**
+2. **[Pre-hardening] `scope-creep-console` had no escalation rail** (only the `App Contract
+   test gate`). **[Now: it also requires the `Path-based auto-escalation (ADR-022 trigger d)`
+   check and carries `* @scope-creep-review` CODEOWNERS — Part 0.]**
 
-Composed with the known **[[adr-023]] residual** (the `owner-approved` label is forgeable
-under the shared `dimays` identity, and **any credential that can open PRs can also add
-labels**), granting write to the *unattended, scheduled* routine makes this path reachable
-end-to-end with no human:
+The residual that **remains** after hardening (the [[adr-023]] **Phase-2** gap): the
+escalation marker is still forgeable by any **label-capable** write identity — now
+specifically the **unattended reviewer PAT** (`@scope-creep-review`, classic `repo` scope,
+which includes label write). The bot author **cannot** (Issues: No access). So the end-to-end
+self-merge path is **narrowed to the reviewer identity, not eliminated**:
 
-> open an escalation-class PR → check goes RED → `gh pr edit --add-label owner-approved` →
-> check re-runs GREEN → `gh pr merge` (0 required reviews) → **merged.**
+> escalation-class PR → **reviewer PAT** adds `owner-approved` → check GREEN → reviewer
+> approves (sole code owner) → merge → **merged, no human.**
 
 This is precisely the "the org autonomously merges a change to its own gates" case
 ([[ledger-048-autonomous-merge-cro-and-decision]], [[adr-022]] activation gate). **So the write grant must ship together with
@@ -44,24 +44,49 @@ that.
 
 ---
 
-## Part 0 — verify the baseline (do this before anything; ~5 min)
+## Part 0 — the live baseline (queried 2026-09-21)
 
-The read-only `403` is **documented but not independently confirmed** (the CRO holds the
-interactive `dimays` token, not the routine's cloud credential; and PR authorship can't
-distinguish routine from human under the shared identity). Confirm reality before scoping a
-fix to an assumption:
+> **Rewritten against the LIVE GitHub state.** The pre-hardening baseline this section used to
+> describe (0 required reviews, no CODEOWNERS, console with no escalation rail) is **no longer
+> true** — [[adr-023]] Phase 1 + branch protection have landed. What is **actually set now**,
+> on both repos:
 
-- [ ] Trigger the live **request-triage** routine manually (or wait for its `:17` run) and
-  read its logs for the push/PR step. Confirm it currently **`403`s on push / can't open a
-  PR** (or, if it *can* already, the write-access question is narrower than [[work-088]]
-  assumes and this checklist is trued-up against that).
-- [ ] Confirm live branch protection matches the CRO's finding, so the Part 1 hardening is
-  scoped right:
-  ```bash
-  gh api repos/dimays/scope-creep/branches/main/protection
-  gh api repos/dimays/scope-creep-console/branches/main/protection
-  ```
-  Expect `required_approving_review_count: 0` and (separately) `gh api repos/dimays/scope-creep/contents/.github/CODEOWNERS` → 404 on both repos.
+| Setting | `dimays/scope-creep` | `dimays/scope-creep-console` |
+|---|---|---|
+| `.github/CODEOWNERS` | `* @scope-creep-review` | `* @scope-creep-review` |
+| Required approving reviews | **1** | **1** |
+| Require code-owner review | **true** | **true** |
+| Require last-push approval | **true** | **true** |
+| Dismiss stale reviews | **true** | **true** |
+| Enforce for admins | **true** | **true** |
+| Required status checks | Path-based auto-escalation (ADR-022 trigger d); Registry sync + work-item schema | **App Contract test gate; Path-based auto-escalation (ADR-022 trigger d)** |
+
+So **author≠merger is mechanically enforced now**: the sole code owner is `@scope-creep-review`
+(not the Owner, not the bot), last-push-approval blocks the pusher from self-approving, and the
+**console now carries its own escalation rail — §1c is DONE.** Re-confirm before acting:
+
+```bash
+gh api repos/dimays/scope-creep/branches/main/protection
+gh api repos/dimays/scope-creep-console/branches/main/protection
+gh api repos/dimays/scope-creep/contents/.github/CODEOWNERS         -H "Accept: application/vnd.github.raw"
+gh api repos/dimays/scope-creep-console/contents/.github/CODEOWNERS -H "Accept: application/vnd.github.raw"
+```
+
+Still confirm the routine's **write path** separately (it is the open item, not the gates):
+the cloud routine still **`403`s on `git push`** through the read-only Claude App, so the fix
+is REST authoring (Part 2 / `docs/runbook-work-sweep-cloud-routine.md` §4), and that chain is
+**expected-but-unverified** end-to-end (only run-1 JWT app-auth succeeded).
+
+> **Known Phase-2 gap — do NOT paper over it.** The control-plane `scripts/escalation-check.sh`
+> `is_escalation()` (inspected 2026-09-21) has **no `.github/CODEOWNERS` case** — its
+> escalation set is `charter/INVARIANTS.md`, `.claude/*`, `standards/*`, `agents/*`, `loops/*`,
+> `registry/*`, `.github/workflows/*`, infra/lock manifests, and non-append `ledger/*`. So a PR
+> that **rewrites `.github/CODEOWNERS` itself is classified ROUTINE**, and the sole code owner
+> `@scope-creep-review` could approve a change to the gate's own ownership as routine work —
+> **unattended, via the reviewer PAT.** The fix is to add a `.github/CODEOWNERS` case to
+> `is_escalation()` (and mirror it in the console's copy), but that script is a **locked gate
+> surface an agent may not edit** ([[adr-023]] Phase 2 / `docs/owner-apply-reviewer-identity.md`
+> Phase 4). It is **flagged here, not fixed here.**
 
 ---
 

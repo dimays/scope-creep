@@ -24,7 +24,7 @@
 | Board read empty / `SCOPE_CREEP_HOME` unset | Runner reads the board via `SCOPE_CREEP_HOME` | Export **`SCOPE_CREEP_HOME=<scope-creep checkout>`** |
 | Bot token mint failed (wrong-id) | `GH_APP_INSTALLATION_ID` held the App **client_id**, not the numeric installation id | **Derive** the installation id at runtime: `GET /repos/{owner}/{repo}/installation` → `.id`. Drop the hardcoded env var. |
 | `git push` → 403 | Sandbox proxies push through the **read-only Claude GitHub App** | **Author over REST** (refs / contents / pulls) with the bot installation token — never `git push` |
-| `GH_REVIEW_PAT` "read as `dimays`" | **Sandbox anomaly on the first run**, not a misconfig | `GH_REVIEW_PAT` is **correct** (= `scope-creep-review`). **Do not repaste or regenerate it.** |
+| `GH_REVIEW_PAT` "read as `dimays`" | **Sandbox anomaly on the first run**, not a misconfig | `GH_REVIEW_PAT` is **correct** (= `scope-creep-review`); **do not repaste or regenerate it** — but the sandbox read is unexplained, so **re-verify the identity in the sandbox** (`GET /user`) next run (§4) |
 | `gh` re-downloaded every run | Not pre-provisioned | REST-only authoring removes the hard `gh` dependency (see §4); if `gh` is kept for convenience, pre-provision it |
 | Runtime flakiness under `bun run` | Bun's `fetch` is dropped by the egress proxy | **Run with Node/tsx** (`npm run work-sweep -- …`), even though deps install with bun |
 
@@ -103,6 +103,22 @@ the author cannot merge, and the merger did not author.**
 
 ## 4. The GitHub write path, step by step (REST — never `git push`)
 
+> **Verification status: EXPECTED, NOT YET PROVEN — confirm on the next supervised run.**
+> On the first run **only the JWT `app-auth` call (a `GET`) succeeded**. The
+> installation-token **MINT itself FAILED** (it used the App client_id as the installation
+> id), so **create-ref, blob/tree/commit, create-PR, and merge-as-reviewer were never
+> exercised end-to-end from the sandbox.** Treat the entire author → review → merge REST
+> chain below as **expected-but-unverified** until a supervised run walks it green. Two
+> must-confirm items before trusting it unattended:
+> - **Re-verify the `GH_REVIEW_PAT` identity IN THE SANDBOX** — `GET /user` → `.login` on the
+>   next run. The Owner verified it locally (= `scope-creep-review`), but **run 1's sandbox
+>   read it as `dimays`.** That discrepancy must be **reconciled**, not assumed away: a
+>   reviewer that authenticates as `dimays` inside the sandbox **breaks author≠merger and the
+>   entire §3 split**. (The token is not wrong — do not repaste it — but the sandbox read is
+>   unexplained.)
+> - **Walk the full bot chain** (mint → ref → commit → PR) and a **reviewer approve+merge** on
+>   a throwaway no-op PR, and capture the identities each step acted as.
+
 ### 4a. Author the PR as `scope-creep-routine[bot]`
 
 ```bash
@@ -139,14 +155,18 @@ curl -s -X PUT  .../repos/$OWNER/$REPO/pulls/$N/merge   -d '{"merge_method":"squ
 
 The code-owner approval from `@scope-creep-review` (≠ the bot author, ≠ the last pusher)
 satisfies branch protection's `require_code_owner_reviews` + `require_last_push_approval`.
-**Escalation-class PRs do not take this path** — their escalation check stays RED without
-the Owner's `owner-approved` label; the routine holds them at `needs-you`.
+**Escalation-class PRs do not take this path** — the routine holds them at `needs-you` **by
+convention** (its fail-closed rule), *not* by a mechanical rail: the escalation check is RED
+by default, but the unattended reviewer PAT could itself add `owner-approved` and flip it —
+see §7. Do not represent this hold as mechanically un-forgeable before [[adr-023]] Phase 2.
 
-> **Why REST is the stable path, not a workaround.** It carries our **own** bearer
-> token straight to `api.github.com`, so it never touches the sandbox's git-push proxy
-> (the read-only Claude App). It works today (the first run's raw-REST app-auth
-> succeeded); it does not depend on the Claude App's posture; and it removes the hard
-> dependency on `gh` (no per-run download).
+> **Why REST is the *expected* stable path, not a workaround.** It carries our **own** bearer
+> token straight to `api.github.com`, so it never touches the sandbox's git-push proxy (the
+> read-only Claude App), it does not depend on the Claude App's posture, and it removes the
+> hard `gh` dependency (no per-run download). **Caveat (see the callout above):** the only
+> piece proven on run 1 was the JWT `app-auth` `GET` — the token **mint** failed and the
+> author→review→merge chain is **unverified end-to-end**. Stable *by design*; **to be
+> confirmed empirically** on the next supervised run.
 
 ---
 
@@ -200,14 +220,23 @@ of record is claude.ai, not this repo ([[adr-016]]); the Owner's approval is the
 
 ## 7. Residuals (recorded honestly)
 
-- **`owner-approved` stays forgeable by the reviewer identity.** `@scope-creep-review`
-  is a classic `repo`-scoped PAT (fine-grained can't reach another account's repos), so it
-  *can* add labels. In `work-sweep` that PAT runs **unattended**, so escalation
-  un-forgeability rests on (a) the routine's fail-closed behavior (proven on the first run —
-  it refused to route around a blocked path) and (b) the escalation check being RED by
-  default. **[[adr-023]] Phase 2** (a human-only code owner for core/escalation paths the
-  reviewer PAT isn't in) closes it. **The bot author is already clean:** with **Issues: No
-  access** it cannot add labels at all, so the *author* identity can never self-clear.
+- **The escalation rail is NOT closed against the unattended reviewer identity — do not
+  read §4b as if it were.** `@scope-creep-review` authenticates with a **classic
+  `repo`-scoped PAT** (fine-grained tokens can't reach another account's repos, so classic is
+  required), and that scope **includes label write**. In `work-sweep` this PAT runs
+  **unattended**. So on an escalation-class PR the reviewer identity can **add the
+  `owner-approved` label itself → flip the escalation check GREEN → approve → merge**, with no
+  human in the loop. **"Escalation-check RED-by-default" does NOT stop this** — RED-by-default
+  only stops the **bot author** (Issues: No access → cannot label at all) or a leaked *bot*
+  token; it does **nothing** against the label-capable reviewer PAT. Today the escalation hold
+  therefore rests **only** on the routine's fail-closed behavior — a **convention** (proven
+  once on the first run, when it refused to route around a blocked path), **not** a mechanical
+  rail. **Closing it requires [[adr-023]] Phase 2: a human-only code owner on the
+  core/escalation paths the reviewer PAT is not in**, so an escalation-class merge needs an
+  approval the unattended identity provably cannot produce. Until Phase 2 lands, treat
+  escalation-class autonomy as **mechanically unguarded** and Owner-gated by convention only.
+  **The bot author is already clean:** with **Issues: No access** it cannot add labels at all,
+  so the *author* identity can never self-clear — the residual is confined to the reviewer PAT.
 - **Local harness gates don't travel to the cloud.** `guard-gates` and the local
   `gh pr merge` revocation are per-checkout; server-side branch protection is the only rail
   that constrains the routine.
