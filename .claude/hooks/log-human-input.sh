@@ -6,5 +6,8 @@
 # Never blocks a prompt: any failure is swallowed and we exit 0.
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Converge on the dir the Console reads (readHumanInput -> SCOPE_CREEP_HOME, ADR-011);
+# fall back to stripping a worktree suffix. Twin of the log-activity.sh fix (ledger-057).
+ROOT="${SCOPE_CREEP_HOME:-${ROOT%%/.claude/worktrees/*}}"
 python3 "$ROOT/.claude/hooks/log-human-input.py" "$ROOT" 2>/dev/null || true
 exit 0
