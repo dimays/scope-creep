@@ -2,13 +2,17 @@
 id: work-095
 title: Converge log-human-input.sh write path on SCOPE_CREEP_HOME (worktree sessions bypass the Console)
 type: bug
-status: proposed
+status: done
 priority: medium
 owner: cto
 spec: prd-human-input-log
 created: 2026-09-21
 updated: 2026-09-21
 ---
+> **Done — merged via PR #93** (2026-09-21). The Owner-authored one-line write-path fix landed in
+> `.claude/hooks/log-human-input.sh` (recorded in [[ledger-067-human-input-hook-write-path-fix]]);
+> this session's worktree inputs were backfilled into the main log. Worktree-rooted sessions now log
+> human input to the `SCOPE_CREEP_HOME` main checkout the Console reads.
 The Human-Input Log ([[adr-010]], [[work-020]]) is empty in the Console for any session run from a
 **git worktree** — including this whole checkpoint session. Root cause is the exact write-path ≠
 read-path divergence [[ledger-057-transparent-delegation-visibility-fix]] fixed for the **activity**
