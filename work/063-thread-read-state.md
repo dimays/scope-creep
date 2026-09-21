@@ -2,13 +2,17 @@
 id: work-063
 title: Thread read-state, persistent unread badge, and notification center
 type: feature
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-request-loop
+pr: https://github.com/dimays/scope-creep-console/pull/54
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** Shipped
+> via console PR #54 — thread read-state, persistent unread badge, and the notification center.
+> Acceptance met; closing.
 The only "you have something new" signal today is the `needs-you` thread status, recomputed
 on load of `/` and `/threads` — no unread/last-read state, no persistent badge, no way to be
 told. So the Owner has to go looking. Pillar III of [[prd-request-loop]], in-app half
