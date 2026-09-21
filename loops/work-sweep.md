@@ -51,10 +51,14 @@ milestone. The execution-side mirror of [[request-triage]], and the runner for
    [[adr-022]] **escalation checklist** *before* build (§ Guardrails). Any trigger → this is a
    **blocker**: set `blocked`, write the resume [[ledger]] entry, surface to `needs-you`, and
    continue to the next ready ticket (or halt if it is a global red-gate stop).
-3. **Drive** — run the ticket through [[dev-cycle]]/[[ticket-cycle]]: one-purpose branch,
-   atomic commits, Definition of Done met, green App-Contract `test`, then **verify → review →
-   land** ([[qa-tester]] → [[code-reviewer]] → [[git-manager]]). Routine periphery work lands
-   on independent review under [[adr-022]]; an escalation trigger **holds for the Owner**.
+3. **Drive** — run the ticket through [[dev-cycle]]/[[ticket-cycle]], moving it
+   `active → review → done` on the board: build on a one-purpose branch (`active`),
+   atomic commits, Definition of Done met, green App-Contract `test`; when
+   code-complete with a PR open, flip it to **`review`** (the [[work-readme]]
+   in-review state) and hand it to **verify → review → land** ([[qa-tester]] →
+   [[code-reviewer]] → [[git-manager]]); on merge it flips to `done`. Routine
+   periphery work lands on independent review under [[adr-022]]; an escalation
+   trigger **holds for the Owner** (the ticket sits at `review` until they dispose).
 4. **Loop or stop** — after each ticket, re-evaluate the ready set:
    - a **milestone** fired ([[prd-autonomous-execution-loop]] rule: theme/PRD boundary,
      release boundary, priority-floor exhaustion, or an explicit `milestone: owner-review`
