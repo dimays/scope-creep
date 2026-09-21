@@ -2,7 +2,7 @@
 id: work-096
 title: Redesign the cloud write path around the sandbox proxy identity wall (propose-only vs. alternate execution)
 type: debt
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-autonomous-execution-loop
@@ -11,6 +11,17 @@ updated: 2026-09-21
 ---
 > **Blocker for any unattended `work-sweep` run.** The routine stays **paused**
 > (`registry/routines.json`) until this lands.
+
+> **⏳ Acceptance artifacts STAGED in this PR — holds for the Owner ([[adr-026]]).** The
+> spike's decision is landed as **[[adr-026]]** (propose-only via granting the shared Claude
+> GitHub App scoped write; review + merge stay off-sandbox as `@scope-creep-review`), the
+> **runbook write path is corrected** (`docs/runbook-work-sweep-cloud-routine.md` §2–§4), and
+> the **machine-checkable un-pausing criteria** are defined (ADR-026 + runbook §4a). **The
+> decisive sandbox test is GATED on the Owner grant and was NOT run locally** (no proxy
+> locally) — it is defined, not asserted. **This ticket flips to `done` only when the Owner
+> merges this escalation-class PR** (ADR-022 trigger d); do not self-merge. Un-pausing the
+> routine in `registry/routines.json` is a **separate** follow-up PR after the Owner grants
+> the App write and a supervised cloud run captures criteria §4a #1–#6.
 
 The definitive root-cause is [[ledger-066-cloud-sandbox-proxy-identity-wall]]: the claude.ai cloud
 sandbox's egress proxy **overrides the outbound `Authorization` header** on `api.github.com` and
