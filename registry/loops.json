@@ -98,6 +98,14 @@
       "description": "The operating loop — a retro-driven, governed, terminating ticket flow. How Scope Creep works turn to turn.",
       "owner_agent": "chief-of-staff",
       "path": "loops/ticket-cycle.md"
+    },
+    {
+      "name": "work-sweep",
+      "kind": "loop",
+      "status": "proposed",
+      "description": "The scheduled cloud routine that closes the execution side of \"run the roadmap autonomously\" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Proposed; Owner-gated loop creation (ADR-021).",
+      "owner_agent": "chief-of-staff",
+      "path": "loops/work-sweep.md"
     }
   ]
 }
