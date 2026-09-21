@@ -104,13 +104,19 @@ private key** (downloads a `.pem`).
 
 **C. Install it, scoped to two repos** — **Install App** → on `dimays` → **Only select
 repositories** → tick **`scope-creep`** and **`scope-creep-console`** (the two [[adr-025]]
-checks out — *not* the design/extension repos) → **Install**. The URL ends in
-`/settings/installations/<INSTALLATION_ID>` — note the **Installation ID**.
+checks out — *not* the design/extension repos) → **Install**. The installation id is **not a
+stored secret** — the runner **derives it per repo at runtime** (see E). You do not need to
+copy the `<INSTALLATION_ID>` from the URL.
 
-**D. Land three secrets in the `scope-creep-local` cloud env** (same place as `DATABASE_URL` /
-`DATABASE_AUTH_TOKEN`):
+> **Correction (first-run finding, [[work-093]]).** The first run stored the App's
+> **client_id** in a `GH_APP_INSTALLATION_ID` env var; the client_id is a valid **JWT
+> issuer** but the **wrong value** for the installation-token endpoint, so the mint failed.
+> The fix is to **derive** the installation id at runtime, not hardcode it — so this env var
+> is **removed**, not corrected.
+
+**D. Land two secrets in the `scope-creep-local` cloud env** (same place as `DATABASE_URL` /
+`DATABASE_AUTH_TOKEN`) — **no `GH_APP_INSTALLATION_ID`:**
 - `GH_APP_ID` = the App ID
-- `GH_APP_INSTALLATION_ID` = the Installation ID
 - `GH_APP_PRIVATE_KEY_B64` = the `.pem` **base64-encoded to a single line** — a `.env`-format
   value can't hold the PEM's real line breaks, so encode it first (macOS):
   ```bash
@@ -120,16 +126,28 @@ checks out — *not* the design/extension repos) → **Install**. The URL ends i
   PEM at startup. (Base64 avoids the `\n`-escaping fragility of pasting a raw PEM into a
   key=value block.)
 
-**E. Token minting (runner impl — [[work-086]]/[[work-088]], not an Owner step; stated so the
-wiring is complete):** at run start the routine mints a ~1h installation token from the three
-secrets and exports it, then `git` / `gh` authenticate as `scope-creep-routine[bot]`:
+**E. Token minting + authoring (runner impl — [[work-086]]/[[work-088]]/[[work-093]], not an
+Owner step; stated so the wiring is complete):** at run start the routine mints a JWT from the
+**two** secrets, **derives the installation id per repo**, mints a ~1 h installation token, and
+authors **over the REST API** as `scope-creep-routine[bot]` — it does **not** `git push` (see
+the callout below):
 ```
-// @octokit/auth-app
+// JWT from the private key (node:crypto RS256, or @octokit/auth-app), iss = App ID:
 const privateKey = Buffer.from(process.env.GH_APP_PRIVATE_KEY_B64, "base64").toString("utf8");
-const auth = createAppAuth({ appId: GH_APP_ID, privateKey, installationId: GH_APP_INSTALLATION_ID });
-process.env.GH_TOKEN = (await auth({ type: "installation" })).token;
-// then: gh auth setup-git  →  git push + gh pr create both act as the bot
+// DERIVE the installation id at runtime — never a stored GH_APP_INSTALLATION_ID:
+//   GET /repos/{owner}/{repo}/installation  ->  .id
+// then mint the installation token:
+//   POST /app/installations/{id}/access_tokens  ->  .token
+// then author OVER REST with that token (Authorization: Bearer <token>):
+//   POST /repos/{o}/{r}/git/refs (branch) -> git-data blobs/tree/commit -> PATCH ref
+//   POST /repos/{o}/{r}/pulls (open the PR)
 ```
+
+> **`git push` does NOT work in the cloud sandbox (first-run finding, [[work-093]]).** The
+> sandbox proxies `git push` through the **read-only Claude GitHub App** and returns **403**,
+> regardless of any local `gh auth setup-git`. `api.github.com` REST **is** reachable with the
+> bot's own bearer token — so the routine **authors entirely over REST** (refs / contents /
+> pulls). The step-by-step sequence is in `docs/runbook-work-sweep-cloud-routine.md` §4.
 
 **F. Expiry / rotation posture:**
 - **Installation tokens auto-expire (~1h)** — minted fresh each run, never stored. A leaked
@@ -186,6 +204,36 @@ pusher (the bot) can't be the approver, so a different principal must approve;
   JSON
   ```
 
+### 1d. Keep the newly-installed **Claude GitHub App** read-only [Owner]
+
+> **Recommendation (CTO, [[work-093]]): the Claude GitHub App stays READ-ONLY. Do not grant
+> it write to "fix" the push 403.** The 403 is routed *around*, not escalated.
+
+You installed the **Claude GitHub App** (the principal behind the MCP `github` tools). It is a
+**third, distinct** identity — and the one the sandbox's `git push` proxy authenticates as.
+Treat it as **read-only**:
+
+| Principal | Posture | Why |
+|---|---|---|
+| **Claude GitHub App** (MCP tools) | **Read-only** — Contents / Pull requests / Issues / Metadata: **Read** | A **shared, general-purpose** identity behind every interactive Claude session. Giving it write would re-create the "one shared identity authors *and* could merge" hole that [[adr-023]] exists to close — and its permission set is Anthropic's to define, outside our least-privilege control. |
+| **`scope-creep-routine[bot]`** (this App) | **Write, scoped** (1a) | The **dedicated** author; a non-code-owner principal that mechanically cannot approve or merge. |
+
+**Why the read-only Claude App does not block us:** the routine authors over **REST with the
+bot's own token**, which hits `api.github.com` directly and never touches the git-push proxy.
+So the push 403 is irrelevant to the write path — **do not raise the Claude App's grant to
+work around it.**
+
+**For a stable Claude-App connection (the MCP tools), the Owner's exact actions:**
+- **Scope the installation** to **only** `scope-creep` and `scope-creep-console` (Install App →
+  Only select repositories) — same two repos as the bot, not the whole account.
+- **Repository permissions: Contents / Pull requests / Issues / Metadata → Read** (the read
+  side the MCP tools need). Leave **everything else at No access.**
+- **Do not grant Pull requests: Write** unless a concrete need appears — write there would let
+  an interactive-Claude path add labels / reviews, widening the trusted set. Read-only is the
+  least-privilege default; revisit only on a named requirement.
+
+---
+
 > **What 1a–1c close (and don't).** They make the *unattended cloud routine* "propose, never
 > dispose" **mechanically, server-side** (independent of the local `guard-gates` hook, which
 > isn't guaranteed in the cloud env): the bot can push branches and open PRs but is the
@@ -203,15 +251,18 @@ pusher (the bot) can't be the approver, so a different principal must approve;
 ## Part 2 — grant the scoped write access
 
 - [ ] Provision the identity from **1a** with exactly the scopes listed there, on exactly the
-  two repos. Store its credential **only** as a secret named **`GH_TOKEN`** in the existing
-  **`scope-creep-local`** claude.ai cloud environment (the same place `DATABASE_URL` /
-  `DATABASE_AUTH_TOKEN` live, `*.turso.io` allowlisted). Never in the repo, a committed
-  `.env`, a ledger entry, or an Artifact ([[tech-sops]] §6).
-- [ ] The runner wires `git push` to the same token via `gh auth setup-git` in its setup step
-  (impl detail of [[work-086]]; your action is only pasting the secret).
-- [ ] Set a **bounded expiry** (90 days recommended) and a rotation reminder. An expired
-  credential surfaces as a `needs-you` **blocker** (honest-degradation below), never a silent
-  drop.
+  two repos. The stored secrets are the **App ID + base64 private key** from **1D**
+  (`GH_APP_ID`, `GH_APP_PRIVATE_KEY_B64`) in the existing **`scope-creep-local`** claude.ai
+  cloud environment — **not** a static `GH_TOKEN`. The runtime `GH_TOKEN` is the ~1 h
+  installation token the runner **mints each run** (1E) and never stores. Never put the key in
+  the repo, a committed `.env`, a ledger entry, or an Artifact ([[tech-sops]] §6).
+- [ ] The runner **authors over REST** with the minted token (1E) — it does **not** `git push`
+  (403 through the read-only Claude App). Your action is only pasting the two 1D secrets.
+- [ ] **Expiry/rotation** is the **1F** posture: installation tokens auto-expire (~1 h, minted
+  fresh); the **private key** is the only standing secret (rotate annually, or on suspicion). A
+  revoked/expired credential surfaces as a `needs-you` **blocker** (honest-degradation below),
+  never a silent drop. *(The reviewer credential `GH_REVIEW_PAT` is a separate, already-correct
+  secret — see `docs/owner-apply-reviewer-identity.md`; do not repaste or regenerate it.)*
 
 **Honest-degradation (required behavior, [[work-088]] acceptance):** a `403`/permission error
 on push or PR-open is a **hard, non-zero failure**; the ticket stays `ready` (never marked
