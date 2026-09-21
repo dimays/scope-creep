@@ -1,5 +1,5 @@
 ---
-name: ledger-059-merge-079-owner-apply-github-write-access
+name: ledger-060-merge-079-owner-apply-github-write-access
 description: Records the landing of scope-creep PR #79 (docs/owner-apply-github-write-access → main, work-088) — the C-suite-drafted owner-manual checklist for granting GitHub write access and activating the Autonomous Execution Loop. Routine / non-escalation (docs-only; ADR-022 trigger-d check green). Owner approved it in conversation; the blocker was a docs:lint failure, now fixed. Author (main session, dimays) ≠ merger (Git Manager). Merge commit df0ec99, branch deleted.
 metadata:
   type: project
@@ -9,7 +9,7 @@ metadata:
   last_verified: 2026-09-21
 ---
 
-# Ledger 059 — PR #79 landed: owner-apply GitHub write-access checklist (work-088)
+# Ledger 060 — PR #79 landed: owner-apply GitHub write-access checklist (work-088)
 
 **Date:** 2026-09-21 · **Recorded by:** Git Manager · **Repo:** `dimays/scope-creep` ·
 **Status:** **LANDED** (single routine, non-escalation PR).
