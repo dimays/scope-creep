@@ -2,13 +2,21 @@
 id: work-059
 title: Block Edit/Write to the gate surface + bring permission grants in-band
 type: feature
-status: active
+status: done
 priority: high
 owner: cto
 spec: adr-022
+pr: https://github.com/dimays/scope-creep/pull/46
 created: 2026-09-06
-updated: 2026-09-06
+updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** Both
+> write-side rails shipped and are live (scope-creep PR #46): `.claude/hooks/guard-writes.sh`
+> blocks un-prompted Edit/Write to the gate surface, and `.claude/settings.json` carries the
+> in-band `permissions.deny` block — so a permission change on the gate surface now appears in
+> a PR diff. Acceptance met. The residual **agent-forgeable `owner-approved` marker** is not
+> this ticket's acceptance — it is [[adr-023]]'s restricted-identity scope (Phase 1 landed via
+> scope-creep #86 / #85); tracked there, not here. Closing.
 CRO fix #3 for [[adr-022]]. Today the `guard-gates` hook only inspects Bash, so an agent
 can neuter the hook or widen its own permissions with the Edit/Write tool, no prompt —
 and the strongest grants live in a **gitignored** `settings.local.json` the review can

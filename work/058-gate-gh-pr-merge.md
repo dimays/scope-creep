@@ -2,13 +2,20 @@
 id: work-058
 title: Gate gh pr merge + revoke the blanket merge grant
 type: feature
-status: active
+status: done
 priority: high
 owner: cto
 spec: adr-022
+pr: https://github.com/dimays/scope-creep/pull/44
 created: 2026-09-06
-updated: 2026-09-06
+updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** The
+> merge-gate shipped and is **live** in `.claude/hooks/guard-gates.sh` (scope-creep PR #44) —
+> verified firing this session. The blanket-grant revoke is a belt-and-suspenders Owner-local
+> paste (the hook fires regardless of the allow-list), and the deeper agent-forgeable-identity
+> concern was carried forward to [[adr-023]] Phase 1 (reviewer identity → `@scope-creep-review`,
+> landed via scope-creep #86 / #85). Acceptance met by the live gate; closing.
 > **Partially shipped 2026-09-06.** `guard-gates.sh` now gates `gh pr merge`: it
 > blocks (exit 2, fail-closed) unless every required PR check — incl. the
 > [[work-057]] escalation-check — is green, and closes the CRO's spend/deploy
