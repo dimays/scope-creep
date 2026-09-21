@@ -3,23 +3,30 @@ name: adr-021
 description: Ratifies the operating-loop system — three refined loops (the dev-cycle primary development loop wrapping ticket-cycle; the roadmap planning loop; the evolve org self-improvement loop) plus a new code-reviewer standing function — and states how they compose with the existing loops, their cadences/trigger types, and the decision-rights implications.
 metadata:
   type: reference
-  status: proposed
-  version: 1.0.0
+  status: active
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-20
 ---
 
 # ADR-021: The operating-loop system
 
-- **Status:** proposed — authored by the [[chief-of-staff]] under the [[ceo]]'s direction and
-  the Owner's 2026-09-06 direction ("refine them among the staff, design it all yourself, I
-  trust the org to make decisions for the best of the product"). The [[cto]] (loop mechanics,
-  standards enforcement), [[chief-product-officer]] (roadmap/planning), and
-  [[chief-knowledge-manager]] (doc/registry) lenses are represented; the
-  [[chief-reality-officer]]'s reality-check was applied against the existing loop set and the
-  green gates. **An independent CRO/QA pass is recommended before this is accepted** (see
-  "Where reality-checks would strengthen this").
-- **Date:** 2026-09-06
+- **Status:** **active — ratified in practice.** Authored by the [[chief-of-staff]] under the
+  [[ceo]]'s direction and the Owner's 2026-09-06 direction ("refine them among the staff,
+  design it all yourself, I trust the org to make decisions for the best of the product"). The
+  [[cto]] (loop mechanics, standards enforcement), [[chief-product-officer]]
+  (roadmap/planning), and [[chief-knowledge-manager]] (doc/registry) lenses are represented;
+  the [[chief-reality-officer]]'s reality-check was applied against the existing loop set and
+  the green gates.
+  > **Reconciliation (2026-09-20):** the loop system this ADR ratifies is **live**. Its
+  > scheduled loops are registered cloud routines — [[roadmap]] and [[evolve]]
+  > ([[ledger-046-loops-scheduled]]), [[staffing-review]] ([[ledger-044-staffing-loop-automated]]),
+  > and [[request-triage]] (`registry/routines.json`, status `active`). The
+  > [[code-reviewer]] standing function is established and load-bearing in [[adr-022]]. Status
+  > is corrected **proposed → active** to match. This edit is **escalation-class** (a core
+  > `standards/` change, [[adr-022]] trigger (d)) and **HOLDS for the Owner's `owner-approved`
+  > marker** — the Owner ratifies the acceptance by clearing the reconciliation PR.
+- **Date:** 2026-09-06 (authored) · 2026-09-20 (status reconciled to active)
 - **Owner-gated:** **yes** — it adds core loops, a core standing-function agent, and edits core
   records ([[glossary]], [[decision-rights]], [[staffing]]). Lands via **PR under Owner
   approval** (the [[core-upgrade]] discipline, [[invariants]] §I.4 / [[adr-014]]). Agents

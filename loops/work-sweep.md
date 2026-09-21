@@ -22,6 +22,14 @@ milestone. The execution-side mirror of [[request-triage]], and the runner for
 > **Owner-gated ([[adr-021]]):** creating this loop is a core-upgrade. This manifest is a
 > **proposal** — the org drafts it; the Owner dispositions it (via the [[roadmap-001]] Theme 3
 > greenlight) and registers the claude.ai routine. It is not self-authorized.
+>
+> **Greenlight landed (2026-09-20), build pending — status stays `proposed`.** The Owner
+> dispositioned [[roadmap-001]] Theme 3 (as extended by [[prd-autonomous-execution-loop]]) by
+> merging **PR #78**, which **greenlights this loop's creation**. It is **not yet built or
+> registered** as a routine — so its status remains `proposed` (which here means *not yet
+> live*, distinct from the now-`active` [[request-triage]]). Activation is [[work-086]], gated
+> on [[work-088]] (GitHub write access) + the [[adr-023]] bot identity. The claude.ai routine
+> registration remains an Owner-gated step.
 
 ## Inputs
 

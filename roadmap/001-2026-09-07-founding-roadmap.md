@@ -129,5 +129,16 @@ the ledger — so a thread is a real map of what the org did and why.
 
 ## Disposition
 
-_Pending the Owner_ ([[roadmap]] step 7 — **accepted** / **revised** / **deferred**).
-Recorded here on the Owner's response; until then this round stands as presented.
+_Recorded on the Owner's response ([[roadmap]] step 7 — **accepted** / **revised** /
+**deferred**)._
+
+| Theme | Disposition | Evidence |
+|---|---|---|
+| **Theme 3 — the self-improving loop system** | **ACCEPTED, as extended** | Dispositioned via the merge of **PR #78** (2026-09-20), which greenlit the Autonomous Execution Loop ([[prd-autonomous-execution-loop]]) as the execution-side extension of this theme. Build pending: [[work-086]]/[[work-087]], gated on [[work-088]] (GitHub write access). See [[ledger-059-capstone-merge-and-reconciliation]]. |
+| Themes 1, 2, 4, 5 | Pending the Owner | No disposition recorded yet; these stand as presented. |
+
+> **Note (reconciliation, 2026-09-20).** This block records the Theme 3 disposition
+> **inferred from the PR #78 merge** (the PR the capstone PRD asked the Owner to merge as the
+> greenlight). It is staged in a reconciliation PR that **HOLDS for the Owner's
+> `owner-approved` marker** — the Owner confirms this reading by clearing that PR. The other
+> four themes remain open.

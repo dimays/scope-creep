@@ -3,12 +3,18 @@ name: request-triage
 description: The scheduled cloud routine that closes the Request Loop — sweeps new Owner request threads, runs request-intake per thread, writes tickets and the outcome back to the thread, and pulls the Owner in only when a call is theirs. Hourly to start, self-tuning. The time-scheduled sibling of request-intake.
 metadata:
   type: reference
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 1.0.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-07
+  last_verified: 2026-09-20
   mode: autonomous
 ---
+
+<!-- Reconciled 2026-09-20: this loop is LIVE — a registered hourly cloud routine
+     (registry/routines.json, status active, cron 17 * * * *). Status corrected
+     proposed → active. Escalation-class (a core loops/ change, ADR-022 trigger (d));
+     HOLDS for the Owner's owner-approved marker. -->
+
 
 # Loop: request-triage
 

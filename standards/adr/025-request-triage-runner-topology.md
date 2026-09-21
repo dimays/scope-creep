@@ -3,17 +3,23 @@ name: adr-025
 description: Where the request-triage runner lives and how it reaches each side. The runner straddles two repos — the shared thread store (the console's DB, ADR-024) and ticket-authoring (the scope-creep control plane). Decision — the runner's read/write-back mechanics live in the CONSOLE (reusing its schema + work-064 writers as the single source of truth; no schema fork), ticket-authoring reuses the console's existing controlPlaneRepoDir()+landProposal PR machinery, and the scheduled routine is a claude.ai Code Routine SOURCED FROM scope-creep with the console as a sibling checkout and the ADR-024 remote DATABASE_URL/DATABASE_AUTH_TOKEN in its environment. Triage judgment stays runtime Claude reasoning; the runner never self-merges. PROPOSED (CTO) — escalation-class, holds for the Owner marker.
 metadata:
   type: reference
-  status: proposed
-  version: 1.0.0
+  status: active
+  version: 1.1.0
   owner_agent: cto
-  last_verified: 2026-09-07
+  last_verified: 2026-09-20
 ---
 
 # ADR-025: request-triage runner topology (where the runner lives, how it reaches each side)
 
-- **Status:** **PROPOSED** (CTO, 2026-09-07). Escalation-class ([[adr-022]] trigger (d) — it
-  is a core `standards/` ADR); it **holds for the Owner marker** and is not self-merged.
-- **Date:** 2026-09-07
+- **Status:** **ACTIVE — the topology is built and running** (reconciled 2026-09-20). The
+  [[request-triage]] runner this ADR designs is a **registered hourly cloud routine**
+  (`registry/routines.json`, status `active`, cron `17 * * * *`, env `scope-creep-local`
+  with the console cloned as a sibling — exactly this ADR's split). Originally PROPOSED (CTO,
+  2026-09-07).
+  > **Escalation-class ([[adr-022]] trigger (d) — a core `standards/` ADR).** This
+  > proposed → active reconciliation **HOLDS for the Owner's `owner-approved` marker** and is
+  > not self-merged; the Owner ratifies by clearing the reconciliation PR.
+- **Date:** 2026-09-07 (authored) · 2026-09-20 (status reconciled to active)
 - **Deciders:** **CTO** (topology decision, this ADR); **Owner** (ratifies; the routine
   registration + spend ride the [[work-066]] activation, [[adr-016]]/[[adr-024]]).
 - **Relates to:** [[prd-request-loop]], [[request-triage]], [[adr-024]] (the shared store this
