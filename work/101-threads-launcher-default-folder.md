@@ -1,5 +1,5 @@
 ---
-id: work-098
+id: work-101
 title: Threads launcher opens "No folder" instead of scope-creep (default-folder defect)
 type: bug
 status: active
@@ -12,7 +12,7 @@ updated: 2026-09-21
 **Owner report (2026-09-21):** "open the thread in Claude" opens in **"No folder"** instead of
 **`scope-creep`**, which the Owner prefers as the default.
 
-## Suspected root cause (verify empirically — [[work-097]] qa pass)
+## Suspected root cause (verify empirically — [[work-100]] qa pass)
 The deep link is built in `app/lib/claude-sessions.ts`:
 `buildDeepLink` emits `claude://code/new?q=…&folder=<encoded cwd>` where `cwd = controlPlaneHome()`
 = `process.env.SCOPE_CREEP_HOME ?? join(process.cwd(), "..", "scope-creep")`. Two candidate
@@ -35,4 +35,4 @@ override; ensure the default resolves to the real absolute control-plane path in
 Running the console and clicking "Open in Claude" (or inspecting the generated deep-link URL)
 targets the `scope-creep` folder; Claude Desktop opens Claude Code **in that folder**, not "No
 folder." Re-verified empirically by [[qa-tester]]. Owner acceptance check defined for the actual
-OS-level open on the Owner's machine if it can't be proven in-repo. See [[work-097]], [[adr-016]].
+OS-level open on the Owner's machine if it can't be proven in-repo. See [[work-100]], [[adr-016]].

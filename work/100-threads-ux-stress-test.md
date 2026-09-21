@@ -1,7 +1,7 @@
 ---
-id: work-097
+id: work-100
 title: Threads UX stress-test — polish the projection + launcher to design-system standard
-type: epic
+type: feature
 status: active
 priority: high
 owner: chief-of-staff
@@ -22,14 +22,14 @@ calls. Every defect below is a launcher / deep-link / projection-correlation / d
 prohibited (evaporates the ToS exemption).
 
 ## The Owner's four observed defects → child tickets
-- [[work-098]] — **Wrong default folder.** "Open the thread in Claude" lands in **"No folder"**
+- [[work-101]] — **Wrong default folder.** "Open the thread in Claude" lands in **"No folder"**
   instead of `scope-creep` (the Owner's preferred default).
-- [[work-099]] — **Launcher→existing-conversation link never works.** Opening a launched thread
+- [[work-102]] — **Launcher→existing-conversation link never works.** Opening a launched thread
   still **prompts to start a NEW conversation**; the Owner "still hasn't seen it successfully
   link to a conversation" — the resume-existing path has never worked end-to-end.
-- [[work-100]] — **Reopen-ongoing-thread flow unverified.** The Owner wants confidence that
-  reopening a conversation on an ongoing thread works; blocked from testing by work-099.
-- [[work-101]] — **Design polish.** "Redundant flows, inconsistent spacing and style" — bring
+- [[work-103]] — **Reopen-ongoing-thread flow unverified.** The Owner wants confidence that
+  reopening a conversation on an ongoing thread works; blocked from testing by work-102.
+- [[work-104]] — **Design polish.** "Redundant flows, inconsistent spacing and style" — bring
   the surface to the [[design-system]] standard.
 
 ## Where the work lands

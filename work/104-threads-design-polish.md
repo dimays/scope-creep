@@ -1,5 +1,5 @@
 ---
-id: work-101
+id: work-104
 title: Threads design polish — resolve redundant flows, inconsistent spacing/style
 type: chore
 status: active
@@ -22,18 +22,18 @@ critical-update / needs-input / branch) whose spacing and badges should read as 
 
 ## Scope
 - Collapse the launcher/resume flows to a single clear primary action per state (start vs. resume;
-  see [[work-099]]) with secondary affordances demoted, not stacked.
+  see [[work-102]]) with secondary affordances demoted, not stacked.
 - Uniform spacing/rhythm and status/motion tokens from the design system (`@scope-creep/design`);
   extract shared primitives where the console is re-implementing them inline.
 - Consistent card styling across the thread timeline (badges, accents, padding).
 - Keep it dark-mode-correct ([[work-045]]) and delightful.
 
 ## Coordination
-Layer **on top of** the [[work-099]] behavior fix (same console branch) so the design reflects the
+Layer **on top of** the [[work-102]] behavior fix (same console branch) so the design reflects the
 corrected start/resume split — don't polish flows that are about to change. [[chief-designer]]
 owns; pairs with [[cto]] on the launcher markup.
 
 ## Acceptance
 The Threads surface reads as one system: one clear action per state, uniform spacing/style,
 design-system tokens/primitives, no redundant stacked flows. Reviewed against the design system
-and re-verified in a running console by [[qa-tester]]. See [[work-097]], [[adr-016]].
+and re-verified in a running console by [[qa-tester]]. See [[work-100]], [[adr-016]].

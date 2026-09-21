@@ -1,5 +1,5 @@
 ---
-id: work-099
+id: work-102
 title: Launcher→existing-conversation link never works — resume opens a NEW conversation
 type: bug
 status: active
@@ -14,7 +14,7 @@ conversation — it still **prompts to start a NEW conversation**. The Owner "st
 successfully link to a conversation." This is the headline defect: the resume-existing path has
 **never** worked end-to-end.
 
-## Root-cause hypothesis (confirm in [[work-097]] qa/CTO pass)
+## Root-cause hypothesis (confirm in [[work-100]] qa/CTO pass)
 Two distinct things are conflated in the Owner's symptom; both need resolving:
 
 1. **The "Resume in Claude" control can spawn a NEW session.** In
@@ -28,7 +28,7 @@ Two distinct things are conflated in the Owner's symptom; both need resolving:
    ever offered. Correlation (`claude-sessions.server.ts` `findSessionForThread`) matches a local
    JSONL whose first Owner message contains the `[scope-creep-thread:<id>]` marker. That marker
    only lands in the JSONL once the Owner **actually sends** the seeded prompt (the deep link
-   pre-fills the composer but does not auto-send). If the folder defect ([[work-098]]) or an
+   pre-fills the composer but does not auto-send). If the folder defect ([[work-101]]) or an
    unsent seed means no correlated JSONL exists, the projection is `pending` forever → "waiting
    for the session to start" and a resume that opens `code/new`.
 
@@ -46,7 +46,7 @@ OS URL launch) is the clean fix. If not, the honest fix is: (a) never present `c
 - Wire a working resume-existing path (deep-link-by-id if it exists today; else the correlated
   `--resume` command as the clear primary, with the projected transcript as the in-app view of
   the past conversation).
-- Make correlation reliable + observable (tie it to the corrected folder from [[work-098]]; show
+- Make correlation reliable + observable (tie it to the corrected folder from [[work-101]]; show
   a clear "linked ✓ / waiting to link" state).
 - **No Claude API call** may be introduced to "show" the conversation ([[adr-016]] hard rule).
 
@@ -54,5 +54,5 @@ OS URL launch) is the clean fix. If not, the honest fix is: (a) never present `c
 After launching a thread and sending the seed in Claude, reopening the thread shows the linked
 conversation (projected transcript in-app) and a resume control that **reopens the existing
 conversation**, never a new one. Empirically reproduced-then-fixed by [[qa-tester]]; Owner
-acceptance check defined for the OS-level resume on the Owner's machine. See [[work-097]],
-[[work-098]], [[work-100]], [[adr-016]].
+acceptance check defined for the OS-level resume on the Owner's machine. See [[work-100]],
+[[work-101]], [[work-103]], [[adr-016]].
