@@ -2,7 +2,7 @@
 id: work-097
 title: PM maturity — add the in-review lifecycle state and the board-hygiene cadence
 type: feature
-status: active
+status: review
 priority: high
 owner: chief-product-officer
 spec: adr-005
@@ -11,11 +11,11 @@ created: 2026-09-21
 updated: 2026-09-21
 ---
 > **Artifacts staged in this PR (`cpo/pm-maturity-in-review-board-hygiene`); flips to `done`
-> on Owner merge — do NOT mark done here.** This is the lifecycle+hygiene upgrade itself, held
-> `active` while the PR is under review. Fittingly, it is the **first ticket to traverse the new
-> finish line** — code-complete with a PR open, it is exactly what the new `review` state
-> describes, and it moves `active → review → done` as this escalation-class PR is reviewed and
-> merged.
+> on Owner merge — do NOT mark done here.** This is the lifecycle+hygiene upgrade itself, and it
+> **dogfoods the very state it introduces**: it is code-complete with a PR open awaiting
+> review/merge — exactly the `review` entry condition — so it sits at `review` rather than
+> `active`. Fittingly the **first ticket to traverse the new finish line**, it moves
+> `active → review → done` as this escalation-class PR is reviewed and merged.
 
 **User problem.** The board is a four-column kanban in the Owner's head (to-do → in-progress →
 in-review → done) but only three of those columns exist as states — there is **no explicit

@@ -4,7 +4,7 @@ title: Create and register the board-hygiene loop — the propose-only board jan
 type: feature
 status: proposed
 priority: medium
-owner: chief-product-officer
+owner: chief-of-staff
 spec: prd-autonomous-execution-loop
 created: 2026-09-21
 updated: 2026-09-21
