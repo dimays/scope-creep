@@ -2,12 +2,12 @@
 id: work-087
 title: Execution cadence & milestone governance — self-tuning sweep, machine-checkable milestone rule
 type: feature
-status: proposed
+status: active
 priority: medium
 owner: chief-of-staff
 spec: prd-autonomous-execution-loop
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-21
 ---
 The [[work-sweep]] loop must (a) self-pace its cadence on real signal rather than a hard-coded
 guess and (b) know **precisely** when to stop for a milestone. This ticket makes a standing

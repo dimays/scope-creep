@@ -2,12 +2,13 @@
 id: work-089
 title: Bug — a launched thread's view hides the Owner's original prompt
 type: bug
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/66
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-21
 ---
 Clicking **"Open in Claude Code"** on a thread launches it, and the launched thread view then
 **stops showing the Owner's original prompt**. The data is intact in the DB (thread #9, message

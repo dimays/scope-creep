@@ -2,12 +2,12 @@
 id: work-086
 title: work-sweep routine — scheduled sweep of the work board, drive ready tickets to done
 type: feature
-status: proposed
+status: active
 priority: high
 owner: chief-of-staff
 spec: prd-autonomous-execution-loop
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-21
 ---
 Stand up the [[work-sweep]] loop as a scheduled runner — the one net-new piece of
 [[prd-autonomous-execution-loop]] and the thing that makes "run the roadmap autonomously"
