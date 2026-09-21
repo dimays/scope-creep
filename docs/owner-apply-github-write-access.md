@@ -38,7 +38,7 @@ end-to-end with no human:
 > check re-runs GREEN → `gh pr merge` (0 required reviews) → **merged.**
 
 This is precisely the "the org autonomously merges a change to its own gates" case
-([[ledger-048]], [[adr-022]] activation gate). **So the write grant must ship together with
+([[ledger-048-autonomous-merge-cro-and-decision]], [[adr-022]] activation gate). **So the write grant must ship together with
 the mechanical backstop that closes it** — the substance of [[adr-023]]. The order below does
 that.
 
@@ -304,7 +304,7 @@ and this closes [[adr-023]]'s substance as part of the grant rather than deferri
   routine is what makes the forgeable-marker residual *agent-reachable*. Parts 1a–1c are its
   substance; if you take the PAT bridge instead, [[adr-023]] is the immediate next priority.
 - **Local harness gates don't travel to the cloud.** The `guard-gates` hook and the
-  `Bash(gh pr merge *)` revocation ([[docs/owner-apply-adr-022-floor]]) are per-checkout,
+  `Bash(gh pr merge *)` revocation (`docs/owner-apply-adr-022-floor.md`) are per-checkout,
   gitignored, local — they do **not** constrain the cloud routine. Server-side branch
   protection (Part 1) is the rail that does.
 - **Reversible.** Revoke the credential or delete the `GH_TOKEN` secret and the routine drops
