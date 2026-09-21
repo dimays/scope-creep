@@ -138,43 +138,50 @@ off-sandbox as `@scope-creep-review` (Part 0), a code owner the proxy can never 
   settings / `gh api repos/dimays/scope-creep/installation`) — un-pause criterion #3, now a **hard
   gate** (below).
 
-> **⚠️ Residual — the Claude App's permission set is Anthropic's manifest, not ours to trim; the
-> merge-block is CONDITIONAL on it.** Unlike our own `scope-creep-routine` App, you **cannot**
-> hand-pick "Contents + Pull-requests only"; you consent to whatever the Claude App requests. **So
-> the scope above is a request, not a guarantee — verify it, and gate on it:**
-> - **`Administration` OR `Workflows`/`Actions` write present → HARD BLOCK, do not un-pause.** Any of
->   these lets the identity **rewrite branch protection or the required checks** and dismantle the
->   code-owner gate — the merge-block guarantee no longer holds.
-> - **`Issues`/label write present → accepted, recorded residual (not a blocker).** A cloud/interactive
->   session could **pre-apply `owner-approved`**, degrading that marker's integrity (the live
->   **[[adr-023]] Phase-2 marker concern**) — but it still **cannot merge** (the code-owner review it
->   cannot produce is an independent required gate).
+> **⚠️ Residual — the grant is broad; the gate is repo STATE, not scope (verified 2026-09-21).**
+> The manifest is Anthropic-fixed, so you **cannot** trim it. The **actual grant** (both repos, all
+> Read+Write): `actions`, `checks`, `code`, `discussions`, `issues`, `pull-requests`,
+> `repository-hooks`, `workflows` — **`Administration` ABSENT.** So fine-grained restriction is
+> impossible, and the un-pause gate is a **two-part compensating-controls check on repo state:**
+> - **(i) `Administration`/branch-protection write ABSENT** — verify in the GitHub App install UI
+>   (CLI can't read the App manifest without its JWT). **Double-confirm** it is not listed. If it
+>   ever appears → **HARD BLOCK.**
+> - **(ii) No code-owner-capable credential in Actions secrets / Environments** — verified: `gh
+>   secret list` empty both repos, `environments` total_count 0 both. If one lands → **HARD BLOCK.**
+> - **Given (i)+(ii), `workflows`/`actions`/`checks`/`issues` write are accepted, signal-only
+>   residuals.** They are **forgeable but non-merging:** a cloud session can rewrite a check
+>   workflow on a PR branch (green under the pinned `github-actions` app_id) and forge the
+>   `owner-approved` label — but it **cannot** produce the `@scope-creep-review` code-owner review.
+>   **That identity gate is the sole trustworthy merge control.**
 
 ### What this closes (and doesn't)
 
-- **Merge stays impossible from the cloud** — the proxy identity is **not** the sole code owner
-  `@scope-creep-review`, and `require_code_owner_reviews` + `require_last_push_approval` (Part 0)
-  hold server-side **for any scope up to Contents/Pull-requests/Issues write** (the merge-block
-  breaks only if the App holds Administration/Workflows/Actions — the hard gate above).
-  **Author (cloud) ≠ merger (off-sandbox).**
-- **Does NOT make the merger human.** "Off-sandbox" secures the cloud **author** boundary; the
-  **unattended `@scope-creep-review` PAT** satisfies the code-owner review identically to a human.
-  So **[[adr-026]] does not close the [[adr-023]] Phase-2 residual** (an unattended reviewer can
-  clear an escalation hold and merge) — that stays open.
-- **Blast radius:** every interactive claude.ai session gains push/open-PR on the two repos —
-  but (given the hard gate passes) **cannot merge, approve as code owner, or rewrite the gate.**
-  `Contents:write` lets a session push to an in-flight PR branch, but `require_last_push_approval`
-  + `dismiss_stale_reviews` keep that **non-merging**. Worst case is spurious, non-merging,
-  reviewable PRs. Accepted for a single-user, fully-trusted-Owner system.
-- **Reversible:** uninstall the Claude App (or drop its write) → the routine falls back to
-  read-only, degrading to `needs-you`, never a silent action.
+- **Merge stays impossible from the cloud** — the proxy identity is **not** the code owner
+  `@scope-creep-review` (`can_approve=false`), so `require_code_owner_reviews` +
+  `require_last_push_approval` (Part 0) hold. **Author (cloud) ≠ merger (off-sandbox).**
+- **CI-green and the `owner-approved` label are FORGEABLE** by a cloud session (workflows+issues
+  write); **only the code-owner identity is trustworthy.** There is **no defense-in-depth beneath
+  it.**
+- **Does NOT make the merger human, and does NOT close [[adr-023]] Phase-2.** The unattended
+  `@scope-creep-review` PAT satisfies the code-owner review identically to a human. Since a cloud
+  session can pre-stage every other precondition, an auto-approving reviewer would let it merge an
+  **escalation-class gate change** with no human. **So un-pausing is TIERED:**
+  - **Tier 1 (safe after the canary):** `board-hygiene` + non-escalation periphery.
+  - **Tier 2 (gated on ADR-023 Phase-2):** `work-sweep` on any escalation/core/gate-reachable path
+    — needs a CODEOWNERS split putting the escalation set behind a human-only code owner + the
+    `escalation-check.sh` CODEOWNERS case first.
+- **Reversible:** uninstall the Claude App (or drop its write) → read-only, degrading to
+  `needs-you`, never a silent action.
 
-### Un-pause the routine only after (ADR-026 / runbook §4a)
+### Un-pause a routine only after (ADR-026 / runbook §4a; and see the board-hygiene canary doc)
 
-`POST /git/refs` → 201 · `POST /pulls` → 201 **as the proxy identity** · **full permission surface
-recorded + HARD-BLOCK on Administration/Workflows/Actions write** · `PUT /merge` from the sandbox →
-**405/409 blocked** · local `@scope-creep-review` merge **works** (proves the path, not that a human
-did it) · 403 → `needs-you` blocker (never silent). **Only then** flip `registry/routines.json` (a
+`POST /git/refs` → 201 · `POST /pulls` → 201 **as the proxy identity** · **compensating-controls
+gate #3: Administration absent (Owner UI-confirm) + Actions secrets/environments empty** · `PUT
+/merge` from the sandbox → **405/409 blocked** · local `@scope-creep-review` merge **works** (proves
+the path, not that a human did it) · 403 → `needs-you` blocker (never silent). **Tier 1 first** via
+the `board-hygiene` supervised canary (`docs/owner-apply-board-hygiene-routine.md`); **Tier 2
+(`work-sweep` on escalation-reachable paths) only after ADR-023 Phase-2.** **Only then** flip
+`registry/routines.json` (a
 separate PR). The decisive test is **gated on this grant and not reachable locally** — do not assert
 it proven.
 
