@@ -111,15 +111,22 @@ checks out — *not* the design/extension repos) → **Install**. The URL ends i
 `DATABASE_AUTH_TOKEN`):
 - `GH_APP_ID` = the App ID
 - `GH_APP_INSTALLATION_ID` = the Installation ID
-- `GH_APP_PRIVATE_KEY` = the **full** `.pem` contents (keep the `-----BEGIN/END-----` lines and
-  newlines)
+- `GH_APP_PRIVATE_KEY_B64` = the `.pem` **base64-encoded to a single line** — a `.env`-format
+  value can't hold the PEM's real line breaks, so encode it first (macOS):
+  ```bash
+  openssl base64 -A -in ~/Downloads/scope-creep-routine.private-key.pem | pbcopy
+  ```
+  Store the resulting single line (no surrounding quotes). The runner decodes it back to a real
+  PEM at startup. (Base64 avoids the `\n`-escaping fragility of pasting a raw PEM into a
+  key=value block.)
 
 **E. Token minting (runner impl — [[work-086]]/[[work-088]], not an Owner step; stated so the
 wiring is complete):** at run start the routine mints a ~1h installation token from the three
 secrets and exports it, then `git` / `gh` authenticate as `scope-creep-routine[bot]`:
 ```
 // @octokit/auth-app
-const auth = createAppAuth({ appId: GH_APP_ID, privateKey: GH_APP_PRIVATE_KEY, installationId: GH_APP_INSTALLATION_ID });
+const privateKey = Buffer.from(process.env.GH_APP_PRIVATE_KEY_B64, "base64").toString("utf8");
+const auth = createAppAuth({ appId: GH_APP_ID, privateKey, installationId: GH_APP_INSTALLATION_ID });
 process.env.GH_TOKEN = (await auth({ type: "installation" })).token;
 // then: gh auth setup-git  →  git push + gh pr create both act as the bot
 ```
@@ -128,7 +135,8 @@ process.env.GH_TOKEN = (await auth({ type: "installation" })).token;
 - **Installation tokens auto-expire (~1h)** — minted fresh each run, never stored. A leaked
   `GH_TOKEN` is dead within the hour.
 - **The private key has no expiry** — the only standing secret. Rotate annually as hygiene, or
-  immediately on suspicion (generate a new key, replace `GH_APP_PRIVATE_KEY`, delete the old).
+  immediately on suspicion (generate a new key, re-encode + replace `GH_APP_PRIVATE_KEY_B64`,
+  delete the old).
 - **Instant revoke:** uninstall the App or drop a repo from the installation — no token to hunt.
 - Nothing (key or token) ever lands in the repo, a committed `.env`, the ledger, or an Artifact
   ([[tech-sops]] §6).
