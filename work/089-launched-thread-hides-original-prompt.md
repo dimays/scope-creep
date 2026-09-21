@@ -2,12 +2,12 @@
 id: work-089
 title: Bug — a launched thread's view hides the Owner's original prompt
 type: bug
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-cos-threads
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-21
 ---
 Clicking **"Open in Claude Code"** on a thread launches it, and the launched thread view then
 **stops showing the Owner's original prompt**. The data is intact in the DB (thread #9, message
