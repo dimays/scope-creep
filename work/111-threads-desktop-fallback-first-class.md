@@ -2,7 +2,7 @@
 id: work-111
 title: Make the desktop-only Threads fallback a delightful first-class path, not a degradation
 type: chore
-status: backlog
+status: proposed
 priority: medium
 owner: chief-designer
 spec: prd-cos-threads

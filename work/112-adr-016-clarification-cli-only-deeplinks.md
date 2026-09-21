@@ -2,7 +2,7 @@
 id: work-112
 title: ADR-016 clarification — deep-link launcher + resume-by-id are CLI-only (Owner-gated core)
 type: chore
-status: backlog
+status: proposed
 priority: medium
 owner: chief-of-staff
 spec: prd-cos-threads

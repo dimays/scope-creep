@@ -2,7 +2,7 @@
 id: work-110
 title: Threads launcher — detect CLI-handler setup and present the right primary action
 type: feature
-status: backlog
+status: proposed
 priority: high
 owner: cto
 spec: prd-cos-threads
