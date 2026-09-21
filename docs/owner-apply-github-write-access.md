@@ -70,55 +70,125 @@ fix to an assumption:
 These make "propose but not dispose" a **mechanical** property instead of a hope. All are
 Owner-side (repo settings + a new identity). Do them **before** Part 2.
 
-### 1a. Provision the write credential as a *separate* machine identity — not the shared token
+### 1a. Provision the write credential as a *separate* identity — a **GitHub App** [Owner]
 
-**DECIDED (Owner, 2026-09-20): a dedicated bot identity — a GitHub App installation (or a
-dedicated machine account), not a fine-grained PAT under `dimays`.** This is the safe path;
-the PAT bridge below was explicitly *not* taken.
+**DECIDED (Owner, 2026-09-20): a dedicated bot identity, not a fine-grained PAT under
+`dimays`. CTO pick: a GitHub App installation** (over a dedicated machine account).
 
-- The safety property depends on a **required review from a party the routine is not**. A PAT
-  minted under `dimays` is the *same principal* as every interactive session and the
-  git-manager, so a required review can't tell them apart — it buys nothing. A **separate
-  identity** is what lets branch protection enforce author≠merger (1b) and lets CODEOWNERS
-  exclude the routine.
-- **Scope (least privilege), on both `dimays/scope-creep` and `dimays/scope-creep-console`
-  only** (the two repos [[adr-025]] checks out — *not* the design/extension repos):
-  - **Contents: Read & write** (push the feature branch)
-  - **Pull requests: Read & write** (open the PR)
-  - **Metadata: Read** (auto)
-  - **Everything else: No access** — in particular **Administration: none** (can't touch
-    branch protection) and **Workflows: none** (can't edit `.github/workflows/**`, itself an
-    escalation-class path).
-- **Honest limit (both CTO and CRO flag this):** there is *no* scope that grants "open PRs"
-  without also granting label add/remove on PRs. So the credential **can** self-label. That
-  is exactly why 1b (a required review the routine can't satisfy) is non-optional — label
-  forgery alone must not be enough to merge.
+*Why an App:* it is a principal that **structurally cannot be a code owner or approve as one**,
+and it mints **~1-hour installation tokens from a stored private key** — so a leaked `GH_TOKEN`
+dies within the hour, and there is no second GitHub *account* (email, 2FA, recovery, ToS) to
+secure forever. A machine account gives the "outside the approving set" property only by
+convention and leaves a long-lived PAT on the wire; the App gives it by construction. (The PAT
+bridge the CTO first floated for speed was rejected: a PAT under `dimays` is the same principal
+as every interactive session, so a required review couldn't tell them apart, and any credential
+that can open PRs can also self-label — so only a *separate* principal + a required review the
+bot can't satisfy actually closes the forge+merge path.)
 
-> *Footnote (decision record): the CTO's original position was a fine-grained PAT now with the
-> GitHub App deferred to [[adr-023]], to unblock faster. The CRO demonstrated that deferring
-> the separate identity while granting write to an unattended cron agent is what opens the
-> forge+merge path. The Owner chose the separate identity (2026-09-20), which folds
-> [[adr-023]]'s "separate principal" into this step — so the write grant and its mechanical
-> backstop ship together.*
+**A. Create the App** — GitHub → avatar → **Settings → Developer settings → GitHub Apps →
+New GitHub App**:
+- **Name:** `scope-creep-routine` (→ the `scope-creep-routine[bot]` principal; if taken,
+  `scope-creep-routine-dimays`).
+- **Homepage URL:** `https://github.com/dimays/scope-creep` (any valid URL; required field).
+- **Webhook:** untick **Active** (the routine acts; it doesn't receive events).
+- **Repository permissions** — set only these; leave **everything else "No access"**:
+  - **Contents: Read and write** (push the branch)
+  - **Pull requests: Read and write** (`gh pr create`)
+  - **Metadata: Read-only** (auto)
+  - Explicitly leave **Administration / Workflows / Actions / Environments / Secrets** at
+    **No access** — so the bot cannot edit branch protection or `.github/workflows/**`.
+- **Where can this be installed?** "Only on this account." → **Create GitHub App.**
 
-### 1b. Require a real review the routine cannot give — on **both** repos
+**B. Mint the standing secret** — on the App page, note the **App ID**, then **Generate a
+private key** (downloads a `.pem`).
 
-- [ ] Set `required_approving_review_count: 1` (or more) on `main` for **both** repos.
-- [ ] Add a **CODEOWNERS** file naming an approving team/identity that the **routine identity
-  is not a member of** (e.g. the Owner, or a `git-manager`/human reviewer identity). Now the
-  routine can open a PR but **cannot approve it**, so it cannot merge — author≠merger becomes
-  a GitHub rule, not a convention.
+**C. Install it, scoped to two repos** — **Install App** → on `dimays` → **Only select
+repositories** → tick **`scope-creep`** and **`scope-creep-console`** (the two [[adr-025]]
+checks out — *not* the design/extension repos) → **Install**. The URL ends in
+`/settings/installations/<INSTALLATION_ID>` — note the **Installation ID**.
 
-### 1c. Give the console repo the escalation rail it's missing
+**D. Land three secrets in the `scope-creep-local` cloud env** (same place as `DATABASE_URL` /
+`DATABASE_AUTH_TOKEN`):
+- `GH_APP_ID` = the App ID
+- `GH_APP_INSTALLATION_ID` = the Installation ID
+- `GH_APP_PRIVATE_KEY` = the **full** `.pem` contents (keep the `-----BEGIN/END-----` lines and
+  newlines)
 
-- [ ] Add the **path-based escalation check** (`Path-based auto-escalation (ADR-022 trigger
-  d)`, the [[work-057]] check) as a **required status check** on `scope-creep-console`'s
-  `main`. Today it has none — so escalation-class console changes aren't caught at all.
+**E. Token minting (runner impl — [[work-086]]/[[work-088]], not an Owner step; stated so the
+wiring is complete):** at run start the routine mints a ~1h installation token from the three
+secrets and exports it, then `git` / `gh` authenticate as `scope-creep-routine[bot]`:
+```
+// @octokit/auth-app
+const auth = createAppAuth({ appId: GH_APP_ID, privateKey: GH_APP_PRIVATE_KEY, installationId: GH_APP_INSTALLATION_ID });
+process.env.GH_TOKEN = (await auth({ type: "installation" })).token;
+// then: gh auth setup-git  →  git push + gh pr create both act as the bot
+```
 
-> When 1a–1c are in place, the credential can push branches and open PRs on both repos, but a
-> merge requires a review from an identity the routine isn't — and an escalation-class diff
-> stays RED and unmergeable on **both** repos without a genuine `owner-approved`. That is
-> "propose, never dispose," enforced by GitHub rather than by goodwill.
+**F. Expiry / rotation posture:**
+- **Installation tokens auto-expire (~1h)** — minted fresh each run, never stored. A leaked
+  `GH_TOKEN` is dead within the hour.
+- **The private key has no expiry** — the only standing secret. Rotate annually as hygiene, or
+  immediately on suspicion (generate a new key, replace `GH_APP_PRIVATE_KEY`, delete the old).
+- **Instant revoke:** uninstall the App or drop a repo from the installation — no token to hunt.
+- Nothing (key or token) ever lands in the repo, a committed `.env`, the ledger, or an Artifact
+  ([[tech-sops]] §6).
+
+### 1b. Require a review the bot cannot give — CODEOWNERS + branch protection [Owner]
+
+**Order matters: land CODEOWNERS *before* flipping `require_code_owner_reviews`,** or the very
+PR that adds it can't merge.
+
+- [ ] Add `.github/CODEOWNERS` to **each** repo, identical. `scope-creep-routine[bot]` is a
+  GitHub App, so it **cannot** be a code owner or approve as one — it can only propose.
+  (`.github/CODEOWNERS` is *not* an escalation-class path — only `.github/workflows/*` is — so
+  it lands as a normal PR.)
+  ```
+  # Every change requires review from the Owner (code owner). The cloud routine acts as
+  # scope-creep-routine[bot] (a GitHub App), which cannot be a code owner or approve — it
+  # proposes; the Owner disposes.
+  * @dimays
+  ```
+- [ ] Then set branch protection on `scope-creep`:
+  ```bash
+  gh api --method PUT repos/dimays/scope-creep/branches/main/protection --input - <<'JSON'
+  {"required_status_checks":{"strict":true,"contexts":["Path-based auto-escalation (ADR-022 trigger d)","Registry sync + work-item schema"]},"enforce_admins":true,"required_pull_request_reviews":{"required_approving_review_count":1,"require_code_owner_reviews":true,"dismiss_stale_reviews":true,"require_last_push_approval":true},"restrictions":null,"allow_force_pushes":false,"allow_deletions":false}
+  JSON
+  ```
+- [ ] And on `scope-creep-console` (keeps its single check for now — see 1c):
+  ```bash
+  gh api --method PUT repos/dimays/scope-creep-console/branches/main/protection --input - <<'JSON'
+  {"required_status_checks":{"strict":true,"contexts":["App Contract test gate"]},"enforce_admins":true,"required_pull_request_reviews":{"required_approving_review_count":1,"require_code_owner_reviews":true,"dismiss_stale_reviews":true,"require_last_push_approval":true},"restrictions":null,"allow_force_pushes":false,"allow_deletions":false}
+  JSON
+  ```
+
+`require_last_push_approval: true` is the precise mechanical author≠merger rail — the last
+pusher (the bot) can't be the approver, so a different principal must approve;
+`dismiss_stale_reviews: true` voids an approval if the bot pushes more commits after it.
+
+### 1c. Give the console repo its own escalation rail (fast-follow, then require it) [Agent + Owner]
+
+- [ ] **Port** `escalation-check.yml` + `scripts/escalation-check.sh` to `scope-creep-console`
+  (agent-buildable; the workflow file is escalation-class, so it lands on your marker).
+- [ ] **Only then** add the escalation context as required on the console — **do not require it
+  before the workflow exists**, or every console PR wedges at "waiting for status":
+  ```bash
+  # ONLY after the escalation-check workflow exists in scope-creep-console:
+  gh api --method PUT repos/dimays/scope-creep-console/branches/main/protection --input - <<'JSON'
+  {"required_status_checks":{"strict":true,"contexts":["App Contract test gate","Path-based auto-escalation (ADR-022 trigger d)"]},"enforce_admins":true,"required_pull_request_reviews":{"required_approving_review_count":1,"require_code_owner_reviews":true,"dismiss_stale_reviews":true,"require_last_push_approval":true},"restrictions":null,"allow_force_pushes":false,"allow_deletions":false}
+  JSON
+  ```
+
+> **What 1a–1c close (and don't).** They make the *unattended cloud routine* "propose, never
+> dispose" **mechanically, server-side** (independent of the local `guard-gates` hook, which
+> isn't guaranteed in the cloud env): the bot can push branches and open PRs but is the
+> author/last-pusher and not a code owner, so it cannot approve or merge, and an
+> escalation-class diff stays unmergeable without a genuine `owner-approved`. They do **not**
+> cover **interactive agents**, which still run under the shared `dimays` identity and can
+> approve as code owner — which is what keeps [[adr-022]] autonomous merge of routine work
+> alive (a git-manager-as-`dimays` approval on a bot-authored PR is now a genuine author≠merger
+> event). Moving the remaining functions onto restricted identities is the rest of [[adr-023]],
+> a follow-up — but this removes the highest-risk actor (the hourly unattended runner) from the
+> trusted set, making **[[adr-023]] partially active** once applied.
 
 ---
 
