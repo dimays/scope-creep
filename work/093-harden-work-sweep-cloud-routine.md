@@ -2,13 +2,15 @@
 id: work-093
 title: Harden the work-sweep cloud routine — prompt + env + REST git path (first-run findings)
 type: chore
-status: proposed
+status: active
 priority: high
 owner: cto
 spec: prd-autonomous-execution-loop
 created: 2026-09-21
 updated: 2026-09-21
 ---
+> **In-flight — lands via PR #91; flips to `done` on merge.** The routine hardening (prompt + env
+> + REST git path, runtime installation-ID derivation) is staged and holds for review.
 The first `work-sweep` run ([[ledger-062-work-sweep-first-run]]) proved the loop **safe** (it built
 nothing, routed around no gate, diagnosed precisely, parked at `needs-you`) but surfaced concrete
 reliability gaps. Fix them before the routine is trusted unattended.
