@@ -2,13 +2,19 @@
 id: work-066
 title: request-triage routine — sweep new requests, ticket them, write outcomes back
 type: feature
-status: proposed
+status: done
 priority: high
 owner: chief-of-staff
 spec: prd-request-loop
+pr: https://github.com/dimays/scope-creep-console/pull/59
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** The
+> request-triage runner shipped: console PR #59 (runner mechanics) + scope-creep PR #72 (ADR-025
+> topology + runbook env vars), and the cloud routine was registered live via scope-creep PR #77
+> ("the Request Loop is live"). Landing recorded in [[ledger-058-phase2-request-loop-landing]].
+> Acceptance met; closing.
 Stand up the [[request-triage]] loop as a scheduled runner — the one net-new piece of
 [[prd-request-loop]] and the thing that makes "submit and forget" real. Hourly, it sweeps
 new Owner request threads, runs [[request-intake]] per thread, authors tickets, and writes

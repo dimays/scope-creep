@@ -2,13 +2,19 @@
 id: work-087
 title: Execution cadence & milestone governance — self-tuning sweep, machine-checkable milestone rule
 type: feature
-status: active
+status: done
 priority: medium
 owner: chief-of-staff
 spec: prd-autonomous-execution-loop
+pr: https://github.com/dimays/scope-creep-console/pull/67
 created: 2026-09-08
 updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** Shipped:
+> console PR #67 (milestone predicate + `cadence-decision` self-tune protocol — the sweep
+> mechanics) and scope-creep PR #87 (the cadence policy: concrete seed + bounds, Owner-gated).
+> The first supervised run emitted a `cadence-decision` block backing the cadence off to 7 days
+> ([[ledger-062-work-sweep-first-run]]). Acceptance met; closing.
 The [[work-sweep]] loop must (a) self-pace its cadence on real signal rather than a hard-coded
 guess and (b) know **precisely** when to stop for a milestone. This ticket makes a standing
 function accountable for both — the execution-side analog of [[work-067]] (which did cadence

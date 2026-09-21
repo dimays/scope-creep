@@ -2,13 +2,22 @@
 id: work-086
 title: work-sweep routine — scheduled sweep of the work board, drive ready tickets to done
 type: feature
-status: active
+status: done
 priority: high
 owner: chief-of-staff
 spec: prd-autonomous-execution-loop
+pr: https://github.com/dimays/scope-creep-console/pull/70
 created: 2026-09-08
 updated: 2026-09-21
 ---
+> **Done 2026-09-21 (board reconciliation, [[ledger-063-work-board-reconciliation]]).** The
+> work-sweep loop's behavior/mechanics shipped: console PR #70 (runner mechanics) on top of the
+> capstone proposal scope-creep PR #78, and the routine was registered and **fired its first
+> supervised run** ([[ledger-062-work-sweep-first-run]]) — it read the board, computed a real
+> ready set, verified identities, and fail-closed on a blocked write path. The remaining
+> activation blocker (working GitHub write access from the cloud sandbox) is **not** part of this
+> ticket's build — it is Owner-only provisioning tracked in [[work-088]] with the env/prompt
+> hardening in [[work-093]]. The loop behavior is landed; closing.
 Stand up the [[work-sweep]] loop as a scheduled runner — the one net-new piece of
 [[prd-autonomous-execution-loop]] and the thing that makes "run the roadmap autonomously"
 real. On a cadence, with nobody at the keyboard, it reads the work board, pulls ready tickets
