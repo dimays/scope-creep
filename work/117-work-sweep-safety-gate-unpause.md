@@ -9,7 +9,7 @@ spec: adr-026
 created: 2026-09-22
 updated: 2026-09-22
 blocked_on: owner
-blocked_reason: Every next step is an Owner needs-you gate (Gate 0 PAT removal is a HARD BLOCK). CoS-ratified 2026-09-22; resume when Gate 0 is Owner-confirmed clear. See ledger-072 needs-you card.
+blocked_reason: "Gate 0 (reviewer-PAT removal) CLEARED by the Owner 2026-09-22. Next Owner-gated step: Phase 2a work-094 (Owner-applied gate-file patch) to unblock disposing #110; Gate 1(i) (Administration-write-absent, Owner UI-read) still needed before Phase 3. See ledger-072 needs-you card."
 ---
 
 The plan-of-record for turning on autonomous cadenced execution of the work board:

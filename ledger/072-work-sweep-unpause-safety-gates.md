@@ -212,11 +212,13 @@ right surface — do not over-build it.
 **work-sweep — un-pause: 6 Owner steps, in order. Do not skip a gate.** (Full runbook:
 `docs/owner-apply-work-sweep-unpause.md`. Record: this ledger.)
 
-1. **[Gate 0 — HARD BLOCK] Remove the reviewer PAT from the cloud env.** At
-   `https://claude.ai/code` → Environments → `scope-creep-local` → env vars, remove the
-   `@scope-creep-review` PAT (reviewer-identity step 11 seeded it). It is moot for the cloud path
-   (the egress proxy discards it), so removal is free and closes the merge-capable-credential
-   gap. **Nothing else proceeds until you confirm this is removed.**
+1. **[Gate 0 — HARD BLOCK] ✅ CLEARED 2026-09-22.** The Owner removed the `GH_REVIEW_PAT`
+   (`@scope-creep-review` reviewer PAT, reviewer-identity step 11) from the `scope-creep-local`
+   cloud env. Cloud-env state is Owner-read only (not visible from a local session), so this rests
+   on the Owner's confirmation — the fail-closed design. CLI re-verified the same day: repo secrets
+   empty + `environments = 0` both repos (no code-owner credential reachable); the reviewer PAT
+   remains available off-sandbox (`~/.config/scope-creep/review-pat`) for disposing PRs. The
+   direct criterion-4 merge-probe in Phase 3 is the belt-and-suspenders proof-of-inert.
 2. **[Gate 1(i)] Re-confirm the GitHub App grant.** In the GitHub UI, confirm
    `Administration` / branch-protection write is **ABSENT** from the shared Claude GitHub App on
    **both** repos. If present → stop (HARD BLOCK). Do not rely on the 2026-09-21 report; re-read.
