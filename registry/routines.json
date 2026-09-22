@@ -62,7 +62,7 @@
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_01L1ZuWXmRE1quiLGP3mv9ni",
       "status": "active",
-      "note": "HOURLY (:17) \u2014 the loop that closes the Request Loop ([[prd-request-loop]]). Runs in the custom cloud env 'scope-creep-local' (holds DATABASE_URL + DATABASE_AUTH_TOKEN, *.turso.io allowlisted) and clones scope-creep-console as a sibling for the triage CLI + shared thread store ([[adr-025]]). Runtime is Node (npm run triage), not bun (egress proxy drops bun's fetch). Cadence self-tunes per [[work-067]]."
+      "note": "UN-PAUSED 2026-09-22 by the Owner on claude.ai after [[work-115]] closed. It had been paused 2026-09-22 because console test helpers leaked ~200+ verbatim test fixtures into the shared Turso store (SCOPE_CREEP_DB_URL precedence shadowed the vitest :memory: pin), which the hourly sweep re-triaged, flooding the Console. Gate satisfied: (a) leak closed at source \u2014 scope-creep-console#74 merged to main (test-db isolation + fail-closed guard + 49-pair defensive denylist); (b) store clean \u2014 318 fixture threads archived (reversible), leaving 1 genuine request active, verified read-only. HOURLY (:17) \u2014 the loop that closes the Request Loop ([[prd-request-loop]]). Runs in the custom cloud env 'scope-creep-local' (holds DATABASE_URL + DATABASE_AUTH_TOKEN, *.turso.io allowlisted) and clones scope-creep-console as a sibling for the triage CLI + shared thread store ([[adr-025]]). Runtime is Node (npm run triage), not bun (egress proxy drops bun's fetch). Cadence self-tunes per [[work-067]]."
     },
     {
       "name": "Work sweep",
