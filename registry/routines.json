@@ -1,18 +1,21 @@
 {
   "_generated": false,
-  "_source": "Owner/CoS-maintained by hand — NOT harvested by scripts/registry-build.ts. The system of record for cloud routines is claude.ai (Code Routines), not this repo, so there is no manifest to harvest from. Edit this file directly whenever a routine is created, rescheduled, or retired in claude.ai, and bump `updated`. `registry:check` never rewrites or drops this file — the harvester (scripts/registry-build.ts) does not reference `routines.json` at all.",
+  "_source": "Owner/CoS-maintained by hand \u2014 NOT harvested by scripts/registry-build.ts. The system of record for cloud routines is claude.ai (Code Routines), not this repo, so there is no manifest to harvest from. Edit this file directly whenever a routine is created, rescheduled, or retired in claude.ai, and bump `updated`. `registry:check` never rewrites or drops this file \u2014 the harvester (scripts/registry-build.ts) does not reference `routines.json` at all.",
   "schema_version": "1.0.0",
   "system_of_record": "claude.ai",
   "manage_all_url": "https://claude.ai/code/routines",
-  "updated": "2026-09-21",
-  "note": "Lists only TIME-SCHEDULED cloud routines — the recurring cron-fired runners created in claude.ai that clone this repo and open PRs. EVENT-DRIVEN loops (fired by triggers inside a session, not a wall clock — e.g. `dev-cycle`, `ticket-cycle`, `decision`, `level-set`, `request-intake`, `new-app`, `heal`, `core-upgrade`) have no routine and so have no entry here; see registry/loops.json for the full loop set. For each routine below, this file is memory + a link target ([[adr-016]] zero-Claude-call rule) — it does not imply in-app control. The LIVE (self-tuned) cadence and run history are NOT duplicated here: read the named loop's most recent [[ledger]] `cadence-decision` block (`ran_at`, `trigger`, `next_cadence_days`, `reason`) — see the loop's own manifest for the protocol.",
+  "updated": "2026-09-22",
+  "note": "Lists only TIME-SCHEDULED cloud routines \u2014 the recurring cron-fired runners created in claude.ai that clone this repo and open PRs. EVENT-DRIVEN loops (fired by triggers inside a session, not a wall clock \u2014 e.g. `dev-cycle`, `ticket-cycle`, `decision`, `level-set`, `request-intake`, `new-app`, `heal`, `core-upgrade`) have no routine and so have no entry here; see registry/loops.json for the full loop set. For each routine below, this file is memory + a link target ([[adr-016]] zero-Claude-call rule) \u2014 it does not imply in-app control. The LIVE (self-tuned) cadence and run history are NOT duplicated here: read the named loop's most recent [[ledger]] `cadence-decision` block (`ran_at`, `trigger`, `next_cadence_days`, `reason`) \u2014 see the loop's own manifest for the protocol.",
   "routines": [
     {
       "name": "Staffing review",
       "loop": "staffing-review",
       "trigger_id": "trig_01D3wGKgqvTAwEV7Y5avk7tf",
       "cron": "0 14 * * 1",
-      "cadence_bounds_days": [7, 42],
+      "cadence_bounds_days": [
+        7,
+        42
+      ],
       "model": "claude-sonnet-5",
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_01D3wGKgqvTAwEV7Y5avk7tf",
@@ -23,7 +26,10 @@
       "loop": "roadmap",
       "trigger_id": "trig_017Pa47QSG5qmb9gtQxfEbDR",
       "cron": "0 14 1,15 * *",
-      "cadence_bounds_days": [14, 90],
+      "cadence_bounds_days": [
+        14,
+        90
+      ],
       "model": "claude-sonnet-5",
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_017Pa47QSG5qmb9gtQxfEbDR",
@@ -34,7 +40,10 @@
       "loop": "evolve",
       "trigger_id": "trig_01JviGNe4nFX63ZLoMWucMT6",
       "cron": "0 14 1 * *",
-      "cadence_bounds_days": [30, 90],
+      "cadence_bounds_days": [
+        30,
+        90
+      ],
       "model": "claude-sonnet-5",
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_01JviGNe4nFX63ZLoMWucMT6",
@@ -45,24 +54,45 @@
       "loop": "request-triage",
       "trigger_id": "trig_01L1ZuWXmRE1quiLGP3mv9ni",
       "cron": "17 * * * *",
-      "cadence_bounds_hours": [1, 24],
+      "cadence_bounds_hours": [
+        1,
+        24
+      ],
       "model": "claude-sonnet-5",
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_01L1ZuWXmRE1quiLGP3mv9ni",
       "status": "active",
-      "note": "HOURLY (:17) — the loop that closes the Request Loop ([[prd-request-loop]]). Runs in the custom cloud env 'scope-creep-local' (holds DATABASE_URL + DATABASE_AUTH_TOKEN, *.turso.io allowlisted) and clones scope-creep-console as a sibling for the triage CLI + shared thread store ([[adr-025]]). Runtime is Node (npm run triage), not bun (egress proxy drops bun's fetch). Cadence self-tunes per [[work-067]]."
+      "note": "HOURLY (:17) \u2014 the loop that closes the Request Loop ([[prd-request-loop]]). Runs in the custom cloud env 'scope-creep-local' (holds DATABASE_URL + DATABASE_AUTH_TOKEN, *.turso.io allowlisted) and clones scope-creep-console as a sibling for the triage CLI + shared thread store ([[adr-025]]). Runtime is Node (npm run triage), not bun (egress proxy drops bun's fetch). Cadence self-tunes per [[work-067]]."
     },
     {
       "name": "Work sweep",
       "loop": "work-sweep",
       "trigger_id": "trig_01Aw7cBgWjGTER2FeAe9tyeT",
       "cron": "0 16 * * *",
-      "cadence_bounds_days": [0.5, 7],
+      "cadence_bounds_days": [
+        0.5,
+        7
+      ],
       "model": "claude-sonnet-5",
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_01Aw7cBgWjGTER2FeAe9tyeT",
       "status": "paused",
-      "note": "Registered but PAUSED pending work-092/093 fixes (first supervised run BLOCKED safely — ledger/062). The execution-side loop of [[prd-autonomous-execution-loop]] ([[work-086]]/[[work-087]]); must not run unattended until the work-093 credential fixes land and are re-verified in the sandbox. Cadence self-tunes per [[work-087]]."
+      "note": "Registered but PAUSED pending work-092/093 fixes (first supervised run BLOCKED safely \u2014 ledger/062). The execution-side loop of [[prd-autonomous-execution-loop]] ([[work-086]]/[[work-087]]); must not run unattended until the work-093 credential fixes land and are re-verified in the sandbox. Cadence self-tunes per [[work-087]]."
+    },
+    {
+      "name": "Board hygiene",
+      "loop": "board-hygiene",
+      "trigger_id": "trig_014FAeeQ6aEMEpZF4ACQt9KL",
+      "cron": "0 15 * * *",
+      "cadence_bounds_days": [
+        0.5,
+        7
+      ],
+      "model": "claude-sonnet-5",
+      "source": "github.com/dimays/scope-creep",
+      "manage_url": "https://claude.ai/code/routines/trig_014FAeeQ6aEMEpZF4ACQt9KL",
+      "status": "active",
+      "note": "Tier-1 propose-only board-hygiene canary (ADR-026). Registered + supervised first run PASSED 2026-09-22 (opened #101 as the forced sandbox-proxy identity; merge structurally blocked by the code-owner gate) then un-paused. Edits only work/*.md status + opens ONE board-state-correction PR; never builds/merges. Runs in the scope-creep-local env (Node runtime), console sibling checkout. Cadence self-tunes per work-087; see ledger-071."
     }
   ]
 }
