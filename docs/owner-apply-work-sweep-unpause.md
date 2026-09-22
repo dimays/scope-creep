@@ -77,19 +77,24 @@ Commit on a branch; `@scope-creep-review` approves; **[You]** add the `owner-app
 (this PR self-flags escalation) → merge. (The console already covers CODEOWNERS — line 122 — so
 this only closes the control-plane asymmetry, [[work-094]].)
 
-### 2b. The CODEOWNERS split — both repos **[Me authors → You disposes]**
+### 2b. The CODEOWNERS split — both repos **[Pre-authored → You disposes]**
 
-Replace the current `* @scope-creep-review` (no split) with a genuine split: **escalation set →
+**Pre-authored & open:** `dimays/scope-creep#110` (control plane, **DO-NOT-MERGE until 2a/work-094
+lands** — its escalation-check reads routine until then) + `dimays/scope-creep-console#75` (console,
+correctly holds). Replaces the current `* @scope-creep-review` (no split) with: **escalation set →
 `@dimays` (human-only); periphery → `@scope-creep-review`.**
 
 - **`dimays/scope-creep` escalation set → `@dimays`:** `charter/INVARIANTS.md`, `charter/`,
   `.claude/`, `standards/`, `agents/`, `loops/`, `registry/`, `.github/workflows/`,
-  `.github/CODEOWNERS`, `scripts/escalation-check*.sh`, `ledger/README.md` — **NOT** all of
-  `ledger/**` (routine append entries stay periphery; only the README/policy file escalates).
+  `.github/CODEOWNERS`, `scripts/escalation-check*.sh`, **`scripts/guard-*.sh`**, `ledger/README.md`
+  — **NOT** all of `ledger/**` (routine append entries stay periphery; only the README/policy file
+  escalates).
 - **`dimays/scope-creep-console` escalation set → `@dimays`:** `.github/`, `.claude/`,
-  `scripts/escalation-check.sh`, infra/lock manifests, `drizzle.config.ts`, `app/db/config.ts`,
-  `.env*`.
+  `scripts/escalation-check*.sh`, **`scripts/guard-*.sh`**, infra/lock manifests,
+  `drizzle.config.ts`, `app/db/config.ts`, `.env*`.
 - **Periphery → `@scope-creep-review`** on both.
+- *(`scripts/guard-*.sh` added beyond the brief's literal list — ADR-026 says "the gate scripts";
+  flagged in the PRs for you to trim in one line if you prefer a narrower set.)*
 
 > **`require_last_push_approval` trap (CTO — must heed):** `main` protection has
 > `require_last_push_approval=true`, and `@dimays` is the sole human code owner for the escalation
@@ -98,9 +103,12 @@ Replace the current `* @scope-creep-review` (no split) with a genuine split: **e
 > never the last pusher and disposes as pure code-owner + `owner-approved` label. (Alternative: add
 > a second human code owner.) Do **not** let the human code-owner also be the last committer.
 
-### 2c. Bump ADR-023 status + ledger + live-verify gate **[Me drafts → You disposes]**
+### 2c. Bump ADR-023 status + ledger + live-verify gate **[Pre-authored → You disposes]**
 
-- `standards/adr/023` status → **Phase-2 active** (escalation-class change — Owner-approved).
+- **Pre-authored & open:** `dimays/scope-creep#111` flips `standards/adr/023` → **`active`**
+  (escalation-class — Owner-approved). **MERGE LAST** — only after 2a (work-094) + 2b (#110 +
+  console#75) land AND the live-verify gate below is captured; it asserts Phase 2 is live, so
+  merging earlier is a false claim.
 - **Reviewer-identity live-verify gate** (`docs/owner-apply-reviewer-identity.md` Phase 4 / live
   checklist): a CODEOWNERS-only PR shows escalation-check **RED** without `owner-approved`;
   `@scope-creep-review` **cannot** approve an escalation-set change; **`@dimays` can**. Capture the

@@ -192,6 +192,12 @@ right surface — do not over-build it.
   - `dimays/scope-creep-console#75` — console CODEOWNERS split (mirror). Verified live that its
     escalation-check classifies **ESCALATION → HOLD** (console already covers `.github/CODEOWNERS`),
     so it correctly holds for the owner marker with no work-094-style prerequisite.
+  - `dimays/scope-creep#111` — **ADR-023 → `active` (Phase-2-landed) bump.** **Flagged MERGE-LAST**:
+    it asserts Phase 2 is live, so it must be disposed only AFTER #110 + console#75 + work-094 land
+    and the live-verify gate is captured — merging it earlier would falsely claim an active control.
+    Retains the verbatim CRO residual (marked closed, not deleted) and the honest remainder
+    (periphery auto-review stays; label forgeable but code-owner identity is the load-bearing gate).
+    Classifies **ESCALATION → HOLD** (verified live).
   - Branch-authored in throwaway worktrees off `origin/main` (since removed); the console working
     checkout (on `cto/work-115…`) and the PR #109 branch were left untouched.
 
@@ -218,8 +224,10 @@ right surface — do not over-build it.
    Dispose each: `@scope-creep-review` reviews + you add `owner-approved`; you are not the last
    pusher (both were authored on their own branches). Escalation set → `@dimays`, periphery →
    `@scope-creep-review`.
-5. **[Phase 2c] Dispose the ADR-023 → Phase-2-active PR** (`chief-knowledge-manager` drafts). The
-   live-verify gate evidence is captured to the ledger.
+5. **[Phase 2c] Dispose the ADR-023 → Phase-2-active PR** — **now pre-authored & open** as
+   `dimays/scope-creep#111`. **Merge LAST** — only after step 3 (work-094) + step 4 (#110 +
+   console#75) land AND the live-verify gate evidence is captured to the ledger. It asserts Phase 2
+   is active, so merging it earlier is a false claim.
 6. **[Phase 3] After the supervised canary passes** (criteria 1/2/4/6 incl. the direct
    `PUT …/merge → 405/409` probe, + propose-only + escalation-refusal + WIP-cap; `qa-tester`
    runs, `CRO` verifies): **un-pause the routine at its claude.ai `manage_url`**
@@ -232,8 +240,9 @@ Any permission denial at any step → the ticket stays `blocked` + this card, ne
 
 ## Disposition
 work-sweep remains `paused`. Nothing merged, nothing un-paused, no escalation-class change
-**landed** by this session. Three propose-only PRs are open and held for the Owner: `#109`
+**landed** by this session. Four propose-only PRs are open and held for the Owner: `#109`
 (this plan-of-record, routine), `#110` (control-plane CODEOWNERS split, DO-NOT-MERGE-until-work-094),
-`console#75` (console CODEOWNERS split, correctly holding). See [[work-117]], [[adr-026]],
+`console#75` (console CODEOWNERS split, correctly holding), `#111` (ADR-023 → active bump,
+MERGE-LAST after the substance lands). See [[work-117]], [[adr-026]],
 [[adr-023]], [[adr-022]],
 [[ledger-071-board-hygiene-first-run-canary]], [[ledger-066-cloud-sandbox-proxy-identity-wall]].
