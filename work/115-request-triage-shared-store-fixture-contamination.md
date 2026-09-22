@@ -2,7 +2,7 @@
 id: work-115
 title: request-triage sweep is contaminated by console test-fixture threads in the shared store
 type: bug
-status: review
+status: done
 priority: high
 owner: cto
 spec: adr-025
@@ -72,4 +72,14 @@ DATABASE_URL:":memory:"})` → `{remote:true}`.
    control-plane step), and confirm a canary sweep returns zero fixture titles.
 
 `registry/routines.json` was **stale** (`status: active` while the routine was actually paused) —
-corrected to `paused` in this change, pending the gate above.
+corrected to `paused`, then flipped back to `active` in this change once the gate cleared.
+
+### Closeout (2026-09-22 — all gate items satisfied)
+1. **Leak closed** — [scope-creep-console#74](https://github.com/dimays/scope-creep-console/pull/74)
+   merged to `main` (code-owner approval by `@scope-creep-review`, author `dimays` — author ≠ merger).
+2. **Store clean** — **318 fixture threads archived** (reversible; 50 duplicate groups, the dedup +
+   KEEP-allowlist criterion), leaving the **1 genuine** request (`id=9`, "Request: Planned Work
+   Routine") active. Verified read-only: `request_kind_active = 1`, `not_yet_archived = 0`.
+3. **Un-paused** — the Owner flipped request-triage (`trig_01L1ZuWXmRE1quiLGP3mv9ni`) to active on
+   claude.ai; `registry/routines.json` follows here. A post-un-pause canary confirms the sweep
+   returns no fixtures.
