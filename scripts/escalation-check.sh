@@ -65,6 +65,7 @@ is_escalation() {
     loops/*)                                     return 0 ;;
     registry/*)                                  return 0 ;;
     .github/workflows/*)                         return 0 ;;
+    .github/CODEOWNERS)                          return 0 ;;
     # --- infra / paid-dependency manifests (trigger (d), overlaps (a)) ---
     package.json|*/package.json)                 return 0 ;;
     package-lock.json|*/package-lock.json)       return 0 ;;
