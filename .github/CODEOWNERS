@@ -1,7 +1,36 @@
-# Independent review authority = the machine account @scope-creep-review.
-# A Write (non-admin) GitHub USER, so it CAN be a code owner and satisfy
-# require_code_owner_reviews. It approves others' PRs; GitHub blocks it from
-# approving its own, so author != merger holds mechanically. The human Owner
-# (@dimays) is reserved for ESCALATION (the owner-approved label), not routine
-# review. (ADR-023 Phase 1; docs/owner-apply-reviewer-identity.md)
-* @scope-creep-review
+# CODEOWNERS — ADR-023 Phase 2 split (control plane).
+#
+# Two review authorities, by blast radius:
+#   * PERIPHERY (routine work — work/**, product/**, docs/**, roadmap/**, most
+#     of ledger/**, etc.) is reviewed by the machine account @scope-creep-review.
+#     It is a Write (non-admin) USER, so it satisfies require_code_owner_reviews;
+#     GitHub blocks it from approving its own PRs, so author != merger holds.
+#   * ESCALATION SET (the core / safety rails / gate-enforcement surface) is
+#     reviewed by the HUMAN Owner @dimays ONLY. The unattended reviewer identity
+#     (@scope-creep-review, which runs in work-sweep) is deliberately NOT a code
+#     owner for these paths, so it cannot self-dispose a change to the org's own
+#     gates — the ADR-023 Phase-2 residual this split closes.
+#
+# CODEOWNERS = LAST matching pattern wins, so the escalation set is listed AFTER
+# the periphery default and overrides it for those paths.
+#
+# (ADR-023 Phase 2; ADR-026; docs/owner-apply-work-sweep-unpause.md; work-117.)
+
+# --- periphery default: routine review by the machine account ---
+*                                   @scope-creep-review
+
+# --- escalation set: HUMAN-ONLY Owner review (@dimays) ---
+/charter/                           @dimays
+/charter/INVARIANTS.md              @dimays
+/.claude/                           @dimays
+/standards/                         @dimays
+/agents/                            @dimays
+/loops/                             @dimays
+/registry/                          @dimays
+/.github/workflows/                 @dimays
+/.github/CODEOWNERS                 @dimays
+# gate scripts (ADR-026 residual: "the gate scripts", not just escalation-check)
+/scripts/escalation-check*.sh       @dimays
+/scripts/guard-*.sh                 @dimays
+# ledger POLICY only — routine append entries stay periphery (NOT all of ledger/**)
+/ledger/README.md                   @dimays
