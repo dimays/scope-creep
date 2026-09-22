@@ -30,7 +30,7 @@ prohibited (evaporates the ToS exemption).
 - [[work-103]] — **Reopen-ongoing-thread flow unverified.** The Owner wants confidence that
   reopening a conversation on an ongoing thread works; blocked from testing by work-102.
 - [[work-104]] — **Design polish.** "Redundant flows, inconsistent spacing and style" — bring
-  the surface to the [[design-system]] standard.
+  the surface to the design system standard.
 
 ## Where the work lands
 Threads lives in the **console repo** (`scope-creep-console`, sibling checkout — [[adr-025]]),

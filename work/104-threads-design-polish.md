@@ -10,7 +10,7 @@ created: 2026-09-21
 updated: 2026-09-21
 ---
 **Owner report (2026-09-21):** "the design is a little off — some weird redundant flows,
-inconsistent spacing and style." Bring the Threads surface to the [[design-system]] standard.
+inconsistent spacing and style." Bring the Threads surface to the design system standard.
 
 ## Known redundancy hotspots (confirm in the qa pass)
 `app/components/thread-launcher.tsx` `ResumePanel` stacks several overlapping affordances at once

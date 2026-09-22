@@ -23,4 +23,4 @@ the inline console implementation. Keep it dark-mode-correct and token-driven.
 ## Acceptance
 A design-system CommandRow/CopyButton primitive exists and the Threads launcher consumes it in
 place of its inline `.launcher__cmd*` markup; design package + console build/tests green. See
-[[work-104]], [[design-system]].
+[[work-104]], design system.

@@ -26,4 +26,4 @@ Design the desktop-only path as first-class:
 ## Acceptance
 A desktop-only user sees a first-class, well-explained experience (not an error state); the
 copyable-command + projected-transcript path feels intentional. See [[work-100]], [[work-110]],
-[[design-system]].
+design system.
