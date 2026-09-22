@@ -27,7 +27,7 @@ hook (`.claude/hooks/log-human-input.py`) captured the **raw** prompt with no cl
 all of it was logged as `operator-session` "human input." Verified in `human-input/2026-09.ndjson`:
 task-notification blocks, `gh pr merge …` bash lines, and 7 `<system-reminder>` lines.
 
-**Why it recurred:** work-095 ([[ledger-067-...]], PR #93) fixed the write **PATH** (worktree →
+**Why it recurred:** work-095 ([[ledger-067-human-input-hook-write-path-fix]], PR #93) fixed the write **PATH** (worktree →
 the dir the Console reads); work-096 the cloud proxy. Neither touched content **CLASSIFICATION**.
 So the moment a session ran bang-commands or accrued notifications, the log re-polluted. The
 console read-side filter (`operatorInputText`) stripped only a fixed set of harness *wrapper*
@@ -62,7 +62,7 @@ Enforced in `buildNotifications` (console PR #73), documented in code:
   while the thread has unread org activity**; consumed (drops out) once the Owner opens it. It
   still lives in the thread's own history.
 
-This preserves the transparent-delegation signal ([[transparent-delegation-stress-test]]) —
+This preserves the transparent-delegation signal (the transparent-delegation stress test) —
 consequential updates still surface, once each, until seen — while killing the repetition. Tests
 cover collapse, consume-on-read, blocker persistence, and blocker-over-FYI priority.
 
@@ -88,5 +88,5 @@ cover collapse, consume-on-read, blocker persistence, and blocker-over-FYI prior
   wrapper tags, the tag lists need a one-line extension — the guard test will catch a silent
   regression only for the known categories.
 
-*Traceability:* [[human-input-sync-architecture]] · prd-console-operations · [[work-020]] ·
+*Traceability:* the human-input sync architecture · prd-console-operations · [[work-020]] ·
 [[adr-010]] · [[adr-011]] · [[work-095]] · [[work-096]] · [[ledger-067-human-input-hook-write-path-fix]].

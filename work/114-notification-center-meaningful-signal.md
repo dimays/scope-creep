@@ -25,7 +25,7 @@ Define and enforce a "notification-worthy" contract in `app/lib/threads.ts › b
 - **FYI** (`critical-update`): collapsed to the single newest per thread; shown **only while unread**;
   consumed once the Owner opens the thread (stays in thread history).
 
-Preserve the transparent-delegation signal ([[transparent-delegation-stress-test]]) — consequential
+Preserve the transparent-delegation signal (the transparent-delegation stress test) — consequential
 updates still surface once each until seen.
 
 ## Acceptance
