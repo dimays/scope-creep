@@ -1,5 +1,5 @@
 ---
-name: ledger-069-board-hygiene-first-run-canary
+name: ledger-071-board-hygiene-first-run-canary
 description: Record of the first supervised board-hygiene run (2026-09-22) — the ADR-026 propose-only write-path canary (docs/owner-apply-board-hygiene-routine.md Step 2). The routine opened dimays/scope-creep#101 as the forced sandbox-proxy identity (dimays, confirmed via get_me — not @scope-creep-review), applying 2 mechanical status<->reality corrections (work-096, work-097 -> done) and surfacing 20 stale-proposed tickets for the Owner/CPO to disposition. Un-pause criteria 1 & 2 captured live (POST /git/refs -> 201; POST /pulls -> 201 as the proxy identity); criteria 4/6 were not tested here (the routine never attempts a merge, per its own propose-only mandate) and remain for the reviewer/merge step or a dedicated follow-up to observe. Outcome posted to the owning thread (scope-creep-thread:9) via the work-064 writers.
 metadata:
   type: project
