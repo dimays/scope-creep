@@ -2,14 +2,18 @@
 id: work-097
 title: PM maturity — add the in-review lifecycle state and the board-hygiene cadence
 type: feature
-status: review
+status: done
 priority: high
 owner: chief-product-officer
 spec: adr-005
 branch: cpo/pm-maturity-in-review-board-hygiene
+pr: https://github.com/dimays/scope-creep/pull/96
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** PR #96 merged to
+> `main` 2026-09-21, completing the `active → review → done` traversal this ticket dogfoods.
+
 > **Artifacts staged in this PR (`cpo/pm-maturity-in-review-board-hygiene`); flips to `done`
 > on Owner merge — do NOT mark done here.** This is the lifecycle+hygiene upgrade itself, and it
 > **dogfoods the very state it introduces**: it is code-complete with a PR open awaiting
