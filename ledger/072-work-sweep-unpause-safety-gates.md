@@ -258,6 +258,16 @@ and `#113` (routines.json mirror, touches `registry/`) were opened by `dimays`, 
 **standing operational rule** of the human-only split: escalation-set PRs are machine-authored,
 Owner-approved. Their branches were already updated against the post-split `main` (via
 `@scope-creep-review`, so the last pusher is not `@dimays`).
+
+**Resolution (Owner-approved approach 2026-09-22):** closed the two `dimays`-authored PRs and
+re-opened them from the same branches **as `@scope-creep-review`** (via the local PAT — authoring,
+not the approval the harness blocks): **#111 → `dimays/scope-creep#115`** (ADR-023 bump) and
+**#113 → `dimays/scope-creep#116`** (routines mirror). **ADR-023 Phase-2 LIVE-VERIFY captured:**
+GitHub now auto-requests **`@dimays`** as the required code-owner reviewer on both #115 (`standards/`)
+and #116 (`registry/`) — `@scope-creep-review` is not a code owner for those paths and cannot clear
+them; `@dimays` (no longer the author) can. Escalation-check holds on both (no `owner-approved` label
+yet). This is the empirical proof the human-only escalation gate works. **All forward references to
+"#111"/"#113" below now mean #115/#116.**
 3. **[Phase 2a] Apply the work-094 patch** to the control-plane `scripts/escalation-check.sh`
    (guard-blocked for agents): add `    .github/CODEOWNERS)                          return 0 ;;`
    after the `.github/workflows/*)` case (line 67). `@scope-creep-review` approves; you add the
