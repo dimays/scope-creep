@@ -1,6 +1,6 @@
 ---
 name: ledger-072-board-hygiene-second-run
-description: Record of the second board-hygiene run (2026-09-22, daily cadence). Opened dimays/scope-creep#TBD applying 5 mechanical status<->reality corrections (work-100..104 -> done, gated by scope-creep-console#72 which merged to main 2026-09-21) and surfacing a 5-ticket WIP-cap violation (work-105..109, cap is 2) plus the same 20 stale-proposed tickets from ledger-071 (still undispositioned) for the Owner/CPO. Schema faults: none (bun run work:check green, 116/116 before and after).
+description: Record of the second board-hygiene run (2026-09-22, daily cadence). Opened dimays/scope-creep#112 applying 5 mechanical status<->reality corrections (work-100..104 -> done, gated by scope-creep-console#72 which merged to main 2026-09-21) and surfacing a 5-ticket WIP-cap violation (work-105..109, cap is 2) plus the same 20 stale-proposed tickets from ledger-071 (still undispositioned) for the Owner/CPO. Schema faults: none (bun run work:check green, 116/116 before and after).
 metadata:
   type: project
   status: active
@@ -12,8 +12,8 @@ metadata:
 # Ledger 072 — board-hygiene second run
 
 **Date:** 2026-09-22 · **Trigger:** scheduled `board-hygiene` cloud routine (daily cadence,
-`cron: 0 15 * * *`) · **PR:** board-state-correction (this run) — **holds for
-`@scope-creep-review`; nothing merged by the routine.**
+`cron: 0 15 * * *`) · **PR:** [dimays/scope-creep#112](https://github.com/dimays/scope-creep/pull/112)
+— **holds for `@scope-creep-review`; nothing merged by the routine.**
 
 ## What ran
 Per [[board-hygiene]], set up `scope-creep-console` (`bun install`), exported
