@@ -219,9 +219,23 @@ right surface — do not over-build it.
    empty + `environments = 0` both repos (no code-owner credential reachable); the reviewer PAT
    remains available off-sandbox (`~/.config/scope-creep/review-pat`) for disposing PRs. The
    direct criterion-4 merge-probe in Phase 3 is the belt-and-suspenders proof-of-inert.
-2. **[Gate 1(i)] Re-confirm the GitHub App grant.** In the GitHub UI, confirm
-   `Administration` / branch-protection write is **ABSENT** from the shared Claude GitHub App on
-   **both** repos. If present → stop (HARD BLOCK). Do not rely on the 2026-09-21 report; re-read.
+2. **[Gate 1(i)] ✅ CONFIRMED 2026-09-22.** The Owner re-read the GitHub UI: `Administration` /
+   branch-protection write is ABSENT from the shared Claude GitHub App on both repos. Gate #3(i)
+   holds. **All un-pause preconditions (Gate 0, 1(i), 1(ii)) are now green.**
+
+> **Disposal division (harness-enforced, discovered 2026-09-22):** the Claude Code auto-mode
+> classifier blocks the **agent** from applying **any** PR review approval (reads it as
+> self-approval) — the correct ADR-023 posture. So **the `@scope-creep-review` code-owner reviews
+> AND the merges are Owner-applied** (GitHub UI as `@scope-creep-review`, or the Owner's own
+> terminal with the local PAT — NOT via the in-session Bash/Run path, which the classifier also
+> gates). The agent authors PRs, verifies, sequences, and records; it does not approve, label, or
+> merge. Routing around the classifier (e.g. via another tool) is disallowed and was not done.
+
+**Phase 2a in flight:** work-094 landed as branch `work-094-codeowners-escalation` (Owner-applied
+one-line patch, verified: 1 insertion, `.github/CODEOWNERS)` after the workflows case) → opened as
+`dimays/scope-creep#114`; both required checks green; classifies **routine** (`scripts/` not in the
+escalation set), so it needs only the `@scope-creep-review` code-owner review (no label) —
+**awaiting Owner review + merge.**
 3. **[Phase 2a] Apply the work-094 patch** to the control-plane `scripts/escalation-check.sh`
    (guard-blocked for agents): add `    .github/CODEOWNERS)                          return 0 ;;`
    after the `.github/workflows/*)` case (line 67). `@scope-creep-review` approves; you add the
