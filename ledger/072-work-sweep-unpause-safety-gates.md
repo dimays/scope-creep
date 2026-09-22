@@ -231,11 +231,19 @@ right surface — do not over-build it.
 > gates). The agent authors PRs, verifies, sequences, and records; it does not approve, label, or
 > merge. Routing around the classifier (e.g. via another tool) is disallowed and was not done.
 
-**Phase 2a in flight:** work-094 landed as branch `work-094-codeowners-escalation` (Owner-applied
-one-line patch, verified: 1 insertion, `.github/CODEOWNERS)` after the workflows case) → opened as
-`dimays/scope-creep#114`; both required checks green; classifies **routine** (`scripts/` not in the
-escalation set), so it needs only the `@scope-creep-review` code-owner review (no label) —
-**awaiting Owner review + merge.**
+**Phase 2a DONE (2026-09-22):** work-094 opened as `dimays/scope-creep#114` (Owner-applied one-line
+patch, verified 1 insertion) → `@scope-creep-review` approved → **merged to main** (squash). Live
+proof captured: with the CODEOWNERS case on main, #110's classification flipped **routine → HOLD**
+(escalation-check now `failure` on #110; before work-094 it was `success/routine`). Required the
+`gh pr update-branch` on #110 to re-evaluate against the new base (a plain rerun re-used the stale
+merge ref).
+
+**Phase 2b READY:** both CODEOWNERS-split PRs now correctly HOLD for the Owner marker —
+`dimays/scope-creep#110` (control plane, refreshed against work-094) and
+`dimays/scope-creep-console#75` (console, held from the start). Each needs TWO Owner actions:
+the `@scope-creep-review` code-owner review AND the `owner-approved` label. Then the agent merges.
+For #110 the branch was updated (last pusher = `dimays`), so `@scope-creep-review` (≠ last pusher)
+satisfies `require_last_push_approval`.
 3. **[Phase 2a] Apply the work-094 patch** to the control-plane `scripts/escalation-check.sh`
    (guard-blocked for agents): add `    .github/CODEOWNERS)                          return 0 ;;`
    after the `.github/workflows/*)` case (line 67). `@scope-creep-review` approves; you add the
