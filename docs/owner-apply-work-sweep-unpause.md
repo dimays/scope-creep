@@ -139,9 +139,10 @@ Then flip the routine live:
 - **[You] Un-pause the routine at its `manage_url`** (`https://claude.ai/code/routines/trig_01Aw7cBgWjGTER2FeAe9tyeT`).
   **This is the real switch** — the routine's system of record is **claude.ai, not the repo**
   ([[adr-016]]).
-- **[Me] Mirror the state:** flip `registry/routines.json` `paused → active` as a **separate**
-  Owner-approved control-plane PR (work-sweep may **not** un-pause itself; `registry/*` is
-  escalation-class), and **refresh its stale note** (it still cites the superseded work-092/093 bot
+- **[Pre-authored → You disposes] Mirror the state:** `dimays/scope-creep#113` flips
+  `registry/routines.json` `paused → active` + refreshes the stale note. **MERGE ABSOLUTE-LAST** —
+  only after the routine is actually un-paused live above (the file is a mirror, not the switch;
+  merging it while still paused makes the record lie). It still cites the superseded work-092/093 bot
   path — the live gate is ADR-026 + ADR-023 Phase-2).
 
 ---

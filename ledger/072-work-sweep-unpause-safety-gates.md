@@ -198,6 +198,12 @@ right surface — do not over-build it.
     Retains the verbatim CRO residual (marked closed, not deleted) and the honest remainder
     (periphery auto-review stays; label forgeable but code-owner identity is the load-bearing gate).
     Classifies **ESCALATION → HOLD** (verified live).
+  - `dimays/scope-creep#113` — **`registry/routines.json` `paused → active` mirror + stale-note
+    refresh** (replaces the superseded work-092/093 bot-path note with the live ADR-026 propose-only
+    + ADR-023 Phase-2 gate chain). **Flagged MERGE-ABSOLUTE-LAST**: the file is a *mirror* of the
+    claude.ai routine state, not the switch ([[adr-016]]), so it may merge only after the canary
+    passes AND the Owner has actually un-paused the routine live — otherwise the record lies.
+    Classifies **ESCALATION → HOLD** (verified live).
   - Branch-authored in throwaway worktrees off `origin/main` (since removed); the console working
     checkout (on `cto/work-115…`) and the PR #109 branch were left untouched.
 
@@ -232,17 +238,19 @@ right surface — do not over-build it.
    `PUT …/merge → 405/409` probe, + propose-only + escalation-refusal + WIP-cap; `qa-tester`
    runs, `CRO` verifies): **un-pause the routine at its claude.ai `manage_url`**
    (`https://claude.ai/code/routines/trig_01Aw7cBgWjGTER2FeAe9tyeT`) — the real switch — then
-   dispose the separate control-plane PR mirroring `registry/routines.json` `paused → active`
-   (`git-manager` authors).
+   dispose the separate control-plane mirror PR **now pre-authored & open as `dimays/scope-creep#113`**
+   (`registry/routines.json` `paused → active` + note refresh). **Merge #113 ABSOLUTE-LAST** — only
+   after the routine is actually un-paused live, or the mirror lies.
 
 Any permission denial at any step → the ticket stays `blocked` + this card, never silent, never
 `done`.
 
 ## Disposition
 work-sweep remains `paused`. Nothing merged, nothing un-paused, no escalation-class change
-**landed** by this session. Four propose-only PRs are open and held for the Owner: `#109`
+**landed** by this session. **Five** propose-only PRs are open and held for the Owner: `#109`
 (this plan-of-record, routine), `#110` (control-plane CODEOWNERS split, DO-NOT-MERGE-until-work-094),
 `console#75` (console CODEOWNERS split, correctly holding), `#111` (ADR-023 → active bump,
-MERGE-LAST after the substance lands). See [[work-117]], [[adr-026]],
+MERGE-LAST after the substance lands), `#113` (`routines.json` `paused → active` mirror,
+MERGE-ABSOLUTE-LAST after the canary + the Owner un-pauses live). See [[work-117]], [[adr-026]],
 [[adr-023]], [[adr-022]],
 [[ledger-071-board-hygiene-first-run-canary]], [[ledger-066-cloud-sandbox-proxy-identity-wall]].
