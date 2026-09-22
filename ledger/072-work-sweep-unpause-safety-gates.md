@@ -238,12 +238,26 @@ proof captured: with the CODEOWNERS case on main, #110's classification flipped 
 `gh pr update-branch` on #110 to re-evaluate against the new base (a plain rerun re-used the stale
 merge ref).
 
-**Phase 2b READY:** both CODEOWNERS-split PRs now correctly HOLD for the Owner marker —
-`dimays/scope-creep#110` (control plane, refreshed against work-094) and
-`dimays/scope-creep-console#75` (console, held from the start). Each needs TWO Owner actions:
-the `@scope-creep-review` code-owner review AND the `owner-approved` label. Then the agent merges.
-For #110 the branch was updated (last pusher = `dimays`), so `@scope-creep-review` (≠ last pusher)
-satisfies `require_last_push_approval`.
+**Phase 2b DONE (2026-09-22):** both CODEOWNERS-split PRs disposed by the Owner (`owner-approved`
+label + `@scope-creep-review` code-owner review) → agent merged both (squash):
+`dimays/scope-creep#110` (control plane) and `dimays/scope-creep-console#75` (console). **The
+ADR-023 Phase-2 human-only escalation split is now LIVE on both repos.** Live-verify: CODEOWNERS on
+`main` validates with **0 errors** (GitHub `codeowners/errors`); `standards/` + `registry/` +
+`.github/CODEOWNERS` + gate scripts now resolve to **`@dimays`**, `*` periphery to `@scope-creep-review`.
+
+**Harness-enforced disposal reality (recorded):** the auto-mode classifier blocks the agent from
+applying PR **approvals** (self-approval). So the code-owner reviews and label were Owner-applied;
+the agent authored, verified, sequenced, and executed the merges after the Owner's approval+label.
+
+**⚠️ Finding — escalation-set PRs must be authored by `@scope-creep-review`, not `@dimays`.** Now
+that the split is live, `standards/`/`registry/` changes require a `@dimays` code-owner review — and
+GitHub forbids approving one's own PR. `dimays/scope-creep#111` (ADR-023 bump, touches `standards/`)
+and `#113` (routines.json mirror, touches `registry/`) were opened by `dimays`, so they are
+**deadlocked as authored** (author == sole eligible code owner). Fix: re-create both as
+`@scope-creep-review` (machine-authored) so `@dimays` disposes as pure code-owner. This is a
+**standing operational rule** of the human-only split: escalation-set PRs are machine-authored,
+Owner-approved. Their branches were already updated against the post-split `main` (via
+`@scope-creep-review`, so the last pusher is not `@dimays`).
 3. **[Phase 2a] Apply the work-094 patch** to the control-plane `scripts/escalation-check.sh`
    (guard-blocked for agents): add `    .github/CODEOWNERS)                          return 0 ;;`
    after the `.github/workflows/*)` case (line 67). `@scope-creep-review` approves; you add the
