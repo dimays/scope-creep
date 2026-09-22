@@ -2,13 +2,17 @@
 id: work-096
 title: Redesign the cloud write path around the sandbox proxy identity wall (propose-only vs. alternate execution)
 type: debt
-status: active
+status: done
 priority: high
 owner: cto
 spec: prd-autonomous-execution-loop
+pr: https://github.com/dimays/scope-creep/pull/97
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** PR #97 (ADR-026)
+> merged to `main` 2026-09-21; closing per this ticket's own flip-on-merge condition.
+
 > **Blocker for any unattended `work-sweep` run.** The routine stays **paused**
 > (`registry/routines.json`) until this lands.
 
