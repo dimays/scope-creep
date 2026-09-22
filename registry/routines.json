@@ -76,8 +76,8 @@
       "model": "claude-sonnet-5",
       "source": "github.com/dimays/scope-creep",
       "manage_url": "https://claude.ai/code/routines/trig_01Aw7cBgWjGTER2FeAe9tyeT",
-      "status": "paused",
-      "note": "Registered but PAUSED pending work-092/093 fixes (first supervised run BLOCKED safely \u2014 ledger/062). The execution-side loop of [[prd-autonomous-execution-loop]] ([[work-086]]/[[work-087]]); must not run unattended until the work-093 credential fixes land and are re-verified in the sandbox. Cadence self-tunes per [[work-087]]."
+      "status": "active",
+      "note": "MIRROR of the claude.ai routine state, NOT the switch ([[adr-016]]) - flipping this field does NOT un-pause the routine; the Owner un-pauses at manage_url. Marked active only as the last step of the [[work-117]] un-pause, AFTER: (a) the reviewer PAT was removed from the scope-creep-local cloud env; (b) Administration/branch-protection write confirmed absent from the Claude App grant; (c) [[adr-023]] Phase-2 landed (human-only escalation code owner + [[work-094]]); (d) the [[adr-026]] supervised canary captured criteria 1/2/4/6 incl. the direct PUT /pulls/{n}/merge -> 405/409 probe; and (e) the Owner un-paused the routine at claude.ai. Tier-2 execution loop of [[prd-autonomous-execution-loop]] ([[work-086]]/[[work-087]]): authors PRs on cadence as the forced sandbox-proxy identity (propose-only); merge stays off-sandbox as @scope-creep-review; escalation-class tickets ALWAYS HOLD for the Owner, never self-disposed, even at Tier-2 ([[adr-022]]/[[adr-026]]). SUPERSEDES the earlier pause note (pending work-092/093 bot-path fixes + the [[ledger-066]] proxy-identity wall) - that write path is dead; the live path is ADR-026 propose-only. Cadence self-tunes per [[work-087]]. See [[ledger-072-work-sweep-unpause-safety-gates]]."
     },
     {
       "name": "Board hygiene",
