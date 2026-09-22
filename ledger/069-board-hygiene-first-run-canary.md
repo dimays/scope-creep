@@ -69,7 +69,7 @@ GitHub MCP tools (the sandbox's supplied auth — no token minted or presented).
   sufficient.
 
 ## Outcome posted
-Critical-update posted to the owning thread ([[thread-9]], "Request: Planned Work Routine") via
+Critical-update posted to the owning thread (thread 9, "Request: Planned Work Routine") via
 the [[work-064]] writers (`work-sweep write-back`, run under Node/tsx per ADR-024), thread status
 left at `needs-you` (unchanged — the thread already carried open Owner items). Body: run summary,
 PR link, criteria-1/2 evidence, the stale-proposed count.
