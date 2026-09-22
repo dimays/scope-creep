@@ -19,7 +19,8 @@ metadata:
 Per [[board-hygiene]], set up `scope-creep-console` (`bun install`), exported
 `SCOPE_CREEP_HOME` to the `scope-creep` checkout, pulled latest `main` (`7b78cf8`), and ran the
 read-only board diagnosis before writing anything. The prior run's PR
-([dimays/scope-creep#101](https://github.com/dimays/scope-creep/pull/101), [[ledger-071]]) was
+([dimays/scope-creep#101](https://github.com/dimays/scope-creep/pull/101),
+[[ledger-071-board-hygiene-first-run-canary]]) was
 confirmed **merged** (2026-09-22T01:09:46Z), so this is a fresh diagnosis against current `main`,
 not a re-opening of stale state.
 
@@ -41,7 +42,8 @@ not a re-opening of stale state.
   none carrying a `branch:`/`pr:`, i.e. none has code in flight yet) — still **3 over cap**.
   Surfaced in the PR body for the Owner/CPO to decide which stay active vs. yield; hygiene does
   not auto-resolve WIP-cap judgment calls.
-- **Stale `proposed` tickets (flagged, not touched) — same 20 as [[ledger-071]]:** [[work-067]]
+- **Stale `proposed` tickets (flagged, not touched) — same 20 as
+  [[ledger-071-board-hygiene-first-run-canary]]:** [[work-067]]
   through [[work-085]] (continuous, 19 tickets, unchanged since 2026-09-07) plus [[work-088]]
   (unchanged since 2026-09-08) — all now **≥15 days** untouched and still undispositioned since
   the prior run flagged them. Re-surfaced; hygiene never retires a ticket.
