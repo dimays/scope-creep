@@ -1,43 +1,53 @@
 ---
 name: adr-023
-description: Design for a restricted agent GitHub identity, distinct from the Owner's, so the ADR-022 escalation marker (owner-approved) becomes un-forgeable — an agent identity that cannot self-approve reviews, add the owner-approved label, or merge escalation-class PRs. Phase 1 is now LIVE — the @scope-creep-review machine account is the sole code owner on both repos (scope-creep #86, console #65), so the BOT author cannot self-approve and the control plane is unjammed. Phase 2 remains OPEN — the reviewer/merger identity (@scope-creep-review PAT) that runs UNATTENDED in work-sweep can still forge the marker and merge escalation-class work; closed only by a human-only code owner on core/escalation paths. Closes the residual named in ADR-022, guard-gates.sh, escalation-check.sh, and ledger-048 only when Phase 2 lands.
+description: Design for a restricted agent GitHub identity, distinct from the Owner's, so the ADR-022 escalation marker (owner-approved) becomes un-forgeable for escalation-class paths. Phase 1 LIVE (2026-09-21) — the @scope-creep-review machine account is a code owner on both repos, so the bot author cannot self-approve and the control plane is unjammed. Phase 2 LIVE (2026-09-22) — review authority is SPLIT by blast radius: a human-only code owner (@dimays) now owns the escalation set (core / safety rails / gate scripts / .github/CODEOWNERS), which the UNATTENDED @scope-creep-review reviewer PAT is NOT in, while @scope-creep-review stays code owner for routine periphery. So the unattended identity can no longer clear an escalation hold or merge an escalation-class change to the org's own gates — that now requires the human Owner's code-owner review. Landed via the CODEOWNERS split (scope-creep#110, console#75) + the control-plane escalation-check .github/CODEOWNERS case (work-094), proven by the reviewer-identity live-verify gate. Closes the residual named in ADR-022, escalation-check.sh, and ledger-048 for escalation-class paths; periphery auto-review by @scope-creep-review remains by design (ADR-022 routine-merge).
 metadata:
   type: reference
-  status: "active (Phase 1) / proposed (Phase 2)"
-  version: 1.2.0
+  status: active
+  version: 1.3.0
   owner_agent: cto
-  last_verified: 2026-09-21
+  last_verified: 2026-09-22
 ---
 
 # ADR-023: Restricted agent identity (make the escalation marker un-forgeable)
 
-- **Status:** **Phase 1 ACTIVE — reviewer identity live; Phase 2 PROPOSED — residual
-  open.** *Phase 1 (landed 2026-09-21):* the **`@scope-creep-review` machine account is
-  the sole code owner** on both repos (`.github/CODEOWNERS` `* @scope-creep-review`,
-  scope-creep #86 / console #65) with the reviewer/merger runbook (scope-creep #85), so
-  the **bot author can no longer self-approve** and the control plane is unjammed. *Phase 2
-  (still open):* a **human-only** code owner on core/escalation paths that the reviewer PAT
-  is **not** in — the residual below. It cannot be activated by an agent: it requires Owner
-  GitHub infrastructure (branch protection, [[work-060]], and the human-only code-owner
-  split). Until Phase 2 lands, the ADR-022 escalation marker stays forgeable by the
-  **reviewer/merger identity** and escalation-class merges are not yet un-spoofable
-  ([[adr-014]] / [[adr-022]] activation gate).
-  > **Residual (CRO, verbatim — do not soften):** *"Phase 1 makes the owner-approved marker
-  > un-forgeable by the BOT author (Issues: No access) but it REMAINS forgeable by the
-  > reviewer/merger identity (@scope-creep-review PAT), which runs UNATTENDED in work-sweep —
-  > so one unattended identity can clear an escalation hold and merge escalation-class work
-  > (including a change to the org's own gates) with no human. Closed only by Phase 2: a
-  > human-only code owner on core/escalation paths the reviewer PAT is not in."*
-  > See [[ledger-065-checkpoint-reconciliation]], [[work-094]].
+- **Status:** **ACTIVE — Phase 1 + Phase 2 both live.** *Phase 1 (landed 2026-09-21):* the
+  **`@scope-creep-review` machine account is a code owner** on both repos with the reviewer/merger
+  runbook (scope-creep #85/#86, console #65), so the **bot author can no longer self-approve** and
+  the control plane is unjammed. *Phase 2 (landed 2026-09-22):* review authority is **split by
+  blast radius** — a **human-only** code owner (**`@dimays`**) now owns the **escalation set**
+  (core / safety rails / gate scripts / `.github/CODEOWNERS`), which the **unattended**
+  `@scope-creep-review` reviewer PAT is **not** in, while `@scope-creep-review` stays code owner for
+  routine **periphery**. Landed via the CODEOWNERS split (`dimays/scope-creep#110`,
+  `dimays/scope-creep-console#75`) + the control-plane `escalation-check.sh` `.github/CODEOWNERS`
+  case ([[work-094]]), and proven by the reviewer-identity live-verify gate (a CODEOWNERS-only PR
+  shows escalation-check **RED** without `owner-approved`; `@scope-creep-review` **cannot** approve
+  an escalation-set change; `@dimays` **can**). **Net: an unattended identity can no longer clear an
+  escalation hold or merge an escalation-class change to the org's own gates — that now requires the
+  human Owner's code-owner review.** The [[adr-022]] escalation marker is un-forgeable for
+  **escalation-class** paths. *(Honest scope: `@scope-creep-review` still auto-reviews/merges
+  **periphery** by design — [[adr-022]] routine-merge, Tier-1 — and the `owner-approved` **label**
+  remains technically forgeable via `issues:write`; what makes escalation un-spoofable is the
+  **code-owner IDENTITY** gate, which no in-sandbox/unattended principal can present — [[adr-026]]
+  Blast-radius.)*
+  > **Residual that Phase 2 CLOSED (CRO, verbatim — retained, not deleted):** *"Phase 1 makes the
+  > owner-approved marker un-forgeable by the BOT author (Issues: No access) but it REMAINS
+  > forgeable by the reviewer/merger identity (@scope-creep-review PAT), which runs UNATTENDED in
+  > work-sweep — so one unattended identity can clear an escalation hold and merge escalation-class
+  > work (including a change to the org's own gates) with no human. Closed only by Phase 2: a
+  > human-only code owner on core/escalation paths the reviewer PAT is not in."* **Now closed** by
+  > the Phase-2 split above, for escalation-class paths.
+  > See [[ledger-072-work-sweep-unpause-safety-gates]], [[ledger-065-checkpoint-reconciliation]], [[work-094]].
   > **Reframe (Owner decision 2026-09-20) — this is NOT a "later follow-up"; it is the
   > PRECONDITION of write access / next up.** Granting the unattended cloud routine GitHub
   > write access ([[work-088]]) makes the "org merges a change to its own gates" path
   > reachable end-to-end (any credential that can open PRs can add the `owner-approved`
   > label). So the Owner's decision is to **activate this ADR's substance as part of that
   > grant** — a **separate bot identity** shipped *together with* the write access, not after
-  > it. The residual below remains factually true **until the Owner provisions** the identity;
-  > what changed is priority, not the hole. See `docs/owner-apply-github-write-access.md`
-  > (PR #79), [[work-088]]. Status stays `proposed` until provisioned. *This
+  > it. The residual below was factually true **until the Owner provisioned** the human-only split;
+  > what changed then was priority, not the hole. See `docs/owner-apply-github-write-access.md`
+  > (PR #79), `docs/owner-apply-work-sweep-unpause.md`, [[work-088]], [[work-117]]. **Provisioned
+  > 2026-09-22 — status is now `active`** (the CODEOWNERS split + [[work-094]] landed). *This
   > reframe is escalation-class ([[adr-022]] trigger (d)) and HOLDS for the Owner marker.*
 - **Date:** 2026-09-06 (authored) · 2026-09-20 (reframed to precondition of [[work-088]])
 - **Deciders:** **Owner** (must provision the identity/infra), CTO (design).
@@ -141,12 +151,15 @@ principal can perform. The marker is no longer agent-forgeable.
 - **Operational cost:** agents run under a restricted credential; some `gh` actions
   that "just worked" under the Owner's token will (correctly) be denied and must
   route through the Owner. This is the point.
-- **Residual until the Owner provisions it (state this plainly, do not overclaim):**
-  the `owner-approved` label remains **agent-forgeable** under the shared identity.
-  The work-057/058/059 rails make escalation mechanical, auditable, and fail-closed
-  against *accidental/unreviewed* merges; they are **not** un-spoofable against a
-  *deliberate* agent until this ADR is activated. ADR-022 does not go active on the
-  strength of the marker alone.
+- **Residual — now CLOSED for escalation-class paths (state the remainder plainly, do not
+  overclaim):** with the Phase-2 human-only split live (2026-09-22), an escalation-class change
+  requires an approving **code-owner review from `@dimays`**, which no unattended/in-sandbox
+  principal can present — so escalation-class merges are un-spoofable. **What honestly remains:**
+  (a) the `owner-approved` **label** is still technically forgeable via `issues:write`, but it is
+  no longer sufficient — the code-owner IDENTITY gate is the load-bearing control ([[adr-026]]
+  Blast-radius); (b) **periphery** is still auto-reviewed/merged by `@scope-creep-review` by design
+  ([[adr-022]] routine-merge / Tier-1). The work-057/058/059 rails remain the mechanical,
+  auditable, fail-closed floor beneath the identity gate.
 
 ## Alternatives considered
 
