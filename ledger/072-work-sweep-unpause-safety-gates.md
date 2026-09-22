@@ -184,6 +184,16 @@ right surface — do not over-build it.
   Gate 1 controls → Phase 2 ADR-023 close → Phase 3 ADR-026 canary + un-pause), with the exact
   work-094 patch line, the per-repo CODEOWNERS split sets, the `require_last_push_approval` trap
   mitigation, and the criterion-4 direct merge-probe the board-hygiene canary skipped.
+- **Pre-authored (propose-only, at Owner request 2026-09-22 — NOT merged/labeled/approved):**
+  - `dimays/scope-creep#110` — control-plane CODEOWNERS split. **Flagged DO-NOT-MERGE until
+    work-094 lands** — verified live that its escalation-check classifies **ROUTINE (PASS)** today
+    (the must-fix #5 gap). Escalation set → `@dimays`; periphery → `@scope-creep-review`. (Added
+    `scripts/guard-*.sh` beyond the brief's literal list — flagged in the PR for the Owner to trim.)
+  - `dimays/scope-creep-console#75` — console CODEOWNERS split (mirror). Verified live that its
+    escalation-check classifies **ESCALATION → HOLD** (console already covers `.github/CODEOWNERS`),
+    so it correctly holds for the owner marker with no work-094-style prerequisite.
+  - Branch-authored in throwaway worktrees off `origin/main` (since removed); the console working
+    checkout (on `cto/work-115…`) and the PR #109 branch were left untouched.
 
 ## needs-you card (Owner / cloud steps, in order) — CoS-signed 2026-09-22
 
@@ -202,9 +212,12 @@ right surface — do not over-build it.
    (guard-blocked for agents): add `    .github/CODEOWNERS)                          return 0 ;;`
    after the `.github/workflows/*)` case (line 67). `@scope-creep-review` approves; you add the
    `owner-approved` label; merge. (Must land BEFORE any CODEOWNERS change.)
-4. **[Phase 2b] Dispose the CODEOWNERS-split PRs** (both repos; `git-manager` authors them so you
-   are not the last pusher): review + add `owner-approved` label. Escalation set → `@dimays`,
-   periphery → `@scope-creep-review`.
+4. **[Phase 2b] Dispose the CODEOWNERS-split PRs** — **now pre-authored & open** (propose-only):
+   `dimays/scope-creep#110` (control plane) + `dimays/scope-creep-console#75` (console). **#110
+   must NOT merge until Phase 2a (work-094) lands** — until then its required check reads routine.
+   Dispose each: `@scope-creep-review` reviews + you add `owner-approved`; you are not the last
+   pusher (both were authored on their own branches). Escalation set → `@dimays`, periphery →
+   `@scope-creep-review`.
 5. **[Phase 2c] Dispose the ADR-023 → Phase-2-active PR** (`chief-knowledge-manager` drafts). The
    live-verify gate evidence is captured to the ledger.
 6. **[Phase 3] After the supervised canary passes** (criteria 1/2/4/6 incl. the direct
@@ -219,5 +232,8 @@ Any permission denial at any step → the ticket stays `blocked` + this card, ne
 
 ## Disposition
 work-sweep remains `paused`. Nothing merged, nothing un-paused, no escalation-class change
-landed by this session. See [[work-117]], [[adr-026]], [[adr-023]], [[adr-022]],
+**landed** by this session. Three propose-only PRs are open and held for the Owner: `#109`
+(this plan-of-record, routine), `#110` (control-plane CODEOWNERS split, DO-NOT-MERGE-until-work-094),
+`console#75` (console CODEOWNERS split, correctly holding). See [[work-117]], [[adr-026]],
+[[adr-023]], [[adr-022]],
 [[ledger-071-board-hygiene-first-run-canary]], [[ledger-066-cloud-sandbox-proxy-identity-wall]].
