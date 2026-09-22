@@ -2,13 +2,19 @@
 id: work-103
 title: Verify reopen-ongoing-thread flow works end-to-end
 type: bug
-status: active
+status: done
 priority: medium
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** Its dependencies
+> ([[work-101]], [[work-102]]) landed via
+> [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72), merged to
+> `main` 2026-09-21.
+
 **Owner report (2026-09-21):** the Owner wants confidence that **reopening a conversation on an
 ongoing thread** works well, but couldn't test it because the launch→link path ([[work-102]]) is
 broken.

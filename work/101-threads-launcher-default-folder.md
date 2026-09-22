@@ -2,13 +2,18 @@
 id: work-101
 title: Threads launcher opens "No folder" instead of scope-creep (default-folder defect)
 type: bug
-status: active
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** PR
+> [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (folder
+> resolution hardened; `claude-cli://` scheme fix) merged to `main` 2026-09-21.
+
 **Owner report (2026-09-21):** "open the thread in Claude" opens in **"No folder"** instead of
 **`scope-creep`**, which the Owner prefers as the default.
 

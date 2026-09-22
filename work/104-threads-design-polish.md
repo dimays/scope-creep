@@ -2,13 +2,18 @@
 id: work-104
 title: Threads design polish — resolve redundant flows, inconsistent spacing/style
 type: chore
-status: active
+status: done
 priority: medium
 owner: chief-designer
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** The ResumePanel rebuild
+> landed via [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72),
+> merged to `main` 2026-09-21.
+
 **Owner report (2026-09-21):** "the design is a little off — some weird redundant flows,
 inconsistent spacing and style." Bring the Threads surface to the design system standard.
 

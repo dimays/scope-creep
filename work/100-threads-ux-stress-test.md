@@ -2,13 +2,19 @@
 id: work-100
 title: Threads UX stress-test — polish the projection + launcher to design-system standard
 type: feature
-status: active
+status: done
 priority: high
 owner: chief-of-staff
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** The gating PR
+> [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (covers this
+> umbrella + [[work-101]]/[[work-102]]/[[work-103]]/[[work-104]]) merged to `main` 2026-09-21.
+> Follow-ups [[work-105]]–[[work-109]] are separate tickets, not closed by this merge.
+
 The umbrella ticket for the Owner's 2026-09-21 Threads feedback (thread `scope-creep-thread:9`):
 the Threads experience is "pretty buggy" and needs the org to "really stress-test the user
 experience there and make it polished." Captured here so the report is durable in the work

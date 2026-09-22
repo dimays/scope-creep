@@ -2,13 +2,19 @@
 id: work-102
 title: Launcher→existing-conversation link never works — resume opens a NEW conversation
 type: bug
-status: active
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-22
 ---
+> **Done 2026-09-22 ([[board-hygiene]] status↔reality reconciliation).** PR
+> [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (resume slot
+> shows only the correlated `claude --resume <uuid>`; auto-launch no longer re-fires once
+> correlated) merged to `main` 2026-09-21.
+
 **Owner report (2026-09-21):** opening a launched thread does **not** show the existing Claude
 conversation — it still **prompts to start a NEW conversation**. The Owner "still hasn't seen it
 successfully link to a conversation." This is the headline defect: the resume-existing path has
