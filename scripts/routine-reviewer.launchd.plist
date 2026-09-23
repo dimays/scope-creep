@@ -9,8 +9,11 @@
     * confirm the review PAT lives at ~/.config/scope-creep/review-pat
     * pick the interval (StartInterval below is 1800s = every 30 min)
   The wrapper reads the PAT into GH_TOKEN at run time, so the token is NOT stored in
-  this file. The reviewer itself fails closed (identity + rails + gate #3(ii) checks),
-  so a misconfiguration refuses rather than mis-merges.
+  this file. It invokes the reviewer via `exec bash <script>` (not `exec <script>`) so
+  it does not depend on the file's executable bit — files pushed through the GitHub API
+  arrive mode 0644 — and the script itself is kept bash-3.2-portable for macOS's stock
+  /bin/bash. The reviewer fails closed (identity + rails + gate #3(ii) checks), so a
+  misconfiguration refuses rather than mis-merges.
 -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -22,7 +25,7 @@
     <array>
         <string>/bin/bash</string>
         <string>-lc</string>
-        <string>export GH_TOKEN="$(cat "$HOME/.config/scope-creep/review-pat")"; exec "__CHECKOUT__/scripts/routine-reviewer.sh" --unattended</string>
+        <string>export GH_TOKEN="$(cat "$HOME/.config/scope-creep/review-pat")"; exec bash "__CHECKOUT__/scripts/routine-reviewer.sh" --unattended</string>
     </array>
 
     <key>WorkingDirectory</key>
