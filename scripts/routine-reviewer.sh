@@ -212,7 +212,13 @@ for n in "${PRS[@]}"; do
   # never fall through to escalation-check's "empty diff => routine" behavior.
   git cat-file -e "${head_sha}^{commit}" 2>/dev/null || { skip "head $head_sha not present after fetch — deferring"; continue; }
 
-  changed="$(git diff --name-only "$BASE_SHA" "$head_sha" 2>/dev/null || true)"
+  # THREE-dot (base...head), NOT two-dot: classify only what the PR itself changed
+  # relative to the merge-base, never files main added after the PR forked. A two-dot
+  # `git diff BASE head` would list main's post-fork additions (e.g. this very script)
+  # as "changed" and wrongly trip the self-mod guard / CODEOWNERS rail below. This
+  # matches escalation-check.sh, which also diffs base...head. If the merge-base is
+  # missing (shallow history), the diff is empty and we defer (fail-closed) just below.
+  changed="$(git diff --name-only "$BASE_SHA...$head_sha" 2>/dev/null || true)"
   [ -n "$changed" ] || { skip "no classifiable diff for $head_sha — deferring"; continue; }
 
   # SELF-MODIFICATION GUARD: never auto-merge a change to the reviewer's OWN files.
