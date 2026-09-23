@@ -20,11 +20,19 @@ Supersedes the manual-only batch tool (PR #125): this is **one tool, two modes**
 
 ## What shipped (this ticket)
 - `scripts/routine-reviewer.sh` — runs **off-cloud, as `@scope-creep-review`**. For each open PR
-  it **independently re-derives "routine + safe"** from a **trusted** re-run of
-  `scripts/escalation-check.sh` (base…head) — **not** the PR's forgeable CI/label — and
-  approves+merges only routine + green PRs (direct approve-then-merge; no `allow_auto_merge`
-  needed). Escalation-class PRs are always skipped for `@dimays`. Dry-run by default; `--yes`
-  (manual) / `--unattended` (scheduled).
+  it **independently re-derives "routine + safe"** from **two trusted rails read from `main`** —
+  `scripts/escalation-check.sh` (base…head) **and** `.github/CODEOWNERS` — **not** the PR's
+  forgeable CI/label, and holds if **either** flags a changed path (ADR-027 Part 3(b): the two
+  rails can disagree, e.g. `charter/*` is `@dimays` in CODEOWNERS but only `charter/INVARIANTS.md`
+  in escalation-check). Approves+merges only routine + green PRs (direct approve-then-merge; no
+  `allow_auto_merge` needed). Escalation-class PRs are always skipped for `@dimays`. Dry-run by
+  default; `--yes` (manual) / `--unattended` (scheduled).
+- **CRO audit → BLOCK → fixed → re-audit → SOUND-WITH-FIXES.** First pass found 3 code bugs
+  (working-tree classifier, fail-open gate #3(ii), CLEAN-before-approve); all fixed. Re-audit
+  cleared them and found the charter rail-disagreement (above), now closed by the CODEOWNERS
+  rail; plus robustness fixes (trap-before-fetch, PID-aware lock, fail-closed on unresolvable
+  head, head-pinned merge). Supervised first run is cleared; `--unattended` still gates on the
+  CRO signing off that run + the Owner ratifying the per-run-secrets deviation.
 - **Fail-closed whole-run preconditions** it self-enforces: (A) the trusted escalation-check must
   carry the gate-script cases (ADR-027 precondition #1 / PR #124) or it refuses to run; (B) gate
   #3(ii) — no code-owner credential in Actions secrets/Environments — re-verified every run.

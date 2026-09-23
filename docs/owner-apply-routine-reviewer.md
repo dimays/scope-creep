@@ -14,6 +14,13 @@ runs **off-cloud, on your Mac, as `@scope-creep-review`** (never in a routine's 
 1. **Rails aligned (PR #124) — ✅ landed.** The gate-script cases are merged into
    `scripts/escalation-check.sh` on `main`. The reviewer verifies this on startup (against
    **main's** copy) and **aborts** if they're ever missing.
+
+   > **Two rails, both consulted (CRO re-audit, ADR-027 Part 3(b)).** `escalation-check.sh`
+   > and `.github/CODEOWNERS` currently *disagree*: CODEOWNERS routes **all of `/charter/`**
+   > to `@dimays`, but `escalation-check.sh` only catches `charter/INVARIANTS.md` — so on its
+   > own the check would call a `charter/PRD.md` edit "routine". The reviewer therefore reads
+   > **both** trusted copies from `main` and **holds if either** says escalation, so charter
+   > (and every other `@dimays`-owned path) is safe **before** the source fix in #4 lands.
 2. **`gh` authenticated as `@scope-creep-review`** on your machine (the review PAT at
    `~/.config/scope-creep/review-pat`). The reviewer refuses to run as any other identity.
 3. **Gate #3(ii) clean — split by who can see it.** No code-owner-capable credential may sit in
@@ -47,6 +54,19 @@ runs **off-cloud, on your Mac, as `@scope-creep-review`** (never in a routine's 
    scripts/routine-reviewer*)                   return 0 ;;
    docs/owner-apply-routine-reviewer.md)        return 0 ;;
    ```
+   **While you're in `scripts/escalation-check.sh`, also close the charter rail-disagreement**
+   the CRO found — widen the existing `charter/INVARIANTS.md)` case to the whole directory so
+   the check agrees with CODEOWNERS (`/charter/ → @dimays`). Replace:
+   ```sh
+   charter/INVARIANTS.md)                       return 0 ;;
+   ```
+   with:
+   ```sh
+   charter/*)                                   return 0 ;;
+   ```
+   *(The reviewer already holds charter via the CODEOWNERS rail; this makes the CI check itself
+   correct too, so the two rails stop disagreeing. Optional-but-recommended — not a live-safety
+   blocker.)*
 5. **Live branch protection on `main` re-confirmed (Owner UI — not readable from the cloud).** The
    direct-merge safety rests on it: `require_code_owner_reviews` + `require_last_push_approval` +
    `escalation-check` as a required status check + `enforce_admins`. Confirm these are on before
@@ -103,7 +123,11 @@ changes.
 - It never touches an **escalation-class** PR (safety rails / gate scripts / roster / routine
   config) — those always hold for your `@dimays` review.
 - It never trusts a PR's own CI-green or label (both forgeable from the cloud); it re-derives
-  routine-ness itself from the trusted `escalation-check`.
+  routine-ness itself from **two** trusted rails read from `main` — `escalation-check` **and**
+  `CODEOWNERS` — and holds if either flags any changed path.
+- It uses **direct approve-then-merge**, not GitHub-native auto-merge (ADR-027 Part 5 proposed
+  the native path; this drops the unproven `allow_auto_merge` dependency and still keeps
+  author ≠ merger). *Reconcile ADR-027's text to match before it leaves "proposed".*
 - It never runs **inside** a routine's cloud sandbox — that would undo Gate 0
   ([[ledger-072-work-sweep-unpause-safety-gates]]).
 
