@@ -77,31 +77,57 @@ command -v jq  >/dev/null || die "jq not found"
 me="$(gh api user -q .login 2>/dev/null || true)"
 [ "$me" = "scope-creep-review" ] || die "authenticated as '${me:-none}', not '@scope-creep-review' — refusing (author must != approver)."
 
-# --- Trusted checkout: this repo's escalation-check IS the trust anchor ------------
+# --- Concurrency guard (portable — mkdir is atomic; flock is absent on macOS) ------
+RR_LOCKDIR="${TMPDIR:-/tmp}/.routine-reviewer.$(echo "$REPO" | tr '/' '_').lock.d"
+# clear a stale lock left by a crashed run (>60 min old), then take it.
+[ -d "$RR_LOCKDIR" ] && [ -n "$(find "$RR_LOCKDIR" -maxdepth 0 -mmin +60 2>/dev/null)" ] && rmdir "$RR_LOCKDIR" 2>/dev/null || true
+mkdir "$RR_LOCKDIR" 2>/dev/null || { echo "another routine-reviewer run is active ($RR_LOCKDIR) — exiting."; exit 0; }
+
+# --- Trusted classifier: run MAIN's escalation-check, never the working tree -------
+# (CRO finding: the working-tree copy could be stale or a checked-out PR's version.
+# We extract main's copy to a private temp file and run THAT for every classification;
+# it is self-contained — it only shells out to `git diff` on the SHAs, sources nothing.)
 git fetch --quiet origin main
 BASE_SHA="$(git rev-parse origin/main)"
+TRUSTED_ESC="$(mktemp)"
+trap 'rm -f "$TRUSTED_ESC"; rmdir "$RR_LOCKDIR" 2>/dev/null || true' EXIT
+git show "origin/main:scripts/escalation-check.sh" > "$TRUSTED_ESC" 2>/dev/null || die "cannot read origin/main's escalation-check.sh"
 
 # --- Precondition A: rails aligned (ADR-027 #1 / PR #124) --------------------------
-# The reviewer re-runs escalation-check to classify PRs; it must catch gate scripts,
-# or it would wave through a change to its own trust anchor. Refuse until it does.
-git show "origin/main:scripts/escalation-check.sh" > /tmp/.rr-esc-check.sh 2>/dev/null || die "cannot read escalation-check.sh"
-if ! grep -qE 'scripts/guard-\*\.sh\)' /tmp/.rr-esc-check.sh \
-   || ! grep -qE 'scripts/escalation-check\*\.sh\)' /tmp/.rr-esc-check.sh; then
-  die "escalation-check.sh is missing the gate-script cases (ADR-027 precondition #1 / PR #124 not landed) — refusing until the rails are aligned."
+# The trusted classifier must catch gate scripts, or it would wave through a change to
+# its own trust anchor. Refuse until main's escalation-check carries those cases.
+if ! grep -qE 'scripts/guard-\*\.sh\)' "$TRUSTED_ESC" \
+   || ! grep -qE 'scripts/escalation-check\*\.sh\)' "$TRUSTED_ESC"; then
+  die "main's escalation-check.sh is missing the gate-script cases (ADR-027 precondition #1 / PR #124 not landed) — refusing until the rails are aligned."
 fi
 
 # --- Precondition B: gate #3(ii) — no code-owner credential in CI (ADR-026) --------
-sec_count="$(gh secret list --repo "$REPO" 2>/dev/null | grep -c . || true)"
-env_count="$(gh api "repos/$REPO/environments" -q '.total_count' 2>/dev/null || echo 0)"
-[ "${sec_count:-0}" = "0" ] || die "gate #3(ii): $sec_count Actions secret(s) present on $REPO — refusing (a forged workflow could authenticate as the reviewer)."
-[ "${env_count:-0}" = "0" ] || die "gate #3(ii): $env_count Environment(s) present on $REPO — refusing."
+# FAIL-CLOSED: an unreadable check is treated as "refuse", never "safe". Environments
+# are readable by the reviewer identity; the Actions-secrets list requires ADMIN, which
+# the (correctly) non-admin reviewer identity lacks — so that sub-check cannot be done
+# per-run from here. It is verified at INSTALL by the Owner (admin) and held stable by
+# gate #3(i) (the cloud has no Administration write to add secrets). We surface that
+# explicitly rather than pretend to have verified it. See docs/owner-apply-routine-reviewer.md.
+if env_json="$(gh api "repos/$REPO/environments" 2>/dev/null)"; then
+  env_count="$(jq -r '.total_count // 0' <<<"$env_json")"
+  [ "$env_count" = "0" ] || die "gate #3(ii): $env_count Environment(s) present on $REPO — refusing."
+else
+  die "gate #3(ii): cannot read Environments on $REPO — refusing (fail-closed)."
+fi
+if sec_out="$(gh secret list --repo "$REPO" 2>/dev/null)"; then
+  sec_count="$(grep -c . <<<"$sec_out" || true)"
+  [ "${sec_count:-0}" = "0" ] || die "gate #3(ii): $sec_count Actions secret(s) present on $REPO — refusing."
+  SEC_STATUS="verified empty"
+else
+  SEC_STATUS="NOT re-verifiable from the non-admin reviewer identity — relying on install-time check + gate #3(i)"
+fi
 
 log "== routine-reviewer =="
 log "repo:      $REPO"
 log "reviewer:  $me"
 log "mode:      $MODE"
 log "base:      origin/main @ $BASE_SHA"
-log "checks:    rails-aligned OK · gate #3(ii) OK (secrets/environments empty)"
+log "checks:    rails-aligned OK · environments empty · secrets: $SEC_STATUS"
 
 mapfile -t PRS < <(gh pr list --repo "$REPO" --state open --base main --json number --jq '.[].number' 2>/dev/null || true)
 [ "${#PRS[@]}" -gt 0 ] || { log "no open PRs targeting main."; exit 0; }
@@ -129,20 +155,29 @@ for n in "${PRS[@]}"; do
     skip "touches the reviewer's own files — holds for @dimays (self-modification guard)"; continue
   fi
 
-  # THE TRUST ANCHOR: routine-ness from the trusted gate script, base...head.
-  if ! bash scripts/escalation-check.sh "$BASE_SHA" "$head_sha" >/dev/null 2>&1; then
+  # THE TRUST ANCHOR: routine-ness from MAIN's escalation-check (extracted above),
+  # never the working-tree copy — base...head over the fetched git objects.
+  if ! bash "$TRUSTED_ESC" "$BASE_SHA" "$head_sha" >/dev/null 2>&1; then
     skip "escalation-class — holds for @dimays"; continue
   fi
 
-  case "$state" in
-    CLEAN) : ;;
-    *) skip "not cleanly mergeable (state=$state mergeable=$mergeable)"; continue ;;
-  esac
+  # Gate on what must hold INDEPENDENT of the review we are about to give: no merge
+  # conflict, and all REQUIRED checks green. Do NOT gate on mergeStateStatus==CLEAN —
+  # a routine PR still awaiting the code-owner review is BLOCKED, not CLEAN, and would
+  # be skipped before we ever approve it (the whole point of the reviewer). GitHub still
+  # refuses the final merge unless branch protection is fully satisfied, so approving
+  # here cannot force an unsafe merge.
+  [ "$mergeable" = "MERGEABLE" ] || { skip "not mergeable (mergeable=$mergeable state=$state)"; continue; }
+  gh pr checks "$n" --repo "$REPO" --required >/dev/null 2>&1 || { skip "required checks not green"; continue; }
 
   if [ "$MODE" = dry ]; then
-    log "WOULD MERGE #$n  (routine + green)  — $title"; acted=$((acted+1)); continue
+    log "WOULD MERGE #$n  (routine + checks green)  — $title"; acted=$((acted+1)); continue
   fi
-  log "MERGE #$n  (routine + green)  — $title"
+
+  # TOCTOU guard: ensure the head hasn't moved since we classified it.
+  cur_head="$(gh pr view "$n" --repo "$REPO" --json headRefOid -q .headRefOid 2>/dev/null || true)"
+  [ "$cur_head" = "$head_sha" ] || { skip "head moved during review — deferring to next run"; continue; }
+  log "MERGE #$n  (routine + checks green)  — $title"
   gh pr review "$n" --repo "$REPO" --approve -b "Routine (re-verified via trusted escalation-check); auto-approved by routine-reviewer." \
     && gh pr merge "$n" --repo "$REPO" --squash --delete-branch \
     && acted=$((acted+1)) \
