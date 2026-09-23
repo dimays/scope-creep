@@ -19,7 +19,7 @@ manual form of that routine's pass) · **Supersedes:** the stale/incomplete
 ## Why now
 
 [[work-sweep]] was un-paused live at its claude.ai `manage_url` (2026-09-23) after the ADR-026
-canary passed ([[ledger-073-work-sweep-first-run-canary]]). The board it un-paused onto carried
+canary passed (the supervised canary, [dimays/scope-creep#119](https://github.com/dimays/scope-creep/pull/119)). The board it un-paused onto carried
 **10 tickets in `active`** (work-100…109) against the [[ticket-cycle]] WIP cap of **≤2** — 5× the
 cap. A cadenced sweep should start from an honest, within-cap board, so the Owner asked for a
 reconciliation pass.
@@ -73,6 +73,6 @@ the Owner explicitly delegated the call this run. Reversible — nothing retired
 
 Delivered as a **routine propose-only PR** (work/*.md `status` + this ledger append = routine),
 held for `@scope-creep-review`. `bun run work:check` green. Nothing merged by this session's
-sandbox identity (it cannot — [[ledger-073-work-sweep-first-run-canary]]); the Owner disposes
+sandbox identity (it cannot — proven by the ADR-026 canary, [#119](https://github.com/dimays/scope-creep/pull/119)); the Owner disposes
 (review as `@scope-creep-review` + merge) off-sandbox. The stale #112 is closed as superseded.
-See [[board-hygiene]], [[ticket-cycle]], [[work-readme]], [[ledger-073-work-sweep-first-run-canary]].
+See [[board-hygiene]], [[ticket-cycle]], [[work-readme]], and the ADR-026 canary ([#119](https://github.com/dimays/scope-creep/pull/119)).
