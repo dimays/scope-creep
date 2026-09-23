@@ -9,20 +9,48 @@ runs **off-cloud, on your Mac, as `@scope-creep-review`** (never in a routine's 
 > your machine — neither is something an agent can (or should) do. The agent builds the tool and
 > this runbook; you install and turn it on.
 
-## Preconditions (the reviewer self-enforces #1 and #3(ii) — it refuses to run otherwise)
+## Preconditions
 
-1. **Rails aligned (PR #124).** The gate-script cases must be merged into
-   `scripts/escalation-check.sh` first. The reviewer checks this on startup and **aborts** if
-   they're missing — so it is safe to install now; it simply won't act until #124 lands.
-2. **`gh` authenticated as `@scope-creep-review`** on your machine, and the review PAT present at
-   `~/.config/scope-creep/review-pat`.
-3. **Gate #3(ii) clean.** No code-owner-capable credential in the repo's Actions secrets or
-   Environments (both empty). The reviewer re-verifies this every run and aborts if not.
-4. **The reviewer's own files are in the escalation set.** `scripts/routine-reviewer*`, its
-   `.launchd.plist`, and this runbook should be routed to `@dimays` in `.github/CODEOWNERS` and
-   added to `escalation-check.sh` (fold into the PR #124 gate-file patch) — so no one can merge a
-   change to the reviewer itself without your review. The script also self-guards (it skips any PR
-   touching its own files), but the CODEOWNERS lock is the durable protection.
+1. **Rails aligned (PR #124) — ✅ landed.** The gate-script cases are merged into
+   `scripts/escalation-check.sh` on `main`. The reviewer verifies this on startup (against
+   **main's** copy) and **aborts** if they're ever missing.
+2. **`gh` authenticated as `@scope-creep-review`** on your machine (the review PAT at
+   `~/.config/scope-creep/review-pat`). The reviewer refuses to run as any other identity.
+3. **Gate #3(ii) clean — split by who can see it.** No code-owner-capable credential may sit in
+   the repo's Actions secrets or Environments.
+   - *Environments* are readable by the reviewer identity, so the reviewer **re-checks them every
+     run and aborts fail-closed** (any read error → refuse).
+   - *Actions secrets* require **admin** to list, which the (correctly non-admin) reviewer
+     identity lacks — so it cannot re-verify them per run. **You verify this once at install**
+     (below), and it stays true because the cloud has no Administration write to add a secret
+     (gate #3(i)). The reviewer logs `secrets: NOT re-verifiable…` so this is never silently
+     assumed. *(This is a small, reasoned deviation from ADR-027 residual (c), which assumed a
+     per-run secrets check — flag it for CRO/Owner ratification.)*
+
+   Verify secrets empty now (as admin):
+   ```sh
+   gh secret list --repo dimays/scope-creep      # expect: no rows
+   gh api repos/dimays/scope-creep/environments -q .total_count   # expect: 0
+   ```
+4. **The reviewer's own files must be in the escalation set (Owner-applied gate patch).** Until
+   this lands, a *manual* `@scope-creep-review` approval could merge a change to the reviewer
+   itself (the in-script self-guard only covers the automated path). Add these — `escalation-check.sh`
+   is guard-blocked, so apply by hand (the PR #124 pattern):
+
+   **`.github/CODEOWNERS`** — under the escalation set (`@dimays`):
+   ```
+   /scripts/routine-reviewer*          @dimays
+   /docs/owner-apply-routine-reviewer.md   @dimays
+   ```
+   **`scripts/escalation-check.sh`** — in `is_escalation()`, after the `scripts/guard-*.sh)` case:
+   ```sh
+   scripts/routine-reviewer*)                   return 0 ;;
+   docs/owner-apply-routine-reviewer.md)        return 0 ;;
+   ```
+5. **Live branch protection on `main` re-confirmed (Owner UI — not readable from the cloud).** The
+   direct-merge safety rests on it: `require_code_owner_reviews` + `require_last_push_approval` +
+   `escalation-check` as a required status check + `enforce_admins`. Confirm these are on before
+   the first `--yes` run.
 
 ## Step 1 — Supervised first run (DRY-RUN, then a watched real run)
 
