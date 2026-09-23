@@ -66,6 +66,9 @@ is_escalation() {
     registry/*)                                  return 0 ;;
     .github/workflows/*)                         return 0 ;;
     .github/CODEOWNERS)                          return 0 ;;
+    # gate scripts (align is_escalation with CODEOWNERS — ADR-027 precondition; the reviewer re-run must catch these)
+    scripts/escalation-check*.sh)                return 0 ;;
+    scripts/guard-*.sh)                          return 0 ;;
     # --- infra / paid-dependency manifests (trigger (d), overlaps (a)) ---
     package.json|*/package.json)                 return 0 ;;
     package-lock.json|*/package-lock.json)       return 0 ;;
