@@ -2,12 +2,13 @@
 id: work-104
 title: Threads design polish — resolve redundant flows, inconsistent spacing/style
 type: chore
-status: active
+status: done
 priority: medium
 owner: chief-designer
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 **Owner report (2026-09-21):** "the design is a little off — some weird redundant flows,
 inconsistent spacing and style." Bring the Threads surface to the design system standard.
@@ -37,3 +38,5 @@ owns; pairs with [[cto]] on the launcher markup.
 The Threads surface reads as one system: one clear action per state, uniform spacing/style,
 design-system tokens/primitives, no redundant stacked flows. Reviewed against the design system
 and re-verified in a running console by [[qa-tester]]. See [[work-100]], [[adr-016]].
+
+> **[2026-09-23] board reconcile:** `active → done` — landed via [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (merged 2026-09-21). See [[ledger-074-board-reconciliation]].
