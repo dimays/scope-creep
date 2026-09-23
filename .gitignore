@@ -8,6 +8,7 @@ build/
 *.sqlite
 *.sqlite-*
 .claude/settings.local.json
+__pycache__
 
 # Human-Input Log — local-only (Owner's choice, ADR-011): never pushed to the public repo.
 human-input/
