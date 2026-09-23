@@ -58,7 +58,7 @@ is_escalation() {
   f="$1"
   case "$f" in
     # --- the core / safety-rail surface (ADR-022 trigger (d)) ---
-    charter/INVARIANTS.md)                       return 0 ;;
+    charter/*)                                   return 0 ;;
     .claude/*)                                   return 0 ;;
     standards/*)                                 return 0 ;;
     agents/*)                                    return 0 ;;
@@ -69,6 +69,8 @@ is_escalation() {
     # gate scripts (align is_escalation with CODEOWNERS — ADR-027 precondition; the reviewer re-run must catch these)
     scripts/escalation-check*.sh)                return 0 ;;
     scripts/guard-*.sh)                          return 0 ;;
+    scripts/routine-reviewer*)                   return 0 ;;
+    docs/owner-apply-routine-reviewer.md)        return 0 ;;
     # --- infra / paid-dependency manifests (trigger (d), overlaps (a)) ---
     package.json|*/package.json)                 return 0 ;;
     package-lock.json|*/package-lock.json)       return 0 ;;
