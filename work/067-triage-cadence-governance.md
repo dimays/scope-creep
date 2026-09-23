@@ -2,12 +2,12 @@
 id: work-067
 title: Triage cadence governance — self-tuning sweep frequency, ledger-tracked
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-of-staff
 spec: prd-request-loop
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-23
 ---
 The [[request-triage]] sweep starts hourly, but per the Owner's direction ([[prd-request-loop]]
 Q4) the frequency should **not stay a hard-coded guess** — it should self-tune on real
@@ -28,3 +28,5 @@ Build:
 frequency moves within bounds in response to real signal (not manual edits); the routines.json
 entry (once registered) lists `cadence_bounds`. See [[prd-request-loop]], [[request-triage]],
 [[staffing-review]].
+
+> **[2026-09-23] closed → done:** the [[request-triage]] loop emits a ledger `cadence-decision` block each run and `registry/routines.json` carries its `cadence_bounds` — the cadence-governance protocol this ticket specified is implemented. See [[ledger-075-stale-proposed-dispositions]].
