@@ -2,12 +2,13 @@
 id: work-100
 title: Threads UX stress-test — polish the projection + launcher to design-system standard
 type: feature
-status: active
+status: done
 priority: high
 owner: chief-of-staff
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 The umbrella ticket for the Owner's 2026-09-21 Threads feedback (thread `scope-creep-thread:9`):
 the Threads experience is "pretty buggy" and needs the org to "really stress-test the user
@@ -44,3 +45,5 @@ All four child tickets resolved and **empirically re-verified by running the con
 anything that genuinely requires the Owner's own machine (the deep link firing into their
 Claude Desktop and resuming). The Owner experiences the polished, working Threads as the
 milestone. See [[adr-016]], [[prd-cos-threads]].
+
+> **[2026-09-23] board reconcile:** `active → done` — landed via [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (merged 2026-09-21). See [[ledger-074-board-reconciliation]].

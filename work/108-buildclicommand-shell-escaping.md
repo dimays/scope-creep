@@ -2,12 +2,12 @@
 id: work-108
 title: Harden buildCliCommand — shell-active $/backtick survive inside the quoted prompt
 type: debt
-status: active
+status: proposed
 priority: low
 owner: cto
 spec: prd-cos-threads
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 Non-blocking note from the [[work-100]] Threads fix review. `buildCliCommand` in
 `app/lib/claude-sessions.ts` wraps the seed prompt in double quotes but only escapes `\` and `"`
@@ -23,3 +23,5 @@ Add a test case with a `$`/backtick-bearing seed.
 ## Acceptance
 A seed with shell metacharacters produces a paste-safe command that passes the literal prompt to
 `claude`; test covers it. See [[work-100]].
+
+> **[2026-09-23] board reconcile:** `active → proposed` — un-started follow-up (no branch/PR); returned to To-do to clear the WIP-cap. work-sweep will re-activate it within the ≤2 cap. See [[ledger-074-board-reconciliation]].

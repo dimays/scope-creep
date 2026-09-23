@@ -2,12 +2,12 @@
 id: work-106
 title: Extract a shared CommandRow/CopyButton primitive into @scope-creep/design
 type: chore
-status: active
+status: proposed
 priority: low
 owner: chief-designer
 spec: prd-cos-threads
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 Follow-up from the [[work-104]] Threads design polish. The launcher renders an inline
 "copyable command + Copy button" row (`.launcher__cmd*` in the console) for the
@@ -24,3 +24,5 @@ the inline console implementation. Keep it dark-mode-correct and token-driven.
 A design-system CommandRow/CopyButton primitive exists and the Threads launcher consumes it in
 place of its inline `.launcher__cmd*` markup; design package + console build/tests green. See
 [[work-104]], design system.
+
+> **[2026-09-23] board reconcile:** `active → proposed` — un-started follow-up (no branch/PR); returned to To-do to clear the WIP-cap. work-sweep will re-activate it within the ≤2 cap. See [[ledger-074-board-reconciliation]].
