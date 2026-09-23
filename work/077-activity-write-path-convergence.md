@@ -2,12 +2,12 @@
 id: work-077
 title: Activity write path must converge on the Console's read path
 type: bug
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: prd-transparent-delegation
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-23
 ---
 The [[prd-transparent-delegation]] surface ([[work-037]]) is permanently empty on localhost —
 not because of gitignore/deploy, but because [[work-036]]'s capture hook writes to the
@@ -62,3 +62,5 @@ Explore → Activity tab renders it. The surface stays honest-empty when nothing
 captured, and still never fabricates activity. Residual scope limits (in-session `Task` spawns
 only; a session in an unrelated clone with no `SCOPE_CREEP_HOME`) documented, not silently
 implied.
+
+> **[2026-09-23] closed → done:** both hook fixes are committed — the `Task|Agent` matcher (`.claude/settings.json`) and the `SCOPE_CREEP_HOME` write-path convergence (`.claude/hooks/log-activity.sh`) — plus the 63-event backfill shipped. The worktree write↔read mismatch is resolved. See [[ledger-075-stale-proposed-dispositions]].

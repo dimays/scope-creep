@@ -2,12 +2,12 @@
 id: work-088
 title: GitHub write access for the cloud routine — the hard activation blocker for autonomous execution
 type: chore
-status: proposed
+status: superseded
 priority: high
 owner: cto
 spec: prd-autonomous-execution-loop
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-23
 ---
 The cloud routine that will run [[work-sweep]] currently has **read-only** GitHub access: a
 push fails `403 Resource not accessible by integration`, so it **cannot open PRs**. A scheduled
@@ -54,3 +54,5 @@ the target repos. See [[prd-autonomous-execution-loop]], [[work-086]], [[adr-025
 > would make the "org merges a change to its own gates" path reachable end-to-end, so the write
 > grant **must ship together with the ADR-023 mechanical backstop**. Status stays `proposed`
 > until the Owner executes the provisioning (Owner-only). See [[adr-023]], [[work-060]].
+
+> **[2026-09-23] closed → superseded** by [[adr-026]] + [[work-096]]: the cloud routine's reconciled GitHub write access (propose freely, cannot dispose a gate) was delivered by the ADR-026 write-path redesign + [[adr-023]] Phase-2 identity and proven live in the supervised canary ([dimays/scope-creep#119](https://github.com/dimays/scope-creep/pull/119): branches/PRs open as the routine identity; a direct merge is refused 405; escalation holds). This ticket's activation blocker is resolved. See [[ledger-075-stale-proposed-dispositions]].

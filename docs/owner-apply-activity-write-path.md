@@ -6,7 +6,13 @@ and `.claude/settings.json`, both on the **locked gate-enforcement surface** (`.
 fail-closed, and the rule is explicit: *the Owner applies `.claude/**` changes directly; an
 agent only proposes them here.* So these files are yours to apply by hand.
 
-> **Status (verified 2026-09-08) — there are now TWO problems, and the first patch didn't take.**
+> **Status: ✅ APPLIED (2026-09-23).** Both fixes are committed on `main` — the `Task|Agent`
+> matcher (`.claude/settings.json`) and the `SCOPE_CREEP_HOME` write-path convergence in
+> `.claude/hooks/log-activity.sh` — and the 63-event backfill shipped. [[work-077]] is closed
+> `done` (see [[ledger-075-stale-proposed-dispositions]]). The 2026-09-08 diagnosis below is
+> retained as historical record.
+>
+> **Historical (2026-09-08) — at the time there were TWO problems, and the first patch hadn't taken.**
 > 1. **The earlier hook edit is not on disk.** Every `log-activity.sh` on the machine (main
 >    checkout, all worktrees, the `scripts/owner-runbook/` copy) still has the old `ROOT=` line,
 >    and `git status` shows no modification. Re-apply **Fix 1** below and save.
