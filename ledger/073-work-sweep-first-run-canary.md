@@ -40,7 +40,7 @@ one place the [[ledger-066-cloud-sandbox-proxy-identity-wall]] egress proxy exis
 shared Claude GitHub App identity. A local session cannot reproduce the identity override, so the
 proxy wall can only be re-confirmed here — per [[adr-026]] gate #3 and the work-117 plan.
 
-## Acting identity (proxy-forced — [[ledger-066]] / [[adr-026]])
+## Acting identity (proxy-forced — [[ledger-066-cloud-sandbox-proxy-identity-wall]] / [[adr-026]])
 
 - `mcp__github__get_me` → **`dimays`** (the shared Claude App forced login).
 - `GET https://api.github.com/user` (raw curl, through the proxy) → **200**, `"login": "dimays"`.
@@ -62,7 +62,7 @@ sandbox — see "The wall, observed twice" below). Throwaway artifacts, all clea
   (not `@scope-creep-review`); `requested_reviewers` = **`[scope-creep-review]`** (correct — `tmp/` is
   periphery, so the machine account is the code owner); `mergeable_state` = **`blocked`**. Live
   `escalation-check` CI on #117 → **success** (routine). ✓
-- **Criterion 4 — THE KEY PROBE (the gap [[ledger-071]] left):** a **direct**
+- **Criterion 4 — THE KEY PROBE (the gap [[ledger-071-board-hygiene-first-run-canary]] left):** a **direct**
   `PUT https://api.github.com/repos/dimays/scope-creep/pulls/117/merge` from the sandbox (via
   `mcp__github__merge_pull_request`, squash) → **`405 — "Waiting on code owner review from
   scope-creep-review."`** The merge **did NOT succeed.** The request reached GitHub as the
