@@ -1,6 +1,6 @@
 ---
 name: adr-027
-description: How (and whether) to let ROUTINE (non-escalation) PRs merge autonomously from the cloud, now that Gate 0 deliberately removed the @scope-creep-review reviewer credential from the routine's own cloud env (ledger-072) and the sandbox proxy forces the Claude App identity (ledger-066, ADR-026) — so a routine PR authored in-sandbox cannot obtain its own code-owner review and waits for the Owner's off-sandbox 2-click (as observed disposing #119/#120/#121, 2026-09-23). DECISION — do NOT re-introduce a merge-capable reviewer credential into the routine's execution env or into repo Actions secrets (that just undoes Gate 0 / violates ADR-026 gate #3(ii)); instead define a SEPARATED routine-reviewer that lives outside the routine's sandbox, decides from an INDEPENDENT re-run of escalation-check against a trusted checkout (never the PR's own forgeable CI/label signals), and is mechanically confined to periphery — escalation-class PRs stay routed to the human code owner @dimays and never auto-merge. BUILD IT ONLY when routine-PR volume justifies it; until then keep the human 2-click as the deliberate boundary, optionally softened by a Console batch approve+merge. Owner-gated, escalation-class (ADR-022 trigger d); status proposed pending CRO verification + CoS ratification + Owner approval.
+description: How (and whether) to let ROUTINE (non-escalation) PRs merge autonomously from the cloud, now that Gate 0 deliberately removed the @scope-creep-review reviewer credential from the routine's own cloud env (ledger-072) and the sandbox proxy forces the Claude App identity (ledger-066, ADR-026) — so a routine PR authored in-sandbox cannot obtain its own code-owner review and waits for the Owner's off-sandbox 2-click (as observed disposing #119/#120/#121, 2026-09-23). DECISION — do NOT re-introduce a merge-capable reviewer credential into the routine's execution env or into repo Actions secrets (that just undoes Gate 0 / violates ADR-026 gate #3(ii)); instead define a SEPARATED routine-reviewer that lives outside the routine's sandbox, decides from an INDEPENDENT re-run of escalation-check against a trusted checkout (never the PR's own forgeable CI/label signals), and is mechanically confined to periphery — escalation-class PRs stay routed to the human code owner @dimays and never auto-merge. BUILD IT ONLY when routine-PR volume justifies it; until then keep the human 2-click as the deliberate boundary, optionally softened by a Console batch approve+merge. Owner-gated, escalation-class (ADR-022 trigger d); status proposed — decision loop complete (CTO owns / CRO verified SOUND-WITH-FIXES / CoS ratified with fixes folded), pending Owner approval.
 metadata:
   type: reference
   status: proposed
@@ -11,9 +11,9 @@ metadata:
 
 # ADR-027: Autonomous routine-merge — a separated reviewer, not a credential in the sandbox
 
-- **Status:** **proposed** — Owner-gated, escalation-class; HOLDS for the Owner.
+- **Status:** **proposed** — Owner-gated, escalation-class; HOLDS for the Owner. **Decision loop complete 2026-09-23: CTO owns · CRO verified (SOUND-WITH-FIXES) · CoS ratified (with fixes folded).** Pending Owner disposition.
 - **Date:** 2026-09-23
-- **Deciders:** **CTO** (this proposal) · **[[chief-reality-officer]]** (must verify before accept) · **[[chief-of-staff]]** (ratifies) · **Owner** (approves — it touches the merge posture).
+- **Deciders:** **CTO** (this proposal) · **[[chief-reality-officer]]** (verified — SOUND-WITH-FIXES) · **[[chief-of-staff]]** (ratified — with the CRO fixes folded) · **Owner** (approves — it touches the merge posture).
 - **Owner-gated:** **yes** — a `standards/` ADR changing the merge/identity posture ([[adr-022]] trigger (d)). Not self-mergeable.
 - **Extends:** [[adr-022]] (autonomous-merge-with-escalation) · [[adr-023]] (restricted identity) · [[adr-026]] (cloud routine write path). **Closes no gate on its own** — it defines the design and the trigger to build it.
 
@@ -63,14 +63,16 @@ justifies it.** Five parts:
 
 2. **The reviewer is a SEPARATED, review-only surface — outside the routine's sandbox.** It holds the
    `@scope-creep-review` credential where the routine cannot reach it: the Owner's own machine (the
-   `~/.config/scope-creep/review-pat` that already exists, [[ledger-072-work-sweep-unpause-safety-gates]]) or a dedicated review-only environment the routine has no access to. **`author ≠ reviewer` is enforced by *environment separation*, not just identity** — the routine env and the review env never overlap.
+   `~/.config/scope-creep/review-pat` **attested in** [[ledger-066-cloud-sandbox-proxy-identity-wall]] / [[ledger-072-work-sweep-unpause-safety-gates]] — Owner-attested, not independently verifiable from the sandbox) or a dedicated review-only environment the routine has no access to. **`author ≠ reviewer` is enforced by *environment separation*, not just identity** — the routine env and the review env never overlap.
 
 3. **The reviewer decides from an INDEPENDENT re-derivation of "routine + safe," never the PR's own
    signals.** On each candidate PR it: **(a)** re-runs `scripts/escalation-check.sh` from a **trusted
    checkout** (`main`'s copy of the gate script, against `base...head`) — not the PR's CI result;
-   **(b)** confirms the diff touches **no** escalation path (which, by ADR-023 Phase 2, includes
-   `.github/workflows/**` and `.github/CODEOWNERS` — so a workflow-rewrite forge is itself
-   escalation and disqualifies); **(c)** confirms the author is the expected routine identity. Only
+   **(b)** confirms the diff touches **no** escalation path — consulting **both** the re-run **and
+   `.github/CODEOWNERS`**, because the two rails currently disagree (see the un-spoofability note
+   below): `is_escalation()` catches `.github/workflows/**` + `.github/CODEOWNERS` (so a
+   workflow-rewrite forge disqualifies) but has **no `scripts/` case**, while CODEOWNERS routes the
+   gate scripts to `@dimays`; **(c)** confirms the author is the expected routine identity. Only
    if all hold does it approve as `@scope-creep-review`. **It trusts its own computation, not the
    forgeable green check or label.**
 
@@ -81,11 +83,14 @@ justifies it.** Five parts:
    `owner-approved` label.
 
 5. **Mechanism for the merge itself: GitHub-native auto-merge, enabled by the routine.** When the
-   routine opens a routine PR it enables GitHub **auto-merge** (a Pull-requests-write action it
-   already has under [[adr-026]] — **no new credential**). GitHub then merges **only** once branch
-   protection is satisfied — i.e. once the separated reviewer's approval lands and checks are green.
-   The routine enables; the reviewer approves; **GitHub** merges. No single actor both authors and
-   disposes.
+   routine opens a routine PR it enables GitHub **auto-merge** — *expected* to be within its existing
+   Pull-requests-write grant ([[adr-026]]) with **no new credential**, but **not yet proven**: the
+   [[ledger-073-work-sweep-first-run-canary]] canary never exercised `enablePullRequestAutoMerge`
+   from the sandbox, and auto-merge also needs the repo setting **`allow_auto_merge = true`**
+   (unverified). **A build-gated canary must confirm both** before part 5 is relied on (build
+   precondition below). GitHub then merges **only** once branch protection is satisfied — i.e. once
+   the separated reviewer's approval lands and checks are green. The routine enables; the reviewer
+   approves; **GitHub** merges. No single actor both authors and disposes.
 
 > **The one-line mechanism:** *the routine enables auto-merge and proposes; a reviewer in a separate
 > env independently re-derives "routine" and approves; GitHub merges — so `author ≠ reviewer` holds
@@ -117,6 +122,15 @@ green, routine-classified PRs") that still runs as the Owner — human authority
   cloud session could get a **bad but routine** change merged (bounded, reversible — a revert PR).
   That is the *same* risk [[adr-022]] already accepts for routine-merge; ADR-027 does not widen it,
   and keeps escalation strictly human. It does **not** apply to Tier-2 escalation paths at all.
+- **Named residuals (folded from CRO):** three the design lives with, none a safety hole given the
+  reviewer distrusts the PR: **(a)** the `escalation-check.sh` ↔ CODEOWNERS **asymmetry on the gate
+  scripts** (build precondition #1 closes it); **(b)** the **CI-adjacent surface that is not
+  `.github/workflows/**`** — composite actions (`.github/actions/**`), non-`guard-*` scripts a
+  workflow invokes — is periphery in *both* classifiers, so a green check can be induced without
+  touching a locked path; this stays inside [[adr-022]]'s accepted "bad-but-routine, reversible"
+  residual **only because** the reviewer ignores CI-green and re-derives from the diff; **(c)** gate
+  #3(ii) ("no code-owner credential in Actions secrets/Environments") is **point-in-time** — so the
+  separated reviewer must **re-verify #3(ii) as a per-run precondition**, not trust the build-time check.
 - **Interim cost is real but small.** Until the build trigger fires, the Owner keeps clicking
   review+merge on routine hygiene PRs (as for #119/#120/#121). At today's daily-ish, single-app
   cadence that is cheap; the Console batch action makes it one click for many.
@@ -146,12 +160,39 @@ The design is only as good as part 3's independence. It holds **iff**:
 - the escalation set (ADR-023 Phase 2) **already includes `.github/workflows/**` and
   `.github/CODEOWNERS`**, so any forge-enabling diff is itself escalation → routed to `@dimays`,
   never auto-approved;
-- the reviewer's own code/config live on the **locked gate surface** (`.claude/**` / `scripts/guard-*`),
+- the gate surface the reviewer relies on is **locked by CODEOWNERS→`@dimays`** (`.claude/**`,
+  `scripts/escalation-check*.sh`, `scripts/guard-*.sh`, `.github/workflows/**`, `.github/CODEOWNERS`),
   so an agent cannot rewrite what "routine" means or where the reviewer points.
 
-If any of those three is not true, the separated reviewer is **not** safe to run and the build stays
+> **Correction folded from CRO/CoS (2026-09-23) — the load-bearing lock on the gate scripts is
+> CODEOWNERS, NOT the escalation re-run.** `escalation-check.sh` `is_escalation()` has **no
+> `scripts/` case**, so a PR touching `scripts/guard-*.sh` or `scripts/escalation-check*.sh`
+> classifies **ROUTINE** on the re-run — the thing that actually holds it for `@dimays` is the
+> CODEOWNERS routing (lines 33–34), which `@scope-creep-review`'s approval cannot satisfy. The
+> safety property **holds** (branch protection still requires the `@dimays` review), but the
+> re-run is *incomplete* defense-in-depth there, not the lock.
+
+**Build preconditions (all required before the separated reviewer is built — CoS-ratified):**
+1. **Align the two rails** — add `scripts/escalation-check*.sh` + `scripts/guard-*.sh` cases to
+   `is_escalation()` so the trusted re-run is *real* defense-in-depth (and survives a CODEOWNERS
+   regression). `escalation-check.sh` is **guard-write-blocked** → this is an **Owner-applied**
+   gate-file patch (the [[work-094]] pattern), its own escalation-class change.
+2. **Canary the auto-merge trigger** (part 5) — prove `enablePullRequestAutoMerge` succeeds from the
+   sandbox as the proxy identity **and** that `allow_auto_merge = true` on both repos.
+3. **CRO re-signs** that the three `iff` preconditions above hold at build time.
+
+If any precondition is unmet, the separated reviewer is **not** safe to run and the build stays
 blocked. This ADR **asserts the design and the preconditions, not a running system** — building it is
-a follow-up gated on the volume trigger and on CRO sign-off that the three hold.
+gated on the volume trigger **and** the three preconditions.
+
+## Decision-loop determinations (2026-09-23)
+
+Run via the [[decision]] loop — **CTO owns · CRO verifies · CoS ratifies** (the [[ledger-072-work-sweep-unpause-safety-gates]] pattern). Full record: [[ledger-076-adr-027-decision-loop]].
+
+- **CTO (owns):** authored this proposal (the separated-reviewer design; defer-the-build; keep the 2-click interim).
+- **CRO (verifies) — SOUND-WITH-FIXES.** Re-checked every load-bearing claim against live source: the friction is **real** (#119/#120/#121 merged off-sandbox by the Owner, not the routine — GitHub API confirmed), the un-spoofability core is **intact** (`is_escalation()` L67/L68 catch workflows + CODEOWNERS), no fabrications. Required 4 precision fixes (the rails asymmetry; the untested auto-merge capability; the `review-pat` attestation wording; three named residuals) — **all folded above.**
+- **CoS (ratifies) — RATIFIED with the CRO fixes folded.** INVARIANTS upheld (§7/§10 author≠merger by environment separation; §II single-user — a machine reviewer is identity separation, not roles/auth; §I.4 the build is a core-upgrade). Defer-the-build and the 2-click interim both endorsed; the Console batch approve+merge approved as an interim softener (runs *as the Owner*). Added routing: **align the two rails** as a build precondition (Owner-applied gate-file patch, work-094 pattern).
+- **Owner (approves):** pending — escalation-class, HOLDS. Disposal per below.
 
 ## Relates to
 
