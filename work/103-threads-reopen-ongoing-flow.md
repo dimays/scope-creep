@@ -2,12 +2,13 @@
 id: work-103
 title: Verify reopen-ongoing-thread flow works end-to-end
 type: bug
-status: active
+status: done
 priority: medium
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 **Owner report (2026-09-21):** the Owner wants confidence that **reopening a conversation on an
 ongoing thread** works well, but couldn't test it because the launch→link path ([[work-102]]) is
@@ -33,3 +34,5 @@ acceptance of that chain.
 correlated transcript, a reopen that lands on the existing conversation, and a new turn showing
 up on poll). Any step that genuinely requires the Owner's own Claude Desktop is written up as a
 precise Owner acceptance check rather than claimed proven. See [[work-100]], [[adr-016]].
+
+> **[2026-09-23] board reconcile:** `active → done` — landed via [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (merged 2026-09-21). See [[ledger-074-board-reconciliation]].

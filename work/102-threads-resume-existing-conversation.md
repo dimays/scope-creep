@@ -2,12 +2,13 @@
 id: work-102
 title: Launcher→existing-conversation link never works — resume opens a NEW conversation
 type: bug
-status: active
+status: done
 priority: high
 owner: cto
 spec: prd-cos-threads
+pr: https://github.com/dimays/scope-creep-console/pull/72
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 **Owner report (2026-09-21):** opening a launched thread does **not** show the existing Claude
 conversation — it still **prompts to start a NEW conversation**. The Owner "still hasn't seen it
@@ -56,3 +57,5 @@ conversation (projected transcript in-app) and a resume control that **reopens t
 conversation**, never a new one. Empirically reproduced-then-fixed by [[qa-tester]]; Owner
 acceptance check defined for the OS-level resume on the Owner's machine. See [[work-100]],
 [[work-101]], [[work-103]], [[adr-016]].
+
+> **[2026-09-23] board reconcile:** `active → done` — landed via [scope-creep-console#72](https://github.com/dimays/scope-creep-console/pull/72) (merged 2026-09-21). See [[ledger-074-board-reconciliation]].
