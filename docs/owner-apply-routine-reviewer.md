@@ -74,14 +74,21 @@ runs **off-cloud, on your Mac, as `@scope-creep-review`** (never in a routine's 
 
 ## Step 1 — Supervised first run (DRY-RUN, then a watched real run)
 
-From your scope-creep checkout, authenticated as `@scope-creep-review`:
+From your scope-creep checkout. You do **not** need to log `gh` out of your own account —
+prefix each run with the reviewer PAT and `gh` uses it just for that command (it overrides
+your stored auth). Run through **`bash`**: the script is pushed through the GitHub API so it
+arrives without the executable bit, and macOS's stock `/bin/bash` (3.2) is fine because the
+script is kept 3.2-portable.
 
 ```sh
+# 0. confirm the PAT resolves to the reviewer (expect: scope-creep-review):
+GH_TOKEN="$(cat ~/.config/scope-creep/review-pat)" gh api user -q .login
+
 # 1a. dry-run — shows exactly what it WOULD merge, changes nothing:
-scripts/routine-reviewer.sh
+GH_TOKEN="$(cat ~/.config/scope-creep/review-pat)" bash scripts/routine-reviewer.sh
 
 # 1b. watched real run — actually approves + merges the routine + green PRs it listed:
-scripts/routine-reviewer.sh --yes
+GH_TOKEN="$(cat ~/.config/scope-creep/review-pat)" bash scripts/routine-reviewer.sh --yes
 ```
 
 Confirm by eye that it merged only **ordinary** PRs and **skipped every sensitive one**

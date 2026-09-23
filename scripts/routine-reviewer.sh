@@ -183,7 +183,14 @@ log "checks:    rails-aligned OK · environments empty · secrets: $SEC_STATUS �
 MERGE_PIN=""
 if gh pr merge --help 2>&1 | grep -q -- '--match-head-commit'; then MERGE_PIN="yes"; fi
 
-mapfile -t PRS < <(gh pr list --repo "$REPO" --state open --base main --json number --jq '.[].number' 2>/dev/null || true)
+# Collect open PR numbers. NOT `mapfile`/`readarray` — those are bash 4+ builtins and
+# macOS ships bash 3.2 as /bin/bash, so this must stay 3.2-portable (a while-read into
+# an array append). The `${#PRS[@]}` guard below runs before any `"${PRS[@]}"` expansion,
+# which sidesteps bash 3.2's "unbound variable" bug on an empty array under `set -u`.
+PRS=()
+while IFS= read -r _pr; do
+  [ -n "$_pr" ] && PRS+=("$_pr")
+done < <(gh pr list --repo "$REPO" --state open --base main --json number --jq '.[].number' 2>/dev/null || true)
 [ "${#PRS[@]}" -gt 0 ] || { log "no open PRs targeting main."; exit 0; }
 
 acted=0; skipped=0
