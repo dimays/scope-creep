@@ -17,20 +17,22 @@
 # (ADR-023 Phase 2; ADR-026; docs/owner-apply-work-sweep-unpause.md; work-117.)
 
 # --- periphery default: routine review by the machine account ---
-*                                   @scope-creep-review
+*                                       @scope-creep-review
 
 # --- escalation set: HUMAN-ONLY Owner review (@dimays) ---
-/charter/                           @dimays
-/charter/INVARIANTS.md              @dimays
-/.claude/                           @dimays
-/standards/                         @dimays
-/agents/                            @dimays
-/loops/                             @dimays
-/registry/                          @dimays
-/.github/workflows/                 @dimays
-/.github/CODEOWNERS                 @dimays
+/charter/                               @dimays
+/charter/INVARIANTS.md                  @dimays
+/.claude/                               @dimays
+/standards/                             @dimays
+/agents/                                @dimays
+/loops/                                 @dimays
+/registry/                              @dimays
+/.github/workflows/                     @dimays
+/.github/CODEOWNERS                     @dimays
 # gate scripts (ADR-026 residual: "the gate scripts", not just escalation-check)
-/scripts/escalation-check*.sh       @dimays
-/scripts/guard-*.sh                 @dimays
+/scripts/escalation-check*.sh           @dimays
+/scripts/guard-*.sh                     @dimays
 # ledger POLICY only — routine append entries stay periphery (NOT all of ledger/**)
-/ledger/README.md                   @dimays
+/ledger/README.md                       @dimays
+/scripts/routine-reviewer*              @dimays
+/docs/owner-apply-routine-reviewer.md   @dimays
