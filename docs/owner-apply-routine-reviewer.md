@@ -46,10 +46,12 @@ runs **off-cloud, as `@scope-creep-review`** (never in a routine's cloud sandbox
    gh secret list --repo dimays/scope-creep      # expect: no rows
    gh api repos/dimays/scope-creep/environments -q .total_count   # expect: 0
    ```
-4. **The reviewer's own files must be in the escalation set (Owner-applied gate patch).** Until
-   this lands, a *manual* `@scope-creep-review` approval could merge a change to the reviewer
-   itself (the in-script self-guard only covers the automated path). Add these — `escalation-check.sh`
-   is guard-blocked, so apply by hand (the PR #124 pattern):
+4. **The reviewer's own files must be in the escalation set (Owner-applied gate patch) — ✅ landed.**
+   These cases are now on `main` (`scripts/escalation-check.sh` + `.github/CODEOWNERS`, incl. the
+   `charter/*` rail-widening); the block below is retained as the record of what was applied. Until
+   it landed, a *manual* `@scope-creep-review` approval could have merged a change to the reviewer
+   itself (the in-script self-guard only covers the automated path). What was added — `escalation-check.sh`
+   is guard-blocked, so it was applied by hand (the PR #124 pattern):
 
    **`.github/CODEOWNERS`** — under the escalation set (`@dimays`):
    ```
