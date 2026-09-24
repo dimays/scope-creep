@@ -41,3 +41,24 @@ metadata:
 ## Relates to
 
 [[ledger-079-system-audit]] · [[roadmap-001]] · [[roadmap-002]] · [[adr-026]] · [[adr-027]]
+
+## Round 3: the Owner's disposition (same day)
+
+- **Accepted** [[roadmap-002]], with one revision to the substrate. The Owner has no Max plan to lean on and prefers **local-first, free-first**. The org re-decided under the new [[principles]]:
+  - **Claude-powered work:** runs on a local `org-run` runner on the Owner's Mac ([[work-125]]).
+  - **Deterministic gates:** stay on free GitHub Actions.
+  - **Overnight propose-only jobs:** stay on the claude.ai routines.
+  - **Paid options:** only as a future spend proposal.
+- **Asked for non-negotiables plus leeway.** Drafted as the **autonomy charter** ([[adr-028]]):
+  - INVARIANTS v2.0.0, staged for the Owner to apply;
+  - a new Owner-held PRINCIPLES;
+  - decision-rights v2 (six Owner-held classes plus a weekly digest);
+  - narrowed CODEOWNERS;
+  - core-upgrade scoped to the safety kernel;
+  - pre-ratified staffing;
+  - autonomy mandates in all seven executive charters;
+  - the PRD vision and org refresh;
+  - workstream tickets [[work-125]]–[[work-131]].
+- **Credentials:** the Owner will do them. A detailed checklist was written for them.
+- **Private repo for the Owner's words:** `dimays/scope-creep-owner` was created (private, seeded).
+- **Honest note:** the harness classifier blocked an agent from adding CODEOWNERS to scope-creep-design. That now sits in the Owner's checklist alongside the design branch protection.

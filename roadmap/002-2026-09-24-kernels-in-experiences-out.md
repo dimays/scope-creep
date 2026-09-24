@@ -3,8 +3,8 @@ name: roadmap-002
 description: The C-suite's single org position after the Owner's 2026-09-24 re-evaluation mandate. It sets the thesis, the north-star experience and metrics, the diagnosis, six ordered foundation workstreams, the stop list, the new decision rights, and the four calls that are genuinely the Owner's. Supersedes the round-1 "make it true before making it bigger" synthesis.
 metadata:
   type: reference
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 1.0.0
   owner_agent: ceo
   last_verified: 2026-09-24
 ---
@@ -59,10 +59,10 @@ Guardrails: revert, false-green, and canary-catch rates.
 
 | # | Workstream | Owner | Summon | Done means |
 |---|---|---|---|---|
-| 1 | **Producer and substrate:** an `org-run <loop>` host, bot identity everywhere, the reviewer on console + design | [[cto]] | platform-engineer, devops-engineer | No org commit is authored as the Owner. The build loop runs on the host. |
+| 1 | **Producer and substrate (local-first):** an `org-run <loop>` runner on the Owner's Mac (launchd + headless Claude Code on their existing login), bot identity everywhere, the reviewer on console + design | [[cto]] | platform-engineer, devops-engineer | No org commit is authored as the Owner. The build loop runs whenever the Mac is awake and catches up on wake. |
 | 2 | **M1:** one real Owner kernel, end-to-end, unattended, on the console | [[chief-product-officer]] | product-designer, frontend-engineer, qa-verifier | It is running in their console with 0 touches and a replayable trail |
 | 3 | **Spark spine:** capture (human-input log + console box), the Heard ack, and an ideas-in-flight home | [[chief-product-officer]] / [[chief-designer]] | frontend-engineer, integration-engineer | Heard in < 5 min. The "Your factory" home is replaced. |
-| 4 | **Delight gate:** a local live preview (worktree + HMR). This is a **new build**: there has never been a live preview, and the sandbox has always been isolation + diff. a design-review stage, `taste.md` | [[chief-designer]] | product-designer, design-systems-engineer | Every result has something to look at, not a diff |
+| 4 | **Delight gate:** a local live preview (worktree + HMR; a **new build**, since there has never been a live preview), a design-review stage, `taste.md` | [[chief-designer]] | product-designer, design-systems-engineer | Every result has something to look at, not a diff |
 | 5 | **Owner Model:** sourced taste rules, `owner.json`, one file per kernel, truth-based freshness | [[chief-knowledge-manager]] | knowledge-engineer | Every agent reads it first |
 | 6 | **Trust rails and operating model:** evidence bundles, canaries, runaway caps, loops 14 → 7, staff as runtime instances | [[chief-reality-officer]] + [[chief-of-staff]] | security-engineer, program-coordinator | A weekly digest with revert replaces per-PR asks |
 
@@ -74,10 +74,21 @@ Guardrails: revert, false-green, and canary-catch rates.
 | Disagreement | Call |
 |---|---|
 | (a) Reviewer extension | **Extend now.** The CEO withdraws the round-1 hold. |
-| (b) Substrate | **Actions + claude-code-action with the Owner's Max `setup-token`.** **The CRO cleared this, with conditions.** It is officially supported (`claude_code_oauth_token`). ADR-016's ban covers self-built apps, which doesn't include the unmodified Claude Code binary running for the Owner. **Risk:** it draws on the same Max usage pool as the Owner's own sessions. So first run a **1-week canary** with `--max-turns`, concurrency 1 and workflow timeouts, and measure the change in the Owner's usage before scaling up. Fallback: local launchd under a separate macOS user. claude.ai routines stay for read-only jobs only. No API key, which would be metered and therefore §7 spend. |
+| (b) Substrate | **Local-first, free-first** ([[principles]]). Revised 2026-09-24 because the Owner has no Max plan to lean on, and a CI subscription token was the wrong default anyway. See the substrate table below. |
 | (c) Chatbot extension | **Split it.** Close v2 as an *in-app Claude caller*, which ToS rules out (the CPO is right). Revive the shell as a **zero-Claude-call capture surface**, which [[adr-016]] permits (the Designer and CTO are right). |
 | (d) Silence = consent | **Adopt for reversible periphery work only.** It requires the CRO evidence bundle, one-tap revert, and a digest line. |
-| (e) First proof | **M1.** It runs on today's host if Actions isn't ready. It is periphery, so it is self-mergeable now. |
+| (e) First proof | **M1.** It runs on the local runner. It is periphery, so it is self-mergeable now. |
+
+**Substrate (revised). The org decides this under the [[principles]]; it is not an Owner call.**
+
+| Job | Runs on | Cost | Why |
+|---|---|---|---|
+| **Claude-powered work** (build, spec, design review, heal) | **`org-run` on the Owner's Mac**: launchd + headless Claude Code on their existing Claude login | $0 incremental | Full tools, real disk, any identity. No new credential in any cloud. Missed runs fire on wake, and `caffeinate` keeps long dev cycles alive. |
+| **Deterministic gates** (routine-reviewer, liveness, CI) | GitHub Actions | $0 (public repos are free; the private reviewer repo stays well inside the free minutes) | No Claude call, so no token is needed |
+| **Overnight propose-only jobs** (request-triage, board-hygiene) | claude.ai routines, already in the Owner's plan | $0 incremental | Useful while the Mac sleeps. Read and propose only; never a write credential. |
+| Always-on host / API key | **Not now** | Metered, so §7 spend | Revisit only if the metrics show laptop-awake windows are the bottleneck. That would be a spend proposal backed by real cost data. |
+
+**Guardrails on the local runner:** it shares the Owner's Claude usage pool, so it runs at concurrency 1 with `--max-turns` and per-run timeouts. It uses Claude Code's sandboxing and a dedicated checkout directory. Moving it to a separate macOS user is optional hardening, which the CTO decides after M1.
 
 ## 5. Stop, pause, cut
 
@@ -107,10 +118,10 @@ The `owner-approved` label no longer counts as Owner evidence; only a GitHub rev
 |---|---|---|
 | 1 | **Rotate the leaked Turso token and remove the App key from the cloud env** | Credential actions and permission config, which agents are barred from. Blocks nothing. Also remove the stale merge/`api` Bash allows in the local, gitignored `.claude/settings.local.json`. The hook comment says they were revoked, but they are still present. |
 | 2 | **Approve ONE "autonomy charter" core-upgrade** (contents below) | Only the Owner amends INVARIANTS |
-| 3 | **Install the bot App on console + design and set up design branch protection.** Once the CRO clears it, also mint the Max `setup-token` into an Actions Environment scoped to `main`. | These are permission grants and a credential, and using the subscription on CI is ToS-sensitive |
-| 4 | **Decide where your verbatim words live** (proposal: a private `scope-creep-owner` repo) | Their data and their privacy boundary |
+| 3 | **Give the local runner its bot identity, and protect the design repo.** Store the existing `scope-creep-routine` App key in your macOS Keychain for the runner, and apply branch protection plus CODEOWNERS to scope-creep-design. The App is already installed on all three repos. No Max token and no CI credential are needed. | These are a credential placement and a security setting, which agents are barred from |
+| 4 | ~~Decide where your verbatim words live~~ **Decided 2026-09-24: a private repo.** `dimays/scope-creep-owner` has been created (private, seeded) | Their data and their privacy boundary |
 
-**The autonomy charter contains:**
+**The autonomy charter** ([[adr-028]]) contains:
 - **A1:** §I.4 core narrows to the safety kernel.
 - **A2:** under §I.3, the CoS may ratify summon and retire from templates by standing rule.
 - **A3:** in §10(c), a "tradeoff" means a dispute still unresolved after CoS ratification.
@@ -118,6 +129,7 @@ The `owner-approved` label no longer counts as Owner evidence; only a GitHub rev
 - **Decision-rights rewrite,** including the label rule.
 - **CODEOWNERS narrowed** to match A1.
 - **Owner Model** added to the AGENTS.md read order.
+- **[[principles]]**, a new Owner-held charter doc. It covers everything **not** reserved by the INVARIANTS: the org decides, guided by a short list of principles (local-first, free-first, kernel as the unit, delight as the bar, reversible means act).
 
 **Deferred on purpose: §7 standing spend envelopes.** Nothing in this horizon needs spend, and money deserves its own decision backed by real cost data.
 
@@ -131,4 +143,8 @@ The `owner-approved` label no longer counts as Owner evidence; only a GitHub rev
 - **The governance work wasn't waste.** Those rails are what make silence-as-consent safe. The sandbox write path was the waste.
 
 ## Disposition
-*Pending the Owner.*
+**Accepted by the Owner, 2026-09-24,** with one revision: the substrate is local-first and free-first instead of a Max-plan CI token (§4). They answered the four calls:
+1. They will do the credential steps; a detailed checklist was provided.
+2. Draft and apply the autonomy charter ([[adr-028]]).
+3. Correct the substrate call (done above).
+4. A private repo for their words (created).

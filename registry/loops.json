@@ -15,7 +15,7 @@
       "name": "core-upgrade",
       "kind": "loop",
       "status": "active",
-      "description": "The only way the immutable control-plane core changes — ADR, tests, canary, Owner approval, version bump, Ledger.",
+      "description": "The governed path for changing the SAFETY KERNEL (INVARIANTS v2.0.0 §4). That means INVARIANTS, PRINCIPLES, the gate surface, decision-rights, the top-level executive and function charters, and dependency/infra manifests. It runs ADR → branch → green suite → Owner approval → land → record. Everything else is org-governed and lands on independent org review (ADR-028).",
       "owner_agent": "cto",
       "path": "loops/core-upgrade.md"
     },
