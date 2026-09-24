@@ -3,7 +3,7 @@ name: adr-016
 description: The in-app Threads experience is reframed from an agent chat client to a projection + "open in Claude" launcher + link-out layer, because powering a self-built app via the Owner's Claude Max/subscription OAuth is ToS-disallowed (first-party sourced). The real Chief-of-Staff conversation stays in Claude Desktop / Claude Code (the permitted harness, on Max); the Console projects a transcript/summary from local session/ledger data and never makes an automated Claude call. Owner-directed and Owner-ratified 2026-09-06.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-06

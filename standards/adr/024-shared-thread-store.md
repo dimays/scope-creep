@@ -3,7 +3,7 @@ name: adr-024
 description: The remote-datastore standard for cloud-writable systems. A Scope Creep system that a cloud routine must read/write becomes remote by pointing its own DATABASE_URL at a per-system remote libSQL (Turso) instance — the existing @libsql/Drizzle client, a connection-string change, not a rewrite. One database PER system (isolation, INVARIANTS §9), single-user (NOT tenancy/auth, §II); Postgres-by-connection-string stays the sanctioned per-app escape (adr-001). First activation: the console's thread store. ACCEPTED as direction (Owner 2026-09-07); provisioning an instance (account + spend) is Owner-gated.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.1.0
   owner_agent: cto
   last_verified: 2026-09-07
