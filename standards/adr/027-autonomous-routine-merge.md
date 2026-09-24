@@ -4,7 +4,7 @@ description: How (and whether) to let ROUTINE (non-escalation) PRs merge autonom
 metadata:
   type: reference
   status: accepted
-  version: 1.1.0
+  version: 1.1.1
   owner_agent: cto
   last_verified: 2026-09-24
 ---
@@ -238,6 +238,35 @@ in that repo's README.
 
 **Disposition:** with this reconciliation the Owner **accepts** ADR-027 and the shipped system (this PR).
 
+## Operational status — reviewer host live (first run 2026-09-24 UTC)
+
+> **Divergence (ii)'s host is BUILT and LIVE.** The private, Owner-owned `dimays/scope-creep-reviewer`
+> repo now runs the reviewer on an **hourly schedule**; its **first scheduled run was GREEN on
+> 2026-09-24 UTC** — a clean no-op (`reviewer: scope-creep-review` · `no open PRs targeting main`).
+> Full go-live record: [[ledger-078-routine-reviewer-action-host-live]].
+
+**As-built facts (recorded so the ADR text and the running system agree):**
+
+| Aspect | As built |
+|---|---|
+| **Host** | `.github/workflows/routine-reviewer.yml` — hourly `schedule` + `workflow_dispatch`; `permissions: {}`; environment `ci`; `actions/checkout` SHA-pinned to v4.2.2 (`11bd719`); runs `bash scripts/routine-reviewer.sh --unattended` (checked out from `dimays/scope-creep@main`) as `@scope-creep-review`. Shipped via reviewer-repo **PR #1** (+ full README). |
+| **Credential** | a **classic `repo`-scoped** `REVIEW_PAT` for `@scope-creep-review`, stored **only** as the reviewer repo's `ci` environment secret — *corrects* Divergence (ii)'s "fine-grained least-privilege PAT" wording (the as-built token is classic-scoped). |
+| **Reliability** | reviewer-repo **PR #2** — `heartbeat.yml` (weekly `.heartbeat` commit; defeats GitHub's 60-day scheduled-workflow auto-disable; `GITHUB_TOKEN` `contents:write`) + `liveness.yml` (every 2h; emails the Owner if no successful `routine-reviewer` run in 4h; `GITHUB_TOKEN` `actions:read`). Both dispatched green. |
+
+> **Correction to Divergence (ii)'s lockdown list — branch protection is NOT available; the posture
+> is discipline-only.** On GitHub's **free plan a PRIVATE repo cannot be branch-protected** — both
+> classic branch protection *and* rulesets return **403 "Upgrade to GitHub Pro or make this
+> repository public."** So the **"protected branch"** condition listed under Divergence (ii) is
+> **unattainable as-built.** The **Owner accepted a discipline-only posture (2026-09-23)** in its
+> place: **Owner sole admin · the Claude GitHub App the only other actor · no agent ever merges into
+> the reviewer repo.** It is documented in the reviewer repo's `README.md` (the authoritative source
+> for the host's lockdown + reliability conditions). **The safety property ADR-027 depends on is
+> unchanged** — `dimays/scope-creep`'s own Actions/Environments stay empty ([[adr-026]] gate #3(ii)
+> still holds), `author ≠ merger` still holds by environment separation, the reviewer stays bounded
+> to periphery by the two-rail re-derivation, and escalation still holds for `@dimays`. The
+> discipline-only posture governs only the **reviewer repo's own** change-control, into which the
+> threat gate #3(ii) guards (a workflow that can act as the reviewer) is **relocated**.
+
 ## Relates to
 
 [[adr-022]] (autonomous-merge escalation — the routine-merge posture this extends) ·
@@ -246,4 +275,6 @@ in that repo's README.
 [[ledger-066-cloud-sandbox-proxy-identity-wall]] (the proxy identity wall) ·
 [[ledger-072-work-sweep-unpause-safety-gates]] (Gate 0 — the credential removal this must not undo) ·
 [[ledger-073-work-sweep-first-run-canary]] (the 405 merge-refusal, live) ·
+[[ledger-077-adr-027-decision-loop]] (the decision-loop record) ·
+[[ledger-078-routine-reviewer-action-host-live]] (the reviewer host go-live) ·
 [[board-hygiene]] · [[work-sweep]] · [[ticket-cycle]] · [[prd-autonomous-execution-loop]].
