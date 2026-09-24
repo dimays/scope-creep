@@ -3,7 +3,7 @@ name: adr-013
 description: Real-time thread replies (stream the live CoS turn over the response body; short-poll for out-of-band updates; batched-with-indicator as the guaranteed floor) and transparent delegation via a structured activity log the Console projects — capturing the delegation/spawn GRAPH from a control-plane hook, while decisions stay sourced from the ledger agents deliberately write, never inferred. Names the three Owner-gated changes in the package and gates the capture core-upgrade on a proof-of-hook spike. Extends ADR-012 (Phase 3/5).
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: cto
   last_verified: 2026-09-06

@@ -3,7 +3,7 @@ name: adr-014
 description: Owner-directed amendment loosening the PR-merge gate — a merge is gated on a green CI gate + Owner approval (implicit in conversation or explicit), and once approved a ratified git-manager/developer agent may EXECUTE the merge on any Scope-Creep repo and record it. Refines INVARIANTS §III.7/§III.10 ("only the owner disposes" → the owner disposes by approving). Does not touch deploy/spend/delete/publish, which stay Owner-executed via the guard-gates hook.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-06
