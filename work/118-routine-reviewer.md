@@ -7,8 +7,9 @@ priority: high
 owner: cto
 spec: adr-022
 branch: claude/routine-reviewer-build
+pr: https://github.com/dimays/scope-creep/pull/126
 created: 2026-09-23
-updated: 2026-09-23
+updated: 2026-09-24
 ---
 Builds the **ADR-027 automated routine-reviewer** — the fix for the friction the Owner named on
 2026-09-23: because the cloud sandbox cannot merge anything (ADR-026 / Gate 0, proven by the
