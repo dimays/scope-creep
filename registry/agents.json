@@ -76,7 +76,7 @@
     {
       "name": "ada",
       "kind": "employee",
-      "status": "active",
+      "status": "retired",
       "description": "Frontend engineer spun up by the Chief Designer to carry the Console's design-system and UI tickets — dark-mode consolidation and the Threads link-out cards.",
       "reports_to": "chief-designer",
       "template": "frontend-engineer",
@@ -85,7 +85,7 @@
     {
       "name": "linus",
       "kind": "employee",
-      "status": "active",
+      "status": "retired",
       "description": "Backend engineer spun up by the CTO to carry the Threads projection/launcher build and the live-serve preview runtime.",
       "reports_to": "cto",
       "template": "backend-engineer",
@@ -94,7 +94,7 @@
     {
       "name": "quill",
       "kind": "employee",
-      "status": "active",
+      "status": "idle",
       "description": "Technical writer spun up by the Chief Knowledge Manager to keep docs discoverable and fresh as scope grows — currently spun up and awaiting staffing.",
       "reports_to": "chief-knowledge-manager",
       "template": "technical-writer",
@@ -103,7 +103,7 @@
     {
       "name": "rae",
       "kind": "employee",
-      "status": "active",
+      "status": "retired",
       "description": "Researcher spun up by the Chief Product Officer to ground the agent-eval definition and the inline-activity projection in real, cited evidence.",
       "reports_to": "chief-product-officer",
       "template": "researcher",
@@ -112,7 +112,7 @@
     {
       "name": "vera",
       "kind": "employee",
-      "status": "active",
+      "status": "retired",
       "description": "QA verifier spun up by the Chief Reality Officer to produce proving artifacts before \"done\" is accepted — cross-staffed onto the Threads launcher build.",
       "reports_to": "chief-reality-officer",
       "template": "qa-verifier",
