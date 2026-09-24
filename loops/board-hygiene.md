@@ -10,12 +10,14 @@ metadata:
   mode: autonomous
 ---
 
-> **Proposed and Owner-gated ([[adr-021]]); PAUSED for unattended runs.** This manifest is a
-> **proposal** — the org drafts it, the Owner dispositions it and registers the claude.ai
-> routine. Like [[work-sweep]], it **must not run unattended** until the cloud write path is
-> redesigned: the sandbox proxy blocks every distinct GitHub identity
-> ([[ledger-066-cloud-sandbox-proxy-identity-wall]], [[work-096]], a forthcoming **ADR-026**).
-> It is **propose-only** by design, which makes it the write-path **canary** (§ Registration).
+> **LIVE — Owner-gated ([[adr-021]]) and running daily (un-paused 2026-09-22).** The Owner
+> dispositioned this loop and registered the claude.ai routine (cron `0 15 * * *`, active in
+> `registry/routines.json`). It ran the write-path **canary** first — the sandbox proxy blocks
+> every distinct GitHub identity ([[ledger-066-cloud-sandbox-proxy-identity-wall]], [[work-096]],
+> **ADR-026**), so this **propose-only** loop (its only writes are `work/*.md` status fields, the
+> smallest, most-reversible surface) proved the routine-opens-PR → human/local-merges path
+> end-to-end ([[ledger-071-board-hygiene-first-run-canary]]) before [[work-sweep]] was trusted to
+> build. Reconciliation runs recorded in [[ledger-076-board-hygiene-status-reconciliation]].
 
 # Loop: board-hygiene
 

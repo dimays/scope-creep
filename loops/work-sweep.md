@@ -10,11 +10,12 @@ metadata:
   mode: autonomous
 ---
 
-> **Created and registered, but PAUSED for unattended runs (2026-09-21).** The loop exists as a
-> claude.ai Code Routine and passed a supervised first run ([[ledger-062-work-sweep-first-run]]),
-> but it **must not run unattended** until the cloud write path is redesigned: the sandbox proxy
-> blocks every distinct GitHub identity ([[ledger-066-cloud-sandbox-proxy-identity-wall]],
-> [[work-096]]). It is `paused` in `registry/routines.json`.
+> **LIVE — un-paused for unattended daily runs (2026-09-22, [[work-117]]).** The loop exists as a
+> claude.ai Code Routine (cron `0 16 * * *`, active in `registry/routines.json`), passed a
+> supervised first run ([[ledger-062-work-sweep-first-run]]), and was un-paused once the cloud
+> write path was redesigned ([[ledger-066-cloud-sandbox-proxy-identity-wall]], [[work-096]],
+> **ADR-026**) and the [[board-hygiene]] canary proved the propose-only path end-to-end. Its own
+> first cadenced run is recorded in [[ledger-073-work-sweep-first-run-canary]].
 
 # Loop: work-sweep
 
@@ -25,17 +26,15 @@ still gets picked up, driven to `done`, and paused for the Owner only at a block
 milestone. The execution-side mirror of [[request-triage]], and the runner for
 [[prd-autonomous-execution-loop]].
 
-> **Owner-gated ([[adr-021]]):** creating this loop is a core-upgrade. This manifest is a
-> **proposal** — the org drafts it; the Owner dispositions it (via the [[roadmap-001]] Theme 3
-> greenlight) and registers the claude.ai routine. It is not self-authorized.
+> **Owner-gated ([[adr-021]]):** creating this loop was a core-upgrade — the org drafted it and
+> the Owner dispositioned + registered it; it was never self-authorized.
 >
-> **Greenlight landed (2026-09-20), build pending — status stays `proposed`.** The Owner
-> dispositioned [[roadmap-001]] Theme 3 (as extended by [[prd-autonomous-execution-loop]]) by
-> merging **PR #78**, which **greenlights this loop's creation**. It is **not yet built or
-> registered** as a routine — so its status remains `proposed` (which here means *not yet
-> live*, distinct from the now-`active` [[request-triage]]). Activation is [[work-086]], gated
-> on [[work-088]] (GitHub write access) + the [[adr-023]] bot identity. The claude.ai routine
-> registration remains an Owner-gated step.
+> **History (now live):** the Owner dispositioned [[roadmap-001]] Theme 3 (as extended by
+> [[prd-autonomous-execution-loop]]) by merging **PR #78** (2026-09-20), greenlighting this loop's
+> creation. It was then built + registered ([[work-086]], gated on [[work-088]] GitHub write access
+> + the [[adr-023]] bot identity) and **un-paused for unattended runs on 2026-09-22** ([[work-117]])
+> once the [[adr-026]] write path shipped — so its status is now `active`, alongside the
+> [[request-triage]] routine.
 
 ## Inputs
 
