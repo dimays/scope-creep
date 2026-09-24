@@ -2,12 +2,12 @@
 id: work-093
 title: Harden the work-sweep cloud routine — prompt + env + REST git path (first-run findings)
 type: chore
-status: blocked
+status: superseded
 priority: high
 owner: cto
 spec: prd-autonomous-execution-loop
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-24
 ---
 > **Code landed via PR #91, but end-to-end acceptance is BLOCKED and superseded (2026-09-21).** The
 > prompt/env/REST-path/installation-id-derivation changes merged and are correct code. But the
