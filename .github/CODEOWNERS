@@ -2,24 +2,28 @@
 #
 # Two review authorities, by blast radius:
 #   * ORG-GOVERNED (everything outside the safety kernel): standards/**, loops/**,
-#     registry/**, ADRs, agents/employees|templates/**, charter/PRD.md + GLOSSARY.md,
-#     work/**, product/**, roadmap/**, docs/**, ledger entries. Reviewed by the machine
-#     account @scope-creep-review. GitHub blocks it from approving its own PRs, so
-#     author != merger holds (INVARIANTS §10).
+#     registry/**, ADRs, agents/employees|templates/**, charter/PRD.md and GLOSSARY.md,
+#     work/**, product/**, roadmap/**, docs/**, and ledger entries. Reviewed by the
+#     machine account @scope-creep-review. GitHub blocks it from approving its own PRs,
+#     so author != merger holds (INVARIANTS §10).
 #   * SAFETY KERNEL (INVARIANTS v2.0.0 §4): reviewed by the HUMAN Owner @dimays ONLY.
 #     The unattended reviewer is deliberately NOT a code owner here, so the org can
-#     never self-dispose a change to its own gates.
+#     never approve and merge a change to its own gates.
 #
 # Keep this list in lockstep with scripts/escalation-check.sh is_escalation().
-# LAST matching pattern wins, so the kernel is listed AFTER the default.
+# The last matching pattern wins, so the kernel is listed AFTER the default.
+# Exact paths are used for the executive charters (not /agents/*.md). The
+# routine-reviewer matches these patterns with bash `case`, where * also matches '/',
+# so a glob would wrongly hold agents/templates/ and agents/employees/.
 
 # --- org-governed default: routine review by the machine account ---
 *                                       @scope-creep-review
 
 # --- safety kernel: HUMAN-ONLY Owner review (@dimays) ---
-# (a) the Owner-held charter docs
+# (a) the Owner-held charter docs and the instructions every agent loads
 /charter/INVARIANTS.md                  @dimays
 /charter/PRINCIPLES.md                  @dimays
+/AGENTS.md                              @dimays
 # (b) gate-enforcement surface
 /.claude/                               @dimays
 /.github/workflows/                     @dimays
@@ -31,11 +35,29 @@
 /docs/owner-apply-routine-reviewer.md   @dimays
 # (c) the escalation model
 /standards/decision-rights.md           @dimays
-# (d) executive + standing-function charters (top level only; employees/templates are org-governed)
-/agents/*.md                            @dimays
-# (e) dependency / infra manifests (supply chain)
-/package.json                           @dimays
-/bun.lock                               @dimays
-/bun.lockb                              @dimays
+# (d) executive and standing-function charters (exact files; employees/templates are org-governed)
+/agents/ceo.md                          @dimays
+/agents/chief-of-staff.md               @dimays
+/agents/cto.md                          @dimays
+/agents/chief-designer.md               @dimays
+/agents/chief-knowledge-manager.md      @dimays
+/agents/chief-product-officer.md        @dimays
+/agents/chief-reality-officer.md        @dimays
+/agents/code-reviewer.md                @dimays
+/agents/git-manager.md                  @dimays
+/agents/qa-tester.md                    @dimays
+# (e) dependency and infra manifests, anywhere in the tree (supply chain)
+package.json                            @dimays
+package-lock.json                       @dimays
+npm-shrinkwrap.json                     @dimays
+yarn.lock                               @dimays
+pnpm-lock.yaml                          @dimays
+bun.lock                                @dimays
+bun.lockb                               @dimays
+Dockerfile                              @dimays
+fly.toml                                @dimays
+Procfile                                @dimays
+*.tf                                    @dimays
+*.tfvars                                @dimays
 # ledger POLICY only; append entries stay org-governed
 /ledger/README.md                       @dimays

@@ -4,9 +4,9 @@ description: The org self-improvement / evolution loop (meta) — on a monthly-t
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
   cadence: 30d            # seed interval; the live value is tracked in the ledger (see "Cadence")
   cadence_bounds: 30d..90d # min..max: monthly while the org is young, relaxing toward quarterly
@@ -55,14 +55,17 @@ This loop **owns the portfolio of scheduled cadences** — it is the one that re
 time-scheduled loop, and itself:
 - **Its own cadence** self-tunes the [[staffing-review]] way: the live `next_cadence_days`
   lives in the [[ledger]]; the seed/bounds in this manifest are the mechanism and change
-  only by [[core-upgrade]]. On the first run the seed is the live value.
+  only by a reviewed, CoS-ratified PR (org-governed, [[adr-028]]). On the first run the seed
+  is the live value.
 - **Other loops' cadences** ([[level-set]]'s 15-tickets/2wk, [[roadmap]]'s 30d,
   [[staffing-review]]'s bounds): step 3 reviews whether each is firing at the right rate.
   Moving a loop's **live** interval (the ledger value) is ordinary loop output, no gate;
-  moving a loop's **seed/bounds** (the manifest policy) is a [[core-upgrade]] this loop
-  *proposes*, Owner-disposes. **Exception — [[staffing-review]]'s live value is
-  staffing-review's alone:** evolve touches staffing-review only at its **policy/bounds**
-  (a [[core-upgrade]]), never its ledger interval. staffing-review self-tunes its own live
+  moving a loop's **seed/bounds** (the manifest policy) is a reviewed PR this loop
+  *proposes* and the CoS ratifies — an org decision surfaced in the digest, not an Owner gate
+  ([[adr-028]] supersedes [[adr-021]]'s Owner gate on cadence), unless it would enable spend.
+  **Exception — [[staffing-review]]'s live value is staffing-review's alone:** evolve touches
+  staffing-review only at its **policy/bounds** (a reviewed policy PR), never its ledger
+  interval. staffing-review self-tunes its own live
   value between evolve rounds; this loop is the portfolio-level backstop, not a second hand
   on the same dial.
 
@@ -94,17 +97,23 @@ time-scheduled loop, and itself:
    Is any loop **missing** that the org keeps needing? Record a cadence verdict per loop
    (hold / retune-live / propose-policy-change). **`retune-live` applies only to the loops
    that carry a ledger live value; [[level-set]] has no live-retune path — its cadence moves
-   only by [[core-upgrade]].**
+   only by a reviewed PR to its manifest.**
 4. **CRO reality-check** ([[chief-reality-officer]]). Anti-bloat is the point: is a proposed
    template/loop/procedure actually needed *by evidence* (a role summoned N times, a
    procedure improvised N times), or speculative? "Keep the shelf small and sharp"
    ([[adr-020]]) — a new piece of machinery the org won't use is drift, not evolution.
    Verified need proceeds; speculative machinery is declined or parked.
-5. **Propose (all gated).** Turn accepted findings into proposals:
-   - New **templates** / new/retired **loops** / new **standards or procedures** are **core**
-     → route through [[core-upgrade]] (Owner-approved), or open `work/` tickets that do.
-   - **Cadence policy changes** (a loop's seed/bounds) → [[core-upgrade]]; **cadence live
-     retunes** (a loop's ledger interval) → ordinary ledger output.
+5. **Propose (all reviewed).** Turn accepted findings into proposals:
+   - New **templates** / new/retired **loops** / new **standards or procedures** are
+     **org-governed** ([[adr-028]]) → open `work/` tickets that land them on independent org
+     review, CRO-verified if load-bearing, CoS-ratified (a new or materially changed template
+     individually, [[invariants]] §3), and surfaced in the weekly digest. Only machinery that
+     touches the **safety kernel** ([[invariants]] §4) — a new standing function or executive
+     charter, a gate script, a workflow, `.claude/` — routes through [[core-upgrade]]
+     (Owner-approved).
+   - **Cadence policy changes** (a loop's seed/bounds) → a reviewed, CoS-ratified PR (an
+     Owner hold only if it enables spend); **cadence live retunes** (a loop's ledger
+     interval) → ordinary ledger output.
    - A finding that is itself a **load-bearing call** (reshaping the taxonomy, a new function
      tier) routes through [[decision]]. This loop **proposes and tickets**; it never executes
      a structural change itself, and every authoring path stays gated ([[adr-017]] §E).
@@ -117,9 +126,9 @@ time-scheduled loop, and itself:
 - A [[ledger]] entry carrying the scaling-pressure findings, the proposed machinery, and the
   portfolio cadence verdicts.
 - Zero or more new **employee templates**, new/retired **loops**, or new **procedures/standards**
-  (each via [[core-upgrade]] or the gated ticket path).
+  (each via the reviewed ticket path; [[core-upgrade]] only for a safety-kernel change).
 - Zero or more **cadence retunes** (live ledger value) or **cadence policy proposals**
-  (manifest seed/bounds, via core-upgrade).
+  (manifest seed/bounds, via a reviewed PR).
 - Zero or more [[decision]] invocations where a finding is itself load-bearing.
 
 ## Termination
@@ -127,12 +136,13 @@ Machine-checkable ([[invariants]] §IV.12): the loop halts at step 6 once the le
 recorded, in exactly one of — **evolution-proposed** (one or more machinery/cadence proposals
 opened) or **clean** (portfolio healthy, no new machinery this round). Either way the entry
 carries the portfolio cadence verdicts and `since` advances. Executing any proposal is
-[[core-upgrade]]'s / [[dev-cycle]]'s job, not this loop's.
+[[dev-cycle]]'s job (or [[core-upgrade]]'s, for a safety-kernel change), not this loop's.
 
 ## Notes
 - **`metadata.mode` = partially-autonomous:** scan / portfolio-review / synthesize run
-  unattended; the gates are the [[core-upgrade]] Owner approval (for new/retired machinery and
-  cadence-policy changes) and the ordinary [[ticket-cycle]]/PR approvals on anything ticketed.
+  unattended; the gates are independent org review + CoS ratification on anything ticketed
+  (new/retired machinery and cadence-policy changes included, [[adr-028]]), and the
+  [[core-upgrade]] Owner approval only where a proposal touches the safety kernel.
 - **Seeded this round ([[adr-021]]):** the [[devops-engineer]] and [[security-engineer]]
   templates — the Owner-named near-term roles — as the loop's first concrete output. Both are
   gated changes landing in this Owner-approved PR; summoning the first *employees* from them

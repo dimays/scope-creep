@@ -56,7 +56,7 @@
       "name": "code-reviewer",
       "kind": "function",
       "status": "active",
-      "description": "The review orchestrator — a standing function agent that drives the code-review cycle in the dev loop. Reads a pushed PR diff against CTO-set standards, delegates QA to the qa-tester and fixes/debugging to employees, iterates (bounded) until the diff meets standards and gates are green, applies the escalation checklist (financial / security / substantial-tradeoff / safety-rail-or-core), then either hands a routine PR to the git-manager to land or HOLDS an escalated PR for the Owner. Never merges, ships, or waives a red gate.",
+      "description": "The review orchestrator — a standing function agent that drives the code-review cycle in the dev loop. Reads a pushed PR diff against CTO-set standards, delegates QA to the qa-tester and fixes/debugging to employees, iterates (bounded) until the diff meets standards and gates are green, applies the escalation checklist (spend / security / unresolved irreversible dispute / safety kernel, per ADR-028), then either hands a routine PR to the git-manager to land or HOLDS an escalated PR for the Owner. Never merges, ships, or waives a red gate.",
       "path": "agents/code-reviewer.md"
     },
     {

@@ -233,7 +233,9 @@ for n in "${PRS[@]}"; do
   # as "changed" and wrongly trip the self-mod guard / CODEOWNERS rail below. This
   # matches escalation-check.sh, which also diffs base...head. If the merge-base is
   # missing (shallow history), the diff is empty and we defer (fail-closed) just below.
-  changed="$(git diff --name-only "$BASE_SHA...$head_sha" 2>/dev/null || true)"
+  # --no-renames (ADR-028): a rename lists BOTH paths, so moving a safety-kernel file out
+  # of its held path is still caught by the classifier + CODEOWNERS rails below.
+  changed="$(git diff --name-only --no-renames "$BASE_SHA...$head_sha" 2>/dev/null || true)"
   [ -n "$changed" ] || { skip "no classifiable diff for $head_sha — deferring"; continue; }
 
   # SELF-MODIFICATION GUARD: never auto-merge a change to the reviewer's OWN files.

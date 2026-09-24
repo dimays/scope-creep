@@ -4,9 +4,9 @@ description: The roadmap-planning loop — on a monthly cadence the full C-suite
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
   cadence: 30d            # seed interval; the live value is tracked in the ledger (see "Cadence")
   cadence_bounds: 14d..90d # min..max the re-tuning (via evolve) may move the interval within
@@ -45,9 +45,10 @@ Keep them separate loops with separate cadences.
 
 ## Cadence
 Two homes, split by what changes and how often (the pattern [[staffing-review]] established):
-- **Policy — stable, core-gated — the manifest.** `metadata.cadence` (seed) and
-  `metadata.cadence_bounds` live here; changing them is a [[core-upgrade]]. The [[evolve]]
-  loop's portfolio review is what proposes moving them.
+- **Policy — stable, org-governed — the manifest.** `metadata.cadence` (seed) and
+  `metadata.cadence_bounds` live here; changing them is a reviewed, CoS-ratified PR, not a
+  [[core-upgrade]] ([[adr-028]]). The [[evolve]] loop's portfolio review is what proposes
+  moving them.
 - **State — live — the [[ledger]].** The current interval is the most recent roadmap ledger
   entry's `next_cadence_days`; on the first run the manifest seed is the live value. Because
   the roadmap's cadence is re-tuned by [[evolve]] (the loop that owns the *portfolio* of
@@ -83,11 +84,15 @@ Two homes, split by what changes and how often (the pattern [[staffing-review]] 
    load-bearing call *inside* the plan (a blessed-stack upgrade, a new app, a design-system
    change) routes through the [[decision]] loop rather than being settled here; this loop
    *assembles* the roadmap, it does not shortcut the decisions inside it.
-5. **CEO presents to the board (the Owner).** The [[ceo]] composes a board presentation of
-   the proposed roadmap and presents it. **Owner-gated:** roadmap changes and new scope are
-   the Owner's to dispose ([[decision-rights]], [[invariants]] §I.4 / §III.7) — the Owner is
-   the board; approval sets the roadmap. The CEO **proposes and directs**; it cannot
-   self-authorize new scope or a core-upgrade ([[ceo]]).
+5. **CEO decides, then presents to the board (the Owner).** The roadmap is an **org
+   decision** ([[decision-rights]] v2: the [[ceo]] leads, the CRO verifies, the CoS
+   ratifies). The CEO composes a board presentation of the ratified roadmap and surfaces it
+   to the Owner with the weekly digest. It is **not an approval gate** ([[invariants]] §4a,
+   [[adr-028]]): the roadmap stands unless the Owner overrides it, and the org frames it so
+   an override is cheap. Items inside it that fall in an "Owner holds" class — spend
+   (including enabling metered compute), a §III.7 deploy / delete / publish, credentials or
+   permissions, a safety-kernel change ([[core-upgrade]]) — stay held for the Owner
+   individually; the CEO cannot self-authorize those ([[ceo]]).
 6. **Store & surface.** The presentation **and** the round's release notes are stored and
    shown in the **Console** (the [[prd]] roadmap section is updated supersede-not-destroy;
    the `product/` artifacts land via the gated PR path). The *Console surface* for
@@ -96,13 +101,14 @@ Two homes, split by what changes and how often (the pattern [[staffing-review]] 
    design the UI. Storing/showing in the single-user Console is internal, not an external
    publish; any outward publish stays Owner-gated ([[invariants]] §III.7).
 7. **Record.** Append a [[ledger]] entry: hats convened, the CRO verdict, the roadmap
-   version + artifact ids (PRDs / ADRs / user stories), the Owner's disposition, and the
+   version + artifact ids (PRDs / ADRs / user stories), the CoS ratification and any Owner
+   override, and the
    interval this run fired at (for [[evolve]]'s portfolio review). This entry becomes
    `since` for the next cadence count.
 
 ## Outputs (typed)
-- A [[ledger]] entry carrying the new roadmap version, its artifact ids, and the Owner's
-  disposition.
+- A [[ledger]] entry carrying the new roadmap version, its artifact ids, the CoS
+  ratification, and any Owner override.
 - Zero or more new/updated `product/*.prd.md`, ADRs, and user stories (each via the gated PR
   path).
 - A **board presentation + release notes** handed to the Console surface (product-owned).
@@ -110,15 +116,17 @@ Two homes, split by what changes and how often (the pattern [[staffing-review]] 
 
 ## Termination
 Machine-checkable ([[invariants]] §IV.12): the loop halts at step 7 once the ledger entry
-is recorded, in exactly one of — **roadmap accepted** (Owner disposed; artifacts recorded;
-`since` advances), **revised** (Owner sent it back → re-enter at step 4, bounded by the
-deciders' judgment), or **deferred** (Owner explicitly parks it; `since` still advances so
-the next cadence starts clean). The loop's job stops at the recorded roadmap; executing it
+is recorded, in exactly one of — **roadmap ratified** (CoS ratified and surfaced;
+artifacts recorded; `since` advances), **revised** (the CRO check failed or the Owner
+overrode it → re-enter at step 4, bounded by the deciders' judgment), or **deferred** (the
+CEO or the Owner explicitly parks it; `since` still advances so the next cadence starts
+clean). The loop's job stops at the recorded roadmap; executing it
 is the [[dev-cycle]]'s job.
 
 ## Notes
-- **`metadata.mode` = partially-autonomous:** convene / review / plan run unattended; step 5
-  (the CEO's presentation → Owner disposition) is a hard Owner gate.
+- **`metadata.mode` = partially-autonomous:** convene / review / plan / ratify run
+  unattended; step 5 surfaces the result to the Owner for override, not approval
+  ([[adr-028]]). Only "Owner holds" items inside the plan wait for the Owner.
 - **Release-notes generation** (harvesting landed work + version bumps into human-readable
   notes) and the **Console surface** that stores/shows presentations + notes are *build
   work*, not part of this loop's definition — tracked as tickets against the Console

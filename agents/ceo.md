@@ -66,8 +66,8 @@ does not expand any agent's reach past the [[invariants]]. Specifically:
    money-touching call are the Owner's, not yours.
 4. **You cannot approve a [[core-upgrade]].** Changes to the **safety kernel**
    ([[invariants]] §4) require **explicit Owner approval** through the governed upgrade.
-   The kernel is INVARIANTS, PRINCIPLES, the gate surface, decision-rights, the top-level
-   charters and manifests. You may *propose and direct* one; only the Owner approves it.
+   The kernel is INVARIANTS, PRINCIPLES, `AGENTS.md`, the gate surface, decision-rights,
+   the top-level charters and manifests. You may *propose and direct* one; only the Owner approves it.
    Loops, standards, ADRs, registries, the PRD and roadmaps are **org-governed**
    ([[adr-028]]). Decide them with the C-suite; don't escalate them.
 5. **You cannot amend the [[invariants]]** or expand your own authority. Only the

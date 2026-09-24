@@ -49,13 +49,17 @@ Why the current model fails that direction:
 2. **Autonomy by default (INVARIANTS §4a).** Whatever isn't reserved, the org decides and
    records. Escalating an org-owned decision counts as a failure.
 3. **Narrow "core" to the safety kernel (INVARIANTS §4).** The kernel is:
-   - INVARIANTS and PRINCIPLES
+   - INVARIANTS, PRINCIPLES, and `AGENTS.md` (the instructions every agent loads)
    - the gate surface: `.claude/`, workflows, CODEOWNERS, gate scripts, branch protection
    - [[decision-rights]]
    - the top-level executive and function charters
    - dependency and infra manifests, batched for review
 
-   Everything else is org-governed. [[core-upgrade]] now applies **only** to the kernel.
+   **Moving, renaming or deleting a kernel file is a kernel change.** The escalation
+   check and the routine-reviewer both diff with `--no-renames`. Everything else is
+   org-governed. [[core-upgrade]] now applies **only** to the kernel. This
+   **supersedes [[adr-021]]'s Owner gate on new scheduled loops and cadence changes**.
+   Those are org decisions now, unless they enable spend.
 4. **Standing ratification (INVARIANTS §3).** Summoning or retiring an employee from an
    existing template is pre-ratified. A new template, or a change to a charter, is
    ratified individually by the CoS.
@@ -64,7 +68,7 @@ Why the current model fails that direction:
 
    | Phase | Owner evidence | Enforced by |
    |---|---|---|
-   | **A (now)** | `owner-approved` label, **applied only by the Owner's hand**. Agents are forbidden to apply it. | `guard-gates` blocks agent label application (staged, see below). This is string-level and so defence in depth; the rule itself lives in INVARIANTS §4b. |
+   | **A (now)** | `owner-approved` label, **applied only by the Owner's hand**. Agents must never apply it, and must never approve a PR as dimays. | The rule is written into INVARIANTS §4b. `guard-gates` v2 catches the common ways of applying the label. That check is a **string match**, so it is a tripwire, not a wall: `--input` files, GraphQL, and variable-split names get through it. The Owner's local allow-list also drops `gh pr review`. |
    | **B (after workstream 1)** | A GitHub **review by `@dimays`** on a PR the org authored as `scope-creep-routine[bot]` | CODEOWNERS plus the escalation workflow reading reviews instead of labels. The label is retired. Tracked in [[work-126]]. |
 
 6. **Spend vs local (INVARIANTS §7).** Enabling metered compute (an API key, a paid host,
@@ -110,8 +114,10 @@ Agent-writable parts in the same PR:
   evidence bundles, canary PRs, and published revert, false-green and canary-catch rates
   ([[roadmap-002]] workstream 6), plus runaway caps that pause the org and ping the Owner.
 - **Standards and loops can now change without the Owner.** Mitigated by requiring CRO
-  verification on load-bearing changes, and by the fact that none of them can weaken a
-  gate: the gates live in the kernel.
+  verification on load-bearing changes. The gate scripts read nothing from loops,
+  standards or the registry (verified by grep), and a rename can't move a kernel file out
+  of scope (`--no-renames`, which is also applied to `scripts/routine-reviewer.sh` in this
+  PR). So an org-governed change can't weaken a gate.
 - **Phase A is still single-rail against a deliberate agent.** It is honest about that.
   Phase B is the fix.
 

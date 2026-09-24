@@ -22,7 +22,7 @@ metadata:
 | 1 | **Spend** | Anything that would purchase, provision paid infra, add a paid dependency or tier, or **enable metered compute** (API key, paid host) | INVARIANTS §7, §10(a) |
 | 2 | **The §7 actions** | Production deploy, delete, publish, **at the moment of action**, however the code landed. Local builds and previews on the Owner's machine are **not** deploys. | §7 |
 | 3 | **Credentials and permissions** | Creating, rotating, placing, or revoking a secret; granting permissions to any identity; security settings | §10(b) |
-| 4 | **The safety kernel** | Any change to INVARIANTS, [[principles]], the gate surface (`.claude/`, workflows, CODEOWNERS, gate scripts, branch protection), this file, the top-level executive and function charters, or dependency/infra manifests. Manifests are **batched weekly**. | §4, §10(d) |
+| 4 | **The safety kernel** | Any change, including a move, rename or delete, to INVARIANTS, [[principles]], `AGENTS.md`, the gate surface (`.claude/`, workflows, CODEOWNERS, gate scripts, branch protection), this file, the top-level executive and function charters, or dependency/infra manifests. Manifests are **batched weekly**. | §4, §10(d) |
 | 5 | **Red-gate waivers** | Only the Owner waives red | §10 |
 | 6 | **Irreversible deadlocks** | A C-suite disagreement about something that can't be cheaply reverted, still unresolved after CoS ratification and CRO verification | §10(c) |
 

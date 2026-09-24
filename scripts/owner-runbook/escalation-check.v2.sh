@@ -65,6 +65,7 @@ is_escalation() {
     # (a) the two Owner-held charter docs. The rest of charter/ (PRD, GLOSSARY) is org-governed.
     charter/INVARIANTS.md)                       return 0 ;;
     charter/PRINCIPLES.md)                       return 0 ;;
+    AGENTS.md)                                   return 0 ;;
     # (b) the gate-enforcement surface
     .claude/*)                                   return 0 ;;
     .github/workflows/*)                         return 0 ;;
@@ -77,11 +78,8 @@ is_escalation() {
     docs/owner-apply-routine-reviewer.md)        return 0 ;;
     # (c) the escalation model
     standards/decision-rights.md)                return 0 ;;
-    # (d) executive + standing-function charters: TOP-LEVEL agents/*.md only.
-    #     agents/employees/* and agents/templates/* are org-governed (standing ratification, §3).
-    agents/*/*)                                  return 1 ;;
-    agents/*.md)                                 return 0 ;;
     # (e) dependency / infrastructure manifests (supply chain; overlaps spend trigger (a))
+    #     Listed BEFORE the agents/ carve-out so a manifest nested anywhere is still held.
     package.json|*/package.json)                 return 0 ;;
     package-lock.json|*/package-lock.json)       return 0 ;;
     npm-shrinkwrap.json|*/npm-shrinkwrap.json)   return 0 ;;
@@ -93,6 +91,11 @@ is_escalation() {
     fly.toml|*/fly.toml)                         return 0 ;;
     Procfile|*/Procfile)                         return 0 ;;
     *.tf|*.tfvars)                               return 0 ;;
+    # (d) executive + standing-function charters: TOP-LEVEL agents/*.md only.
+    #     agents/employees/* and agents/templates/* are org-governed (standing ratification, §3).
+    #     (bash `case` * matches '/', so the nested carve-out must come first.)
+    agents/*/*)                                  return 1 ;;
+    agents/*.md)                                 return 0 ;;
     # --- ledger: POLICY is kernel-adjacent; append/new entries are routine ---
     ledger/README.md)                            return 0 ;;
     ledger/*)
@@ -111,7 +114,9 @@ is_escalation() {
   return 1
 }
 
-changed="$(git diff --name-only "$base...$head" 2>/dev/null)"
+# --no-renames: a rename is reported as delete(old) + add(new), so MOVING a safety-kernel
+# file out of its held path is itself held (INVARIANTS v2.0.0 §4; CRO 2026-09-24 finding).
+changed="$(git diff --name-only --no-renames "$base...$head" 2>/dev/null)"
 if [ -z "$changed" ]; then
   echo "escalation-check: empty diff for $base...$head — nothing to classify."
   exit 0

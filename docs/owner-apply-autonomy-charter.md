@@ -35,7 +35,14 @@ git commit -am "Owner applies the autonomy charter (ADR-028)"
 git push
 ```
 
-Then **add the `owner-approved` label yourself** on the PR. Once the checks are green, merge.
+Then, on the PR:
+
+1. **Get a fresh `@scope-creep-review` approval.** Your push dismisses the old one
+   (`dismiss_stale_reviews` + `require_last_push_approval`), and the unattended reviewer
+   never approves a held PR. The git-manager re-approves when you ask.
+2. **Add the `owner-approved` label yourself.**
+3. Once the checks are green, merge.
+4. Run `git -C ~/code/scope-creep pull` so your main checkout picks up the new hooks.
 
 ## Verified before staging
 
@@ -44,3 +51,11 @@ Then **add the `owner-approved` label yourself** on the PR. Once the checks are 
   - **routine:** `charter/PRD.md`, `standards/staffing.md`, `loops/*`, `agents/employees/*`, `agents/templates/*`, `registry/*`, `work/*`
 - **guard-gates v2** blocks `--add-label owner-approved` and the labels-API form, and passes ordinary commands.
 - **Both scripts** pass `bash -n`.
+- **Rename bypass closed** (a CRO finding, re-tested in a throwaway clone). Moving
+  `standards/decision-rights.md` → `-v1.md`, or moving `agents/cto.md` into
+  `agents/templates/`, now **HOLDS**, because both the classifier and
+  `scripts/routine-reviewer.sh` diff with `--no-renames`. A plain edit to
+  `standards/staffing.md` is still routine.
+- **CODEOWNERS** lists the ten executive and function charters by exact path. The
+  reviewer's bash matcher treats `*` as matching `/`, so the glob `/agents/*.md` would
+  also have held template and employee changes.

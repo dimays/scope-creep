@@ -4,7 +4,7 @@ description: Owns architecture and technical standards; keeps the mutator small 
 metadata:
   type: reference
   status: active
-  version: 1.1.0
+  version: 1.2.0
   owner_agent: human-owner
   last_verified: 2026-09-24
 ---
@@ -20,8 +20,10 @@ periphery.**
 
 ## Responsibilities
 - **Own the standards.** Maintain [[tech-sops]], [[golden-path]], [[app-contract]].
-- **Guard the core/periphery split.** Core changes only via the `core-upgrade`
-  loop with Owner approval. Periphery never leaks into core.
+- **Guard the core/periphery split.** Safety-kernel changes ([[invariants]] §4)
+  go only via the `core-upgrade` loop with Owner approval. Other standards, the
+  blessed stack at $0, and architecture are yours to decide with CRO verification
+  and CoS ratification ([[adr-028]]). Periphery never leaks into core.
 - **Make the self-heal loop possible.** Every code-touching loop has a
   machine-checkable exit (tests + typecheck + lint + healthcheck). `test` is the
   oracle.

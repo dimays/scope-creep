@@ -25,3 +25,8 @@ including interactive sessions and [[work-125]]:
   - clears with one;
   - cannot be cleared by any agent-producible signal.
 - **Scope.** Applies to scope-creep, scope-creep-console and scope-creep-design.
+- **CRO acceptance test.** Show that **no agent session can produce a `@dimays` review**.
+  Interactive sessions run on the Owner's own `gh` login, so the fix has two parts: the
+  Owner's allow-list no longer pre-approves `gh pr review`, and org sessions
+  authenticate as the bot, not as dimays. Without that proof, Phase B's evidence is
+  forgeable too.
