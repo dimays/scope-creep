@@ -3,7 +3,7 @@ name: adr-015
 description: Defines per-role success criteria — what "good" means for the six C-suite executives (the CEO is deliberately scoped out) plus the three standing functional agents (qa-tester, git-manager, code-reviewer) — and sketches a grounded eval method that derives any score only from real, in-repo signal (authored ledger entries and ADRs, landed PRs, QA verdicts, CRO verifications, the activity graph), never from invented metrics or parsed prose. This is the gating prerequisite for work-007: no agent score may be claimed until the criteria exist as an accepted ADR, and transparent contribution history precedes any quantitative score.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.2.0
   owner_agent: chief-product-officer
   last_verified: 2026-09-07

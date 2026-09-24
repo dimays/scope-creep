@@ -4,9 +4,9 @@ description: How work gets staffed for consistent quality — the template→emp
 metadata:
   type: reference
   status: active
-  version: 1.0.2
+  version: 1.0.3
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
 ---
 
 # Staffing standard
@@ -74,7 +74,7 @@ of truth wired by [[work-018]]); **never hardcode a model ID** that isn't in the
 | Tier | Catalog default | Template presets on this tier |
 |---|---|---|
 | **Routine / fast** | `defaults.routine` (Haiku) | [[program-coordinator]] — high-volume, low-risk coordination/bookkeeping |
-| **Balanced / chat** | `defaults.chat` (Sonnet) | the engineering, design, research, writing, analysis, and verification templates ([[backend-engineer]], [[frontend-engineer]], [[platform-engineer]], [[integration-engineer]], [[design-systems-engineer]], [[product-designer]], [[technical-writer]], [[knowledge-engineer]], [[researcher]], [[product-analyst]], [[qa-verifier]], [[auditor]]) |
+| **Balanced / chat** | `defaults.chat` (Sonnet) | the engineering, design, research, writing, analysis, and verification templates ([[backend-engineer]], [[frontend-engineer]], [[platform-engineer]], [[integration-engineer]], [[design-systems-engineer]], [[product-designer]], [[technical-writer]], [[knowledge-engineer]], [[researcher]], [[product-analyst]], [[qa-verifier]], [[auditor]], [[devops-engineer]], [[security-engineer]]) |
 | **Expensive / agentic** | `defaults.agentic` (Opus) | **no template defaults here** — reserved for escalation (below) |
 
 Rules, straight from [[resource-budget]]:

@@ -1,12 +1,12 @@
 ---
 name: work-sweep
-description: The scheduled cloud routine that closes the execution side of "run the roadmap autonomously" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Created + registered (Owner-gated, ADR-021) and supervised-run once; PAUSED for unattended runs pending the cloud write-path redesign (ledger-066, work-096).
+description: The scheduled cloud routine that closes the execution side of "run the roadmap autonomously" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Created + registered (Owner-gated, ADR-021) and supervised-run once, then un-paused for unattended daily runs (2026-09-22, work-117) after the cloud write-path redesign shipped (ADR-026); cron `0 16 * * *`, first-run canary ledger-073.
 metadata:
   type: reference
   status: active
-  version: 0.3.0
+  version: 0.4.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-21
+  last_verified: 2026-09-24
   mode: autonomous
 ---
 

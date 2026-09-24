@@ -1,12 +1,12 @@
 ---
 name: board-hygiene
-description: The lightweight scheduled routine that keeps the work board honest — wakes on a cadence, reads work/*.md, and opens a single propose-only "board-state-correction" PR that moves code-complete tickets with an open PR to review, flags WIP-cap violations, surfaces stale proposed tickets for pruning, and reconciles status↔reality. It never builds and never merges; it only edits status fields, so it is the lowest-blast-radius routine and the ideal canary to un-pause first once the cloud write path is granted. Proposed + Owner-gated (ADR-021); PAUSED for unattended runs under the same write-path criteria as work-sweep (ledger-066, work-096, a forthcoming ADR-026).
+description: The lightweight scheduled routine that keeps the work board honest — wakes on a cadence, reads work/*.md, and opens a single propose-only "board-state-correction" PR that moves code-complete tickets with an open PR to review, flags WIP-cap violations, surfaces stale proposed tickets for pruning, and reconciles status↔reality. It never builds and never merges; it only edits status fields, so it is the lowest-blast-radius routine and was the first canary un-paused once the cloud write path landed. Owner-gated (ADR-021); LIVE and running daily (un-paused 2026-09-22; cron `0 15 * * *`) after the cloud write-path redesign shipped (ADR-026) — first-run canary ledger-071, reconciliation runs ledger-076.
 metadata:
   type: reference
-  status: proposed
-  version: 0.1.0
+  status: active
+  version: 0.2.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-21
+  last_verified: 2026-09-24
   mode: autonomous
 ---
 
