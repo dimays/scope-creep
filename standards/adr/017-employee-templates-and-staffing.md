@@ -3,7 +3,7 @@ name: adr-017
 description: Ratifies the employee-agent org model — an employee is an Agent (kind:employee) instantiated from a reusable Employee template and reporting to the C-suite executive that spun it up, staffed to work via a work item's assignees field. Defines the generated registries (agents.json employees + employee-templates.json), the owner-vs-assignees staffing semantics, and that both spinning up an employee and creating/modifying a template are gated changes (proposed → PR, never a hand-edited registry, never an auto-merge). This is the substrate for the Console's org view and its in-app, gated authoring.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: chief-product-officer
   last_verified: 2026-09-06

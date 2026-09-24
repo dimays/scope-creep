@@ -3,7 +3,7 @@ name: adr-019
 description: Remove the Console's Propose section (the in-app self-editing surface, work-017) and the in-app agent-chat runtime that backs it. Propose is a strictly-weaker, metered, API-keyed reimplementation of what Claude Code already does natively, it violates ADR-016's zero-automated-Claude-calls rule, and its chat-kind conversation is the source of the recurring "Console chat" thread the Owner wants gone. The honest successor is the ADR-016 "open in Claude" launcher (work-044). Owner-directed 2026-09-06.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: chief-product-officer
   last_verified: 2026-09-06

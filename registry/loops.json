@@ -6,8 +6,8 @@
     {
       "name": "board-hygiene",
       "kind": "loop",
-      "status": "proposed",
-      "description": "The lightweight scheduled routine that keeps the work board honest — wakes on a cadence, reads work/*.md, and opens a single propose-only \"board-state-correction\" PR that moves code-complete tickets with an open PR to review, flags WIP-cap violations, surfaces stale proposed tickets for pruning, and reconciles status↔reality. It never builds and never merges; it only edits status fields, so it is the lowest-blast-radius routine and the ideal canary to un-pause first once the cloud write path is granted. Proposed + Owner-gated (ADR-021); PAUSED for unattended runs under the same write-path criteria as work-sweep (ledger-066, work-096, a forthcoming ADR-026).",
+      "status": "active",
+      "description": "The lightweight scheduled routine that keeps the work board honest — wakes on a cadence, reads work/*.md, and opens a single propose-only \"board-state-correction\" PR that moves code-complete tickets with an open PR to review, flags WIP-cap violations, surfaces stale proposed tickets for pruning, and reconciles status↔reality. It never builds and never merges; it only edits status fields, so it is the lowest-blast-radius routine and was the first canary un-paused once the cloud write path landed. Owner-gated (ADR-021); LIVE and running daily (un-paused 2026-09-22; cron `0 15 * * *`) after the cloud write-path redesign shipped (ADR-026) — first-run canary ledger-071, reconciliation runs ledger-076.",
       "owner_agent": "chief-of-staff",
       "path": "loops/board-hygiene.md"
     },
@@ -111,7 +111,7 @@
       "name": "work-sweep",
       "kind": "loop",
       "status": "active",
-      "description": "The scheduled cloud routine that closes the execution side of \"run the roadmap autonomously\" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Created + registered (Owner-gated, ADR-021) and supervised-run once; PAUSED for unattended runs pending the cloud write-path redesign (ledger-066, work-096).",
+      "description": "The scheduled cloud routine that closes the execution side of \"run the roadmap autonomously\" — wakes on a cadence, pulls ready work-board tickets in priority order, and drives them through dev-cycle/ticket-cycle continuously, stopping only at an Owner blocker (an ADR-022 STOP/escalation gate) or a defined milestone, which it surfaces as needs-you via the thread/notification path. The time-scheduled sibling of dev-cycle. Created + registered (Owner-gated, ADR-021) and supervised-run once, then un-paused for unattended daily runs (2026-09-22, work-117) after the cloud write-path redesign shipped (ADR-026); cron `0 16 * * *`, first-run canary ledger-073.",
       "owner_agent": "chief-of-staff",
       "path": "loops/work-sweep.md"
     }

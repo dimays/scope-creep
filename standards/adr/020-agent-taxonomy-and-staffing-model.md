@@ -3,7 +3,7 @@ name: adr-020
 description: Reconciles the agent org into four clear tiers — Executives (CEO + C-suite), Standing function agents (qa-tester, git-manager; kind:function), ephemeral Employees, and the stable-but-mutable Template catalog each executive summons from. Reclassifies the standing functions out of kind:core, seeds a per-executive template catalog with model presets, and names the staffing standard + staffing-review loop as the ongoing machinery the Chief of Staff drives.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-06

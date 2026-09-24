@@ -3,7 +3,7 @@ name: adr-018
 description: Establish the CEO as an Owner-delegated role atop the agent org, and formalize the Owner ↔ CEO ↔ Chief-of-Staff structure. The Owner stays sovereign; the hard gates and all financial/core-upgrade decisions stay with the Owner.
 metadata:
   type: reference
-  status: accepted
+  status: active
   version: 1.0.0
   owner_agent: chief-of-staff
   last_verified: 2026-09-06
