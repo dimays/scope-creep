@@ -2,12 +2,13 @@
 id: work-098
 title: Create and register the board-hygiene loop — the propose-only board janitor / write-path canary
 type: feature
-status: proposed
+status: done
 priority: medium
 owner: chief-of-staff
 spec: prd-autonomous-execution-loop
+pr: https://github.com/dimays/scope-creep/pull/103
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 **User problem.** Nothing keeps the work board honest on a cadence. The [[work-092]]
 reconciliation was a one-off, but `status` drifts continuously as PRs land — and stale labels
@@ -46,3 +47,5 @@ self-authorized.
 un-paused as the canary and observed to open a real `board-state-correction` PR that a
 human/local reviewer merges — with no ticket retired autonomously and no STOP gate crossed. See
 [[prd-autonomous-execution-loop]], [[board-hygiene]], [[work-sweep]], [[work-096]].
+
+> **[2026-09-23] board reconcile:** `proposed → done` — manifest landed via [scope-creep#96](https://github.com/dimays/scope-creep/pull/96), the supervised canary opened and merged [scope-creep#101](https://github.com/dimays/scope-creep/pull/101) ([[ledger-071-board-hygiene-first-run-canary]]), and the routine was registered + un-paused via [scope-creep#103](https://github.com/dimays/scope-creep/pull/103). This run is itself further evidence of the acceptance criterion being live. See [[ledger-076-board-hygiene-status-reconciliation]].

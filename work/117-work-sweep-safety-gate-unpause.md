@@ -2,14 +2,13 @@
 id: work-117
 title: Safely un-pause work-sweep — resolve the pre-un-pause unknowns, close ADR-023 Phase 2, run the ADR-026 canary
 type: chore
-status: blocked
+status: done
 priority: high
 owner: cto
 spec: adr-026
+pr: https://github.com/dimays/scope-creep/pull/116
 created: 2026-09-22
-updated: 2026-09-22
-blocked_on: owner
-blocked_reason: "Gate 0 (reviewer-PAT removal) CLEARED by the Owner 2026-09-22. Next Owner-gated step: Phase 2a work-094 (Owner-applied gate-file patch) to unblock disposing #110; Gate 1(i) (Administration-write-absent, Owner UI-read) still needed before Phase 3. See ledger-072 needs-you card."
+updated: 2026-09-23
 ---
 
 The plan-of-record for turning on autonomous cadenced execution of the work board:
@@ -79,3 +78,10 @@ un-pause happened only after (1) unknown #1 resolved clean, (2) ADR-023 Phase-2 
 ADR-026 canary captured criteria 1/2/4/6, and (4) a separate Owner-approved control-plane PR
 flipped the routine `active`. Every Owner-only / cloud-only step surfaced as a `needs-you` card,
 never silently skipped. See [[ledger-072-work-sweep-unpause-safety-gates]].
+
+> **[2026-09-23] board reconcile:** `blocked → done` — all four acceptance conditions landed:
+> ADR-023 Phase-2 CODEOWNERS split ([scope-creep#110](https://github.com/dimays/scope-creep/pull/110)),
+> the escalation-check CODEOWNERS-gap fix ([scope-creep#114](https://github.com/dimays/scope-creep/pull/114), work-094),
+> the ADR-026 supervised canary PASS ([scope-creep#119](https://github.com/dimays/scope-creep/pull/119), [[ledger-073-work-sweep-first-run-canary]]),
+> and the control-plane PR flipping `work-sweep` `paused → active` in `registry/routines.json`
+> ([scope-creep#116](https://github.com/dimays/scope-creep/pull/116), the un-pause's final step). See [[ledger-076-board-hygiene-status-reconciliation]].
