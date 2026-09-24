@@ -3,7 +3,14 @@
 **What this is:** turning on the ADR-027 **automated routine-reviewer** so ordinary
 (non-escalation) pull requests get reviewed + merged **without you** — while sensitive
 changes still hold for your `@dimays` review. The tool is `scripts/routine-reviewer.sh`; it
-runs **off-cloud, on your Mac, as `@scope-creep-review`** (never in a routine's cloud sandbox).
+runs **off-cloud, as `@scope-creep-review`** (never in a routine's cloud sandbox).
+
+> **Two off-cloud hosts, same script.** The unattended schedule can live **either** on your Mac
+> (launchd — [Step 3a](#step-3a--schedule-locally-launchd)) **or** as an hourly **GitHub Action in
+> your private `dimays/scope-creep-reviewer` repo** ([Step 3b](#step-3b--schedule-remotely-github-action--now-live), **now live**).
+> The Action host is the realized ADR-027 **Divergence (ii)**; its lockdown + reliability
+> conditions live in that repo's `README.md`. Everything below (preconditions, supervised run,
+> CRO sign-off) applies to **both** — only the final scheduling step differs.
 
 > **Why Owner-applied:** it runs with your reviewer credential and installs a scheduled job on
 > your machine — neither is something an agent can (or should) do. The agent builds the tool and
@@ -101,7 +108,11 @@ Hand the Step-1 output to the Chief Reality Officer to confirm the three un-spoo
 preconditions held in practice (trusted re-run used, escalation held for `@dimays`, gate #3(ii)
 verified). **Do not schedule it unattended until this sign-off exists.**
 
-## Step 3 — Schedule it unattended (launchd)
+## Step 3 — Schedule it unattended (pick one host)
+
+Both hosts run the **same** `scripts/routine-reviewer.sh`. Pick **3a** (Mac) or **3b** (Action).
+
+### Step 3a — schedule locally (launchd)
 
 ```sh
 # copy the template, fill in your checkout path, install it:
@@ -115,15 +126,37 @@ tail -f ~/code/scope-creep/.routine-reviewer.log
 It runs every 30 minutes, reads the review PAT at run time (the token is never stored in the
 plist), logs each pass, and merges only what is cleanly routine + green.
 
-## Turning it off / reverting
-
+**Turn off:**
 ```sh
 launchctl unload ~/Library/LaunchAgents/com.scope-creep.routine-reviewer.plist
 rm ~/Library/LaunchAgents/com.scope-creep.routine-reviewer.plist
 ```
 
-Everything falls back to the manual 2-click. Nothing about the cloud routine's own access
-changes.
+### Step 3b — schedule remotely (GitHub Action) — **now live**
+
+Host: private, Owner-owned **`dimays/scope-creep-reviewer`**. An **hourly** scheduled workflow
+checks out `dimays/scope-creep@main` and runs `bash scripts/routine-reviewer.sh --unattended`,
+authenticating with the `REVIEW_PAT` (a classic `repo`-scoped PAT for `@scope-creep-review`,
+stored **only** as the `ci` environment secret).
+
+- **Why a separate repo, not scope-creep's own CI:** keeps gate #3(ii) intact — scope-creep's
+  Actions/Environments stay empty; the reviewer credential lives in a **different trust domain**
+  the proposing routine cannot reach. `author ≠ merger` still holds (author = `dimays` proxy;
+  merger = `@scope-creep-review`).
+- **Lockdown + reliability (load-bearing):** Owner sole admin · no third-party Apps ·
+  PR-only changes · `ci` env has **no** required-reviewers rule · **no `pull_request` trigger** ·
+  `heartbeat` (defeats the 60-day auto-disable) + `liveness` alert. Full conditions are in that
+  repo's [`README.md`](https://github.com/dimays/scope-creep-reviewer/blob/main/README.md).
+- **Run manually / turn off:** Actions → **routine-reviewer** → *Run workflow*; disable via
+  Actions → **routine-reviewer** → *Disable workflow*.
+
+> **Note the flag difference:** the Action runs `--unattended` (acts, but no-ops cleanly when no
+> routine PRs are open); the local supervised runs above use dry-run / `--yes`.
+
+## Reverting
+
+Turn off whichever host you enabled (3a or 3b). Everything falls back to the manual 2-click.
+Nothing about the cloud routine's own access changes.
 
 ## What it deliberately never does
 
@@ -139,4 +172,5 @@ changes.
   ([[ledger-072-work-sweep-unpause-safety-gates]]).
 
 See ADR-027 (PR #122) · [[adr-022]] · [[adr-023]] · `scripts/routine-reviewer.sh` ·
-`scripts/routine-reviewer.launchd.plist`.
+`scripts/routine-reviewer.launchd.plist` ·
+[`dimays/scope-creep-reviewer`](https://github.com/dimays/scope-creep-reviewer) (the Action host).
