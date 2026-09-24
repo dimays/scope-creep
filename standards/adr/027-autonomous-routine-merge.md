@@ -3,15 +3,15 @@ name: adr-027
 description: How (and whether) to let ROUTINE (non-escalation) PRs merge autonomously from the cloud, now that Gate 0 deliberately removed the @scope-creep-review reviewer credential from the routine's own cloud env (ledger-072) and the sandbox proxy forces the Claude App identity (ledger-066, ADR-026) — so a routine PR authored in-sandbox cannot obtain its own code-owner review and waits for the Owner's off-sandbox 2-click (as observed disposing #119/#120/#121, 2026-09-23). DECISION — do NOT re-introduce a merge-capable reviewer credential into the routine's execution env or into repo Actions secrets (that just undoes Gate 0 / violates ADR-026 gate #3(ii)); instead define a SEPARATED routine-reviewer that lives outside the routine's sandbox, decides from an INDEPENDENT re-run of escalation-check against a trusted checkout (never the PR's own forgeable CI/label signals), and is mechanically confined to periphery — escalation-class PRs stay routed to the human code owner @dimays and never auto-merge. BUILD IT ONLY when routine-PR volume justifies it; until then keep the human 2-click as the deliberate boundary, optionally softened by a Console batch approve+merge. Owner-gated, escalation-class (ADR-022 trigger d); status proposed — decision loop complete (CTO owns / CRO verified SOUND-WITH-FIXES / CoS ratified with fixes folded), pending Owner approval.
 metadata:
   type: reference
-  status: proposed
-  version: 1.0.0
+  status: accepted
+  version: 1.1.0
   owner_agent: cto
-  last_verified: 2026-09-23
+  last_verified: 2026-09-24
 ---
 
 # ADR-027: Autonomous routine-merge — a separated reviewer, not a credential in the sandbox
 
-- **Status:** **proposed** — Owner-gated, escalation-class; HOLDS for the Owner. **Decision loop complete 2026-09-23: CTO owns · CRO verified (SOUND-WITH-FIXES) · CoS ratified (with fixes folded).** Pending Owner disposition.
+- **Status:** **accepted** (2026-09-24, via PR #122) — Owner-gated, escalation-class. **Decision loop complete 2026-09-23: CTO owns · CRO verified (SOUND-WITH-FIXES) · CoS ratified (with fixes folded); built 2026-09-24 ([[work-118]]), supervised run + CRO sign-off. See the Amendment below** for the two mechanisms that diverge from the original design (direct-merge; Actions host).
 - **Date:** 2026-09-23
 - **Deciders:** **CTO** (this proposal) · **[[chief-reality-officer]]** (verified — SOUND-WITH-FIXES) · **[[chief-of-staff]]** (ratified — with the CRO fixes folded) · **Owner** (approves — it touches the merge posture).
 - **Owner-gated:** **yes** — a `standards/` ADR changing the merge/identity posture ([[adr-022]] trigger (d)). Not self-mergeable.
@@ -187,12 +187,56 @@ gated on the volume trigger **and** the three preconditions.
 
 ## Decision-loop determinations (2026-09-23)
 
-Run via the [[decision]] loop — **CTO owns · CRO verifies · CoS ratifies** (the [[ledger-072-work-sweep-unpause-safety-gates]] pattern). Full record: [[ledger-076-adr-027-decision-loop]].
+Run via the [[decision]] loop — **CTO owns · CRO verifies · CoS ratifies** (the [[ledger-072-work-sweep-unpause-safety-gates]] pattern). Full record: [[ledger-077-adr-027-decision-loop]].
 
 - **CTO (owns):** authored this proposal (the separated-reviewer design; defer-the-build; keep the 2-click interim).
 - **CRO (verifies) — SOUND-WITH-FIXES.** Re-checked every load-bearing claim against live source: the friction is **real** (#119/#120/#121 merged off-sandbox by the Owner, not the routine — GitHub API confirmed), the un-spoofability core is **intact** (`is_escalation()` L67/L68 catch workflows + CODEOWNERS), no fabrications. Required 4 precision fixes (the rails asymmetry; the untested auto-merge capability; the `review-pat` attestation wording; three named residuals) — **all folded above.**
 - **CoS (ratifies) — RATIFIED with the CRO fixes folded.** INVARIANTS upheld (§7/§10 author≠merger by environment separation; §II single-user — a machine reviewer is identity separation, not roles/auth; §I.4 the build is a core-upgrade). Defer-the-build and the 2-click interim both endorsed; the Console batch approve+merge approved as an interim softener (runs *as the Owner*). Added routing: **align the two rails** as a build precondition (Owner-applied gate-file patch, work-094 pattern).
 - **Owner (approves):** pending — escalation-class, HOLDS. Disposal per below.
+
+## Amendment — build authorized and completed (2026-09-24)
+
+The original decision **deferred the build** behind a volume trigger and kept the human 2-click
+interim. The Owner **overrode that deferral** and directed the build now, precisely to remove the
+per-PR friction it describes. The separated reviewer was built ([[work-118]]), ran a **supervised
+first run** (approved + squash-merged one routine PR as `@scope-creep-review` — author `dimays` →
+`author ≠ merger` confirmed live; held one escalation PR for `@dimays`), and the CRO **re-signed**
+it (SIGN-OFF-WITH-CONDITIONS; conditions cleared). This section reconciles the ADR text with the
+system that shipped. Two mechanisms diverge from the design above — both **narrow** risk, and both
+are recorded here rather than left silent.
+
+**Divergence (i) — Part 5 revised: DIRECT approve-then-merge, not GitHub-native auto-merge.** The
+reviewer, running as `@scope-creep-review`, **approves and then merges** (`gh pr merge --squash`)
+once it has independently classified the PR routine and confirmed required checks green + mergeable.
+This **drops** the unproven dependency Part 5 flagged (`enablePullRequestAutoMerge` from the sandbox
++ repo `allow_auto_merge = true`) — build precondition #2 is therefore **moot**, not met.
+`author ≠ merger` still holds by environment separation: the **author** is the `dimays` proxy, the
+**merger** is `@scope-creep-review` in a separate env — no single actor both authors *and* disposes.
+GitHub still refuses the merge unless branch protection is fully satisfied, so approving cannot force
+an unsafe merge.
+
+**Divergence (ii) — the reviewer's home is a scheduled GitHub Action in a SEPARATE Owner-owned repo.**
+Part 2 permits "a dedicated review-only environment the routine has no access to." The realized host
+is a private `scope-creep-reviewer` repo the Owner owns, running the reviewer hourly with the
+`@scope-creep-review` PAT as **that repo's** Actions secret. **This is NOT the "PAT in Actions
+secrets" option the Alternatives table HARD-BLOCKS** — that block concerns **scope-creep's own**
+Actions (gate #3(ii)), where a forged in-repo workflow could authenticate as the reviewer.
+scope-creep's Actions/Environments stay empty (gate #3(ii) is still re-checked per run and still
+passes); the credential lives in a **different trust domain** the proposing routine cannot reach.
+Stated plainly: the threat gate #3(ii) guards — a workflow that can act as the reviewer — is
+**relocated** into the reviewer repo, so **that repo's access control is now load-bearing**
+(Owner-sole-admin, single workflow, protected branch, no `pull_request` trigger, fine-grained
+least-privilege PAT). The reviewer repo's README carries the lockdown conditions the CRO/CTO
+required before go-live.
+
+**Build-precondition status:** #1 (align the two rails) **DONE** — the gate-script + `charter/*` +
+reviewer-self cases landed in `is_escalation()` (PR #128), and the reviewer now also consults
+`.github/CODEOWNERS` as a second rail (holds if either flags a path). #2 (auto-merge canary) **MOOT**
+— superseded by direct-merge (divergence i). #3 (CRO re-signs the `iff` preconditions) **DONE** — the
+supervised-run sign-off. The host itself is gated on the reviewer-repo lockdown + liveness conditions
+in that repo's README.
+
+**Disposition:** with this reconciliation the Owner **accepts** ADR-027 and the shipped system (this PR).
 
 ## Relates to
 
