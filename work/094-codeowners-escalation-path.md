@@ -2,12 +2,13 @@
 id: work-094
 title: Add .github/CODEOWNERS to the control-plane escalation-check path-set (ADR-023 Phase 2 gap)
 type: chore
-status: proposed
+status: done
 priority: high
 owner: cto
 spec: adr-023
+pr: https://github.com/dimays/scope-creep/pull/114
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-23
 ---
 A live gap found during the 2026-09-21 checkpoint reconciliation ([[ledger-065-checkpoint-reconciliation]]).
 On the control plane, `scripts/escalation-check.sh` classifies a PR's changed paths and its
@@ -42,3 +43,5 @@ escalation-class by `scripts/escalation-check.sh` and HOLDS without the `owner-a
 the two-repo coverage is symmetric (console already covers it); the change is delivered as an
 Owner-applied patch, not an agent edit to the gate surface. See [[adr-023]], [[adr-022]],
 [[ledger-065-checkpoint-reconciliation]].
+
+> **[2026-09-23] board reconcile:** `proposed → done` — landed via [scope-creep#114](https://github.com/dimays/scope-creep/pull/114) (merged; `.github/CODEOWNERS` case added to `is_escalation()`). See [[ledger-076-board-hygiene-status-reconciliation]].
