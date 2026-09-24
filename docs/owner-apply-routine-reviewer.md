@@ -147,6 +147,10 @@ stored **only** as the `ci` environment secret).
   PR-only changes · `ci` env has **no** required-reviewers rule · **no `pull_request` trigger** ·
   `heartbeat` (defeats the 60-day auto-disable) + `liveness` alert. Full conditions are in that
   repo's [`README.md`](https://github.com/dimays/scope-creep-reviewer/blob/main/README.md).
+  > **Note:** a free-plan **private** repo can't be branch-protected (classic protection *and*
+  > rulesets both return `403`), so lockdown is **discipline-only** — Owner sole admin, the Claude
+  > App the only other actor, and no agent ever merges there. Upgrade to a server-side rule later
+  > via GitHub Pro (stays private) or a public repo (not advised for a credential-adjacent repo).
 - **Run manually / turn off:** Actions → **routine-reviewer** → *Run workflow*; disable via
   Actions → **routine-reviewer** → *Disable workflow*.
 
