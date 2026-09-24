@@ -38,8 +38,8 @@
 #   Direct approve-then-merge (proven working). It does NOT rely on GitHub-native
 #   auto-merge, so it needs no `allow_auto_merge` repo setting. PRs whose CI is still
 #   pending are skipped and picked up on the next run. (This diverges from ADR-027
-#   Part 5's proposed native-auto-merge; author != merger still holds. Flagged for the
-#   ADR to be reconciled — see docs/owner-apply-routine-reviewer.md.)
+#   Part 5's proposed native-auto-merge; author != merger still holds. Reconciled in the
+#   ADR-027 Amendment — see standards/adr/027-autonomous-routine-merge.md.)
 #
 # SAFETY DEFAULTS
 #   * DRY-RUN by default. Prints what it WOULD do, changes nothing. --yes to act;
@@ -52,7 +52,8 @@
 #
 # USAGE
 #   scripts/routine-reviewer.sh [--repo owner/name] [--yes | --unattended]
-#   (defaults: --repo dimays/scope-creep, dry-run)
+#   (defaults: --repo dimays/scope-creep, dry-run). Run it IN a checkout of --repo:
+#   the origin-consistency guard below refuses a mismatch.
 #
 # See: standards/adr/027-autonomous-routine-merge.md · ADR-022 · ADR-023 ·
 #      ledger/072-work-sweep-unpause-safety-gates.md (Gate 0) ·
@@ -82,6 +83,20 @@ command -v jq  >/dev/null || die "jq not found"
 # --- Identity guard: must be the reviewer, never the Owner's own account -----------
 me="$(gh api user -q .login 2>/dev/null || true)"
 [ "$me" = "scope-creep-review" ] || die "authenticated as '${me:-none}', not '@scope-creep-review' — refusing (author must != approver)."
+
+# --- Target/checkout consistency guard (multi-repo safety, ADR-027 Stage 0) --------
+# The reviewer reads its trust rails (escalation-check.sh + CODEOWNERS) and fetches PR
+# heads from the local checkout's `origin`, but SELECTS which PRs to review with --repo
+# ($REPO). If those two differ it would classify one repo's PRs against ANOTHER repo's
+# rails — a real footgun the moment --repo points at a second repo. Refuse unless origin
+# resolves to exactly $REPO. Per-repo review is therefore "one run per target, each in
+# that target's own checkout" (e.g. an Actions matrix), never one checkout for many.
+origin_url="$(git remote get-url origin 2>/dev/null || true)"
+o="${origin_url%.git}"; o="${o%/}"
+case "$o" in
+  *"/$REPO"|*":$REPO") : ;;   # https://…/OWNER/NAME  or  git@…:OWNER/NAME
+  *) die "checkout origin '${origin_url:-none}' does not match --repo '$REPO' — refusing (would classify PRs against the wrong repo's rails)." ;;
+esac
 
 # --- Concurrency guard (portable — mkdir is atomic; flock is absent on macOS) ------
 # We record the holder's PID inside the lock dir so a stale lock from a *dead* run is
