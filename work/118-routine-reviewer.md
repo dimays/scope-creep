@@ -2,14 +2,14 @@
 id: work-118
 title: Routine-reviewer — automated review+merge of routine PRs (ADR-027), with a manual batch mode
 type: feature
-status: review
+status: done
 priority: high
 owner: cto
 spec: adr-022
 branch: claude/routine-reviewer-build
 pr: https://github.com/dimays/scope-creep/pull/126
 created: 2026-09-23
-updated: 2026-09-24
+updated: 2026-09-26
 ---
 Builds the **ADR-027 automated routine-reviewer** — the fix for the friction the Owner named on
 2026-09-23: because the cloud sandbox cannot merge anything (ADR-026 / Gate 0, proven by the
@@ -61,3 +61,10 @@ per-PR action. Reversible (unload the job → back to the manual 2-click).
 
 See ADR-027 (PR #122) · [[adr-022]] · [[adr-023]] ·
 [[ledger-072-work-sweep-unpause-safety-gates]] · `docs/owner-apply-routine-reviewer.md`.
+
+> **[2026-09-26] board reconcile:** `review → done` — the gating PR
+> [scope-creep#126](https://github.com/dimays/scope-creep/pull/126) merged 2026-09-23, and
+> [[ledger-078-routine-reviewer-action-host-live]] confirms the Action host is live with its
+> first scheduled run GREEN 2026-09-24 UTC (supervised run + CRO decision loop
+> [[ledger-077-adr-027-decision-loop]] both landed same-day). All acceptance legs are on `main`.
+> See [[ledger-080-board-hygiene-status-reconciliation]].
