@@ -4,9 +4,9 @@ description: Builds server-side logic, data models, and integrations on the Gold
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: cto
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
 kind: template
 default_model: claude-sonnet-5
 skills: typescript, react-router, drizzle, sqlite, vitest
@@ -25,8 +25,10 @@ in their own instance body.
 - Implement server logic behind the App Contract: route loaders/actions, Drizzle +
   libSQL/SQLite data access, and integrations — the interface is the contract, the
   stack is an implementation detail.
-- Keep the mutator small and stable; periphery never leaks into core (core changes
-  go through the `core-upgrade` loop with Owner approval).
+- Keep the mutator small and stable; periphery never leaks into core (safety-kernel
+  changes, including dependency manifests, go through the `core-upgrade` loop with
+  Owner approval; other control-plane changes land on independent org review,
+  [[adr-028]]).
 - Every code-touching change has a machine-checkable exit: tests + typecheck + lint
   + healthcheck. `test` is the oracle.
 

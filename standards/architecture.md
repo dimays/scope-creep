@@ -4,9 +4,9 @@ description: A living overview of Scope Creep's architecture — the blessed sta
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: cto
-  last_verified: 2026-09-07
+  last_verified: 2026-09-24
 ---
 
 # Architecture overview
@@ -104,7 +104,7 @@ schedule tooling), not only via the claude.ai UI.
 | **§II** — single-user, forever | No auth, tenancy, or roles. A remote DB token is infra credential, not a user identity. |
 | **§9** — app isolation | One datastore per system; the default datastore is never production. |
 | **§III** — gates are human-held | deploy · spend · delete · publish are Owner-gated (provisioning a hosted DB is spend). |
-| **core changes gated** | The blessed stack changes only via the `core-upgrade` loop with Owner approval. |
+| **§4 — only the safety kernel is Owner-held** ([[adr-028]]) | The blessed stack is a [[cto]] decision (CRO-verified, CoS-ratified) at $0. Its dependency/infra manifests are safety kernel, batched for Owner review; kernel changes go via the `core-upgrade` loop. |
 
 ## How this stays true
 

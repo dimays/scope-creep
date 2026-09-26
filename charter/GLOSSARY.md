@@ -4,9 +4,9 @@ description: The locked lexicon of Scope Creep. Every agent uses these terms wit
 metadata:
   type: reference
   status: active
-  version: 1.2.0
+  version: 1.3.0
   owner_agent: chief-knowledge-manager
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
 ---
 
 # GLOSSARY (locked lexicon)
@@ -31,8 +31,8 @@ definition is a Charter-level change, not a casual edit.
   result). The blood of the system.
 - **Registry** — the discovery primitive: a *generated* index mapping stable names
   to resolvable things. Never hand-maintained.
-- **Charter** — the governing document set: the living PRD plus the locked
-  INVARIANTS. What an agent reads to know "what are we, and what may I not do."
+- **Charter** — the governing document set: the living PRD plus the Owner-held
+  INVARIANTS and PRINCIPLES. What an agent reads to know "what are we, and what may I not do."
 - **Grant** — a capability token: "Agent X may do Y in Environment Z, [requiring
   human confirmation]." How infinity stays safe.
 - **Ledger** — the append-only event log; the system's episodic memory and the
@@ -50,6 +50,16 @@ definition is a Charter-level change, not a casual edit.
 ## Governance terms
 
 - **The Owner** — the single human. The source of all authority.
+- **Kernel** — an idea, a piece of feedback, an insight, or a spark from the Owner: **the
+  unit of work** ([[principles]] 1). Tickets and PRs are internal plumbing beneath it; the
+  org succeeds when a kernel becomes an experience the Owner enjoys, not when a PR merges.
+- **Safety kernel** — the small, **Owner-held** set defined in [[invariants]] §4:
+  INVARIANTS, PRINCIPLES, `AGENTS.md`, the gate surface (`.claude/`, workflows, CODEOWNERS,
+  gate scripts, branch protection), [[decision-rights]], the top-level executive and
+  standing-function charters, and dependency/infra manifests. It changes only by
+  [[core-upgrade]] with Owner approval; everything outside it is org-governed
+  ([[adr-028]]). Always write **"safety kernel"** in full for this meaning — never bare
+  "kernel", which means an Owner idea.
 - **The agent org — four tiers** ([[adr-020]]). Every agent is exactly one `kind`:
   **Executives** (`kind: core`), **Standing function agents** (`kind: function`),
   **Employees** (`kind: employee`), and **Templates** (`kind: template`). The tiers below
@@ -66,7 +76,8 @@ definition is a Charter-level change, not a casual edit.
   `function` names the role type, not a weaker governance class. See [[adr-020]], [[adr-021]].
 - **Employee agent** (`kind: employee`) — an **ephemeral/transitory** Agent spun up by an
   executive for a scoped need, **instantiated from an Employee template** and **reporting
-  to** the executive that created it; its creation is ratified by the Chief of Staff. It is
+  to** the executive that created it; summoning one from an existing template is
+  pre-ratified by the Chief of Staff's standing rule ([[invariants]] §3, [[adr-028]]). It is
   **staffed** to work by listing its slug in a work item's `assignees`, and **retired**
   (status → `retired` + a reason, never deleted) when the work is done — consistency lives in
   the template, not in a long-lived worker. See [[adr-017]], [[adr-020]], and [[staffing]].
@@ -74,7 +85,8 @@ definition is a Charter-level change, not a casual edit.
   template`, e.g. Frontend Engineer, Researcher) an executive selects from to spin up an
   Employee agent. It carries the role's operating manual, its `owner_agent` executive, and
   defaults including a **model preset** ([[resource-budget]] tier); when none fits, an
-  executive may create or modify one (a gated change). Templates are agents' *classes*;
+  executive may create or modify one (a reviewed change the Chief of Staff ratifies
+  individually). Templates are agents' *classes*;
   employee agents are their *instances*. See [[staffing]].
 - **The App Contract** — the six lifecycle targets every app exposes, regardless
   of stack.

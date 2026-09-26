@@ -1,38 +1,63 @@
-# CODEOWNERS — ADR-023 Phase 2 split (control plane).
+# CODEOWNERS: ADR-028 autonomy charter (control plane). Supersedes the ADR-023 Phase-2 split.
 #
 # Two review authorities, by blast radius:
-#   * PERIPHERY (routine work — work/**, product/**, docs/**, roadmap/**, most
-#     of ledger/**, etc.) is reviewed by the machine account @scope-creep-review.
-#     It is a Write (non-admin) USER, so it satisfies require_code_owner_reviews;
-#     GitHub blocks it from approving its own PRs, so author != merger holds.
-#   * ESCALATION SET (the core / safety rails / gate-enforcement surface) is
-#     reviewed by the HUMAN Owner @dimays ONLY. The unattended reviewer identity
-#     (@scope-creep-review, which runs in work-sweep) is deliberately NOT a code
-#     owner for these paths, so it cannot self-dispose a change to the org's own
-#     gates — the ADR-023 Phase-2 residual this split closes.
+#   * ORG-GOVERNED (everything outside the safety kernel): standards/**, loops/**,
+#     registry/**, ADRs, agents/employees|templates/**, charter/PRD.md and GLOSSARY.md,
+#     work/**, product/**, roadmap/**, docs/**, and ledger entries. Reviewed by the
+#     machine account @scope-creep-review. GitHub blocks it from approving its own PRs,
+#     so author != merger holds (INVARIANTS §10).
+#   * SAFETY KERNEL (INVARIANTS v2.0.0 §4): reviewed by the HUMAN Owner @dimays ONLY.
+#     The unattended reviewer is deliberately NOT a code owner here, so the org can
+#     never approve and merge a change to its own gates.
 #
-# CODEOWNERS = LAST matching pattern wins, so the escalation set is listed AFTER
-# the periphery default and overrides it for those paths.
-#
-# (ADR-023 Phase 2; ADR-026; docs/owner-apply-work-sweep-unpause.md; work-117.)
+# Keep this list in lockstep with scripts/escalation-check.sh is_escalation().
+# The last matching pattern wins, so the kernel is listed AFTER the default.
+# Exact paths are used for the executive charters (not /agents/*.md). The
+# routine-reviewer matches these patterns with bash `case`, where * also matches '/',
+# so a glob would wrongly hold agents/templates/ and agents/employees/.
 
-# --- periphery default: routine review by the machine account ---
+# --- org-governed default: routine review by the machine account ---
 *                                       @scope-creep-review
 
-# --- escalation set: HUMAN-ONLY Owner review (@dimays) ---
-/charter/                               @dimays
+# --- safety kernel: HUMAN-ONLY Owner review (@dimays) ---
+# (a) the Owner-held charter docs and the instructions every agent loads
 /charter/INVARIANTS.md                  @dimays
+/charter/PRINCIPLES.md                  @dimays
+/AGENTS.md                              @dimays
+# (b) gate-enforcement surface
 /.claude/                               @dimays
-/standards/                             @dimays
-/agents/                                @dimays
-/loops/                                 @dimays
-/registry/                              @dimays
 /.github/workflows/                     @dimays
 /.github/CODEOWNERS                     @dimays
-# gate scripts (ADR-026 residual: "the gate scripts", not just escalation-check)
 /scripts/escalation-check*.sh           @dimays
 /scripts/guard-*.sh                     @dimays
-# ledger POLICY only — routine append entries stay periphery (NOT all of ledger/**)
-/ledger/README.md                       @dimays
 /scripts/routine-reviewer*              @dimays
+/scripts/owner-runbook/                 @dimays
 /docs/owner-apply-routine-reviewer.md   @dimays
+# (c) the escalation model
+/standards/decision-rights.md           @dimays
+# (d) executive and standing-function charters (exact files; employees/templates are org-governed)
+/agents/ceo.md                          @dimays
+/agents/chief-of-staff.md               @dimays
+/agents/cto.md                          @dimays
+/agents/chief-designer.md               @dimays
+/agents/chief-knowledge-manager.md      @dimays
+/agents/chief-product-officer.md        @dimays
+/agents/chief-reality-officer.md        @dimays
+/agents/code-reviewer.md                @dimays
+/agents/git-manager.md                  @dimays
+/agents/qa-tester.md                    @dimays
+# (e) dependency and infra manifests, anywhere in the tree (supply chain)
+package.json                            @dimays
+package-lock.json                       @dimays
+npm-shrinkwrap.json                     @dimays
+yarn.lock                               @dimays
+pnpm-lock.yaml                          @dimays
+bun.lock                                @dimays
+bun.lockb                               @dimays
+Dockerfile                              @dimays
+fly.toml                                @dimays
+Procfile                                @dimays
+*.tf                                    @dimays
+*.tfvars                                @dimays
+# ledger POLICY only; append entries stay org-governed
+/ledger/README.md                       @dimays

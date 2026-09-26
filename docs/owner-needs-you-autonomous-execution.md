@@ -1,5 +1,11 @@
 # Owner needs-you — unlock unattended autonomous execution
 
+> **Superseded, 2026-09-24, by [[adr-028]] (the autonomy charter) and [[roadmap-002]].**
+> This page is historical. Its escalation path set (`standards/**`, `agents/**`, `loops/**`,
+> `registry/**`) no longer applies. The Owner now holds only the **safety kernel**
+> (INVARIANTS v2.0.0 §4), and the substrate is the local-first `org-run` runner
+> ([[work-125]]), not the cloud sandbox.
+
 > **The answer up front — it's a TWO-TIER milestone.**
 > **Tier 1 unlocks now:** the matured board, the self-healing `board-hygiene` routine, and
 > `work-sweep` **scoped to non-escalation periphery** — all safe under the write grant you already

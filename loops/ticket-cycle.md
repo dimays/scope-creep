@@ -4,9 +4,9 @@ description: The operating loop — a retro-driven, governed, terminating ticket
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
 ---
 
@@ -58,12 +58,16 @@ review ([[adr-006]]).
 - Any INVARIANTS §III action at point of action: deploy, destroy, spend, publish,
   prod promotion. Propose only.
 - Any merge to `main` not gated by green CI (in propose-PR mode: every merge).
-- Any write to the **core** (`charter/ agents/ loops/ standards/ registry/*.json`
-  ledger schema `MANIFEST .claude/`). Core routes to `core-upgrade`; the loop may
-  *draft* an ADR, never *merge* one ([[invariants]] §I.4).
+- Any write to the **safety kernel** ([[invariants]] §4: INVARIANTS, PRINCIPLES,
+  `AGENTS.md`, the gate surface — `.claude/`, workflows, CODEOWNERS, gate scripts —
+  [[decision-rights]], top-level `agents/*.md` charters, dependency/infra manifests).
+  Kernel changes route to [[core-upgrade]]. Loops, other standards, ADRs, registries,
+  templates and the rest of `charter/` are **org-governed** ([[adr-028]]): they are not a
+  STOP and land on independent org review like any other PR.
 - Deleting a work item, killing a workstream, cross-workstream reprioritization, or
-  anything implying **new scope** (a new PRD/ADR). Machine executes scope; the Owner
-  authorizes new scope.
+  anything implying **new scope** (a new PRD/ADR). Machine executes scope; the owning
+  executive authorizes new scope ([[decision-rights]] v2), surfaced to the Owner in the
+  digest.
 - A load-bearing product/design/architecture decision, an Escapee-from-Golden-Path
   decision, or accepting non-trivial tech debt ([[engineering-policy]] §5).
 - Anything else irreversible or outward-facing.
@@ -72,8 +76,11 @@ review ([[adr-006]]).
   §I.1). Surface, don't act.
 - **Ambiguous acceptance:** "done" can't be evaluated mechanically.
 
-Rule of thumb: **irreversible, outward-facing, core-touching, or a genuine judgment
-fork → STOP. Everything else → go.**
+Rule of thumb: **irreversible, outward-facing, safety-kernel-touching, or a genuine
+judgment fork → STOP. Everything else → go.** A STOP yields to the Owner only for what
+the Owner holds (§III actions, spend, security, the safety kernel — [[decision-rights]]).
+Scope and judgment forks yield to the owning executive via [[decision]] ([[invariants]]
+§4a, [[adr-028]]).
 
 ## Reality check (CRO)
 Before a **load-bearing decision** (ADR-worthy), before **acting on research or an

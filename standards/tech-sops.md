@@ -4,9 +4,9 @@ description: The CTO's standing technical standards and SOPs for Scope Creep. Ho
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: cto
-  last_verified: 2026-09-04
+  last_verified: 2026-09-24
 ---
 
 # Technical SOPs
@@ -15,10 +15,14 @@ Prime directive: **keep the mutator small and stable; let infinity live only in
 the periphery.**
 
 ## 1. Core / periphery split is law
-The control-plane core (this repo) is small and version-pinned. It changes only
-via the `core-upgrade` loop: ADR → branch → full core test suite → canary app
-rebuild → **Owner approval** → version bump → [[ledger]] entry. Periphery code
-never leaks into core.
+The control plane (this repo) is small and version-pinned. Its **safety kernel**
+([[invariants]] §4: INVARIANTS, PRINCIPLES, `AGENTS.md`, the gate surface,
+[[decision-rights]], the top-level agent charters, dependency/infra manifests)
+changes only via the `core-upgrade` loop: ADR → branch → full core test suite →
+canary app rebuild → **Owner approval** → version bump → [[ledger]] entry. The rest
+of the control plane (loops, other standards, ADRs, registries) is org-governed:
+it lands on independent org review, CRO-verified when load-bearing, and is
+recorded ([[adr-028]]). Periphery code never leaks into core.
 
 ## 2. The App Contract is the interface
 Standardize the interface, not the stack. See [[app-contract]]. The default stack
@@ -58,6 +62,9 @@ must not shatter against a moving core.
 
 ## 9. Change safety
 All work lands via branch + review + gated merge. Everything reversible via git +
-[[ledger]]. Agents propose; gates dispose. A PR merge is gated on a **green CI gate +
-Owner approval** — once approved, the [[git-manager]] may execute it ([[adr-014]]); the
+[[ledger]]. Agents propose; gates dispose. A **routine** PR (outside the safety kernel)
+lands on a **green CI gate + independent org review**, author ≠ merger ([[adr-022]],
+[[adr-028]]). A PR that fires an escalation trigger — spend, security, an unresolved
+irreversible dispute, or the safety kernel ([[invariants]] §10) — needs **Owner
+approval**; once approved, the [[git-manager]] may execute it ([[adr-014]]). The
 `deploy` / spend / `delete` / publish gates stay Owner-executed (`guard-gates` hook).
