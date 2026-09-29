@@ -2,12 +2,14 @@
 id: work-110
 title: Threads launcher — detect CLI-handler setup and present the right primary action
 type: feature
-status: proposed
+status: review
 priority: high
 owner: cto
 spec: prd-cos-threads
+branch: claude/zealous-planck-zq55ju
+pr: https://github.com/dimays/scope-creep-console/pull/77
 created: 2026-09-21
-updated: 2026-09-21
+updated: 2026-09-29
 ---
 Queued from the Owner's **live, passing** acceptance run of the [[work-100]] Threads fix
 (2026-09-21). The fix works, but the Owner had to first install the standalone Claude Code CLI
