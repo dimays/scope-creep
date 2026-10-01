@@ -2,12 +2,14 @@
 id: work-107
 title: Consolidate control-plane-home / env resolution duplication across *.server.ts
 type: debt
-status: proposed
+status: review
 priority: medium
 owner: cto
 spec: prd-cos-threads
+branch: claude/zealous-planck-agjk90
+pr: https://github.com/dimays/scope-creep-console/pull/78
 created: 2026-09-21
-updated: 2026-09-23
+updated: 2026-10-01
 ---
 Follow-up from the [[work-101]] folder-resolution fix. The Threads fix added a robust
 `resolveControlPlaneHome()` (absolute-real-dir-or-null, honest fallback) in
