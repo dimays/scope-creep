@@ -7,7 +7,7 @@ priority: medium
 owner: chief-knowledge-manager
 spec: adr-021
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-01
 ---
 
 `standards/doc-standards.md` (§ "a maintenance loop flags staleness") and
@@ -32,3 +32,13 @@ Recommended by the Chief Knowledge Manager this session. Decide loop-vs-fold-int
 via the [[decision]] loop (CTO/CoS own, Owner dispositions — a new scheduled loop is
 Owner-gated, [[adr-021]]). Also close the linter-scope gap the audit found: `docs/` and
 `reference/` are excluded from `docs-lint.ts` MANIFEST_DIRS (see [[work-123]]).
+
+**Endorsed by [[evolve]]'s first scheduled round ([[ledger-083-evolve-first-run]]), 2026-10-01** —
+this is exactly the "recurring manual procedure → new procedure/loop" scaling pressure evolve's
+step 2 scans for, already correctly ticketed; no duplicate proposal opened. CRO-checked:
+verified need (the audit found live doc rot), not speculative. Evolve's recommendation on the
+open loop-vs-fold question: **fold into [[board-hygiene]]** over standing up an 8th scheduled
+routine — board-hygiene already runs daily, already reads the repo state, and propose-only is
+already its contract; a new standalone cron adds a registry entry and a failure mode for no
+clear benefit over extending the existing one. Still routes through [[decision]]/[[core-upgrade]]
+as scoped above — evolve does not decide this unilaterally.
