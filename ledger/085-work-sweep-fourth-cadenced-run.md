@@ -130,11 +130,13 @@ CODEOWNERS (`*` default, periphery). [[work-105]]/[[work-108]] → `review`, `br
 ```
 ### cadence-decision
 - loop: work-sweep
-- ran_at: 2026-10-02T16:25:00.000Z
+- ran_at: 2026-10-02T16:26:38.414Z
 - trigger: work-sweep
 - next_cadence_days: 0.5
-- reason: ready backlog 34 deep, still above the floor that would widen the interval; wip 0/2
+- reason: ready backlog 34 deep — waking sooner, 0.5→0.5d; wip 0/2
 ```
+
+Emitted via `npm run work-sweep -- cadence --current 0.5 --backlog 34 --owner-pull-rate 0 --wip 0 --min 0.5 --max 7` (the live CLI, not hand-written).
 
 Read the prior live interval (0.5d) from [[ledger-084-work-sweep-third-cadenced-run]] rather than
 re-seeding; owner-pull rate still taken as `0` (no measured history yet, same caveat as all three
