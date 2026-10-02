@@ -2,12 +2,14 @@
 id: work-108
 title: Harden buildCliCommand — shell-active $/backtick survive inside the quoted prompt
 type: debt
-status: proposed
+status: review
 priority: low
 owner: cto
 spec: prd-cos-threads
+branch: work-108-harden-buildclicommand-escaping
+pr: https://github.com/dimays/scope-creep-console/pull/80
 created: 2026-09-21
-updated: 2026-09-23
+updated: 2026-10-02
 ---
 Non-blocking note from the [[work-100]] Threads fix review. `buildCliCommand` in
 `app/lib/claude-sessions.ts` wraps the seed prompt in double quotes but only escapes `\` and `"`
@@ -25,3 +27,5 @@ A seed with shell metacharacters produces a paste-safe command that passes the l
 `claude`; test covers it. See [[work-100]].
 
 > **[2026-09-23] board reconcile:** `active → proposed` — un-started follow-up (no branch/PR); returned to To-do to clear the WIP-cap. work-sweep will re-activate it within the ≤2 cap. See [[ledger-074-board-reconciliation]].
+
+> **[2026-10-02] work-sweep:** `proposed → review` — `$`/backtick escaped alongside the existing `\`/`"` handling in `buildCliCommand`; test added with a `$(whoami)`/`` `id` ``/`$HOME`-bearing seed. Console suite green (355/355, same one pre-existing unrelated failure). PR open, held for `@scope-creep-review`.

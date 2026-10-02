@@ -2,12 +2,14 @@
 id: work-105
 title: Remove dead ThreadProjection.openRepoLink field + update server tests
 type: debt
-status: proposed
+status: review
 priority: low
 owner: cto
 spec: prd-cos-threads
+branch: work-105-remove-dead-openrepolink
+pr: https://github.com/dimays/scope-creep-console/pull/79
 created: 2026-09-21
-updated: 2026-09-23
+updated: 2026-10-02
 ---
 Follow-up from the [[work-100]] Threads UX fix. The launcher fix removed the render path that
 consumed `ThreadProjection.openRepoLink` (the "Open the repo in Claude Code" new-session control
@@ -24,3 +26,5 @@ coordinate so it doesn't fight the landing of the main Threads PR. ADR-016 unaff
 [[work-100]], [[adr-016]].
 
 > **[2026-09-23] board reconcile:** `active → proposed` — un-started follow-up (no branch/PR); returned to To-do to clear the WIP-cap. work-sweep will re-activate it within the ≤2 cap. See [[ledger-074-board-reconciliation]].
+
+> **[2026-10-02] work-sweep:** `proposed → review` — `openRepoLink` removed from `ThreadProjection` (confirmed dead via repo-wide grep; `buildOpenRepoLink` itself kept, still used by `explore.server.ts`'s `LoopLaunch`); console suite green (355/355, same one pre-existing unrelated failure). PR open, held for `@scope-creep-review`.
