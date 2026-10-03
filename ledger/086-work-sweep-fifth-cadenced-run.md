@@ -1,6 +1,6 @@
 ---
 name: ledger-086-work-sweep-fifth-cadenced-run
-description: Record of work-sweep's fifth real cadenced run (2026-10-03). Re-verified the identity gate live a fifth time - GH_REVIEW_PAT is absent from this cloud env entirely (consistent with ledger-072/081/082/084/085) and mcp__github__get_me resolves to dimays, the forced proxy identity, NOT scope-creep-review. As ledger-081/082/084/085 already established, this is the ratified ADR-026 propose-only state, not a failure, so proceeded rather than hard-stopping on the stored prompt's literal (stale) instruction. Read the board (32 ready, wipCap 2, activeCount 0, not exhausted) - all ten previously-deferred high-priority tickets re-screened, frontmatter unchanged since ledger-085, same dispositions hold; work-099/work-121/work-122 unchanged at medium. Picked the one ticket ledger-085 explicitly left for this run: work-109 (restore test env vars in try/finally, not end-of-body in route-entrypoints.test.ts's launch-intent test), staying conservative at 1 of the wipCap-2 ceiling given the growing held-PR queue (below). Verified: vitest 354/354 (same pre-existing baseline as ledger-084/085; route-entrypoints.test.ts itself fails to *load* on main too, from the unrelated missing @scope-creep/design optional dep, so the specific touched test could not be executed in this sandbox - same documented gap as every prior run), biome clean, tsc reproduces the same pre-existing @scope-creep/* baseline errors on unmodified main. Opened dimays/scope-creep-console#81, held for @scope-creep-review; work-109 -> review. Also opened this status/ledger update as dimays/scope-creep#143, likewise held. Nothing merged, nothing un-paused, no core/escalation file touched. Milestone check after landing: no triggers fired. Surfacing for the Owner, now a fifth consecutive run: the held-PR queue has grown again - eight open, unmerged propose-only PRs across both repos (console #76/#77/#78/#79/#80/#81, control-plane #142/#143) - and the escalation-class dimays/scope-creep#140 ("Autonomy charter ADR-028 + roadmap-002") has now sat open and unapplied for nine days with no owner-apply action between any of these five runs; recommend the Owner either clear the review backlog or tell the routine to stop proposing more until it does, since the propose side is now meaningfully outrunning the review side.
+description: Record of work-sweep's fifth real cadenced run (2026-10-03). Re-verified the identity gate live a fifth time - GH_REVIEW_PAT is absent from this cloud env entirely (consistent with ledger-072/081/082/084/085) and mcp__github__get_me resolves to dimays, the forced proxy identity, NOT scope-creep-review. As ledger-081/082/084/085 already established, this is the ratified ADR-026 propose-only state, not a failure, so proceeded rather than hard-stopping on the stored prompt's literal (stale) instruction. Read the board (32 ready, wipCap 2, activeCount 0, not exhausted) - all ten previously-deferred high-priority tickets re-screened, frontmatter unchanged since ledger-085, same dispositions hold; work-099/work-121/work-122 unchanged at medium. Picked the one ticket ledger-085 explicitly left for this run: work-109 (restore test env vars in try/finally, not end-of-body in route-entrypoints.test.ts's launch-intent test), staying conservative at 1 of the wipCap-2 ceiling given the growing held-PR queue (below). Verified: vitest 354/354 (same pre-existing baseline as ledger-084/085; route-entrypoints.test.ts itself fails to *load* on main too, from the unrelated missing @scope-creep/design optional dep, so the specific touched test could not be executed in this sandbox - same documented gap as every prior run), biome clean, tsc reproduces the same pre-existing @scope-creep/* baseline errors on unmodified main. Opened dimays/scope-creep-console#81, held for @scope-creep-review; work-109 -> review. Also opened this status/ledger update as dimays/scope-creep#148, likewise held. Nothing merged, nothing un-paused, no core/escalation file touched. Milestone check after landing: no triggers fired. Surfacing for the Owner, now a fifth consecutive run: the held-PR queue has grown again - eight open, unmerged propose-only PRs across both repos (console #76/#77/#78/#79/#80/#81, control-plane #142/#148) - and the escalation-class dimays/scope-creep#140 ("Autonomy charter ADR-028 + roadmap-002") has now sat open and unapplied for nine days with no owner-apply action between any of these five runs; recommend the Owner either clear the review backlog or tell the routine to stop proposing more until it does, since the propose side is now meaningfully outrunning the review side.
 metadata:
   type: project
   status: active
@@ -13,7 +13,7 @@ metadata:
 
 **Date:** 2026-10-03 · **Trigger:** scheduled `work-sweep` cloud routine ·
 **PRs:** [dimays/scope-creep-console#81](https://github.com/dimays/scope-creep-console/pull/81)
-(work-109), [dimays/scope-creep#143](https://github.com/dimays/scope-creep/pull/143) (this
+(work-109), [dimays/scope-creep#148](https://github.com/dimays/scope-creep/pull/148) (this
 status/ledger update) — both held for `@scope-creep-review`; nothing merged by this session's
 identity ([[adr-026]]).
 
@@ -104,7 +104,7 @@ runs, which is itself the headline below).
 ## Disposition
 
 Delivered as a **routine propose-only PR set** — this ledger append + the [[work-109]] status
-edit in `dimays/scope-creep` (periphery, no core/escalation file touched, `dimays/scope-creep#143`)
+edit in `dimays/scope-creep` (periphery, no core/escalation file touched, `dimays/scope-creep#148`)
 and `dimays/scope-creep-console#81` — both held for `@scope-creep-review`. **Nothing merged,
 nothing un-paused, by this session's identity** — structurally by design ([[adr-026]]).
 
@@ -116,7 +116,7 @@ nothing un-paused, by this session's identity** — structurally by design ([[ad
   repos, up from six at ledger-085:** `scope-creep-console` #76 (work-081, 2026-09-28, **now six
   days old**), #77 (work-110, 2026-09-29), #78 (work-107, 2026-10-01), #79 (work-105, 2026-10-02),
   #80 (work-108, 2026-10-02), #81 (work-109, today); `scope-creep` #142 (staffing-review's first
-  run, 2026-09-28) and #143 (this ledger entry, today). This is the **fifth** consecutive run
+  run, 2026-09-28) and #148 (this ledger entry, today). This is the **fifth** consecutive run
   flagging this queue, and across all five runs **nothing has been merged** — the propose side is
   running every ~12h while the review side has pulled zero PRs. Recommend the Owner either clear
   the backlog or explicitly tell `work-sweep` to pause proposing until review capacity catches up;
