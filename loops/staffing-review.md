@@ -4,9 +4,9 @@ description: The recurring staffing-health loop — the Chief of Staff audits th
 metadata:
   type: reference
   status: active
-  version: 1.1.0
+  version: 1.2.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
   cadence: 14d           # seed interval; the LIVE value is self-tuned in the ledger (see "Cadence")
   cadence_bounds: 7d..42d # min..max the self-tuning may move the interval within
@@ -45,14 +45,15 @@ The schedule is a **staff-driven decision, not a fixed cron the Owner edits**. T
 the number, and the loop revises it on itself every run. Two homes, split by *what changes and
 how often*:
 
-- **Policy — stable, core-gated — the manifest.** `metadata.cadence` (the seed interval) and
+- **Policy — stable, org-governed — the manifest.** `metadata.cadence` (the seed interval) and
   `metadata.cadence_bounds` (min..max), plus the protocol in this section, live in this loop
-  manifest. They are the *mechanism*; changing them reshapes how tuning behaves and is a
-  [[core-upgrade]] (Owner-gated, rare).
+  manifest. They are the *mechanism*; changing them reshapes how tuning behaves, so it is a
+  reviewed PR ratified by the CoS (CRO-verified if load-bearing) and surfaced in the digest —
+  an org decision, **not** a [[core-upgrade]] ([[adr-028]]; rare).
 - **State — live, self-tuned — the [[ledger]].** The **current** interval is whatever the most
   recent staffing-review ledger entry recorded as `next_cadence_days`. Moving it is ordinary
-  loop output (an append to the ledger), so self-tuning needs **no core edit and no gate** —
-  the "automated" the Owner asked for, without routing around [[invariants]] §I.4. On the
+  loop output (an append to the ledger), so self-tuning needs **no manifest edit and no
+  review** — the "automated" the Owner asked for. On the
   first run (no prior entry) the manifest seed is the live value.
 
 **Initial cadence: 14 days (2 weeks)**, alongside the unchanged event triggers (10 spin-ups/

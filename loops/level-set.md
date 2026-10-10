@@ -1,12 +1,12 @@
 ---
 name: level-set
-description: The recurring paydown-and-reflection loop — the C-suite (or a scoped subset) each assesses its domain read-only, the CoS synthesizes a ranked plan spanning tech debt AND organizational lessons, and the Owner picks the track. Cadence-triggered; feeds the ticket-cycle.
+description: The recurring paydown-and-reflection loop — the C-suite (or a scoped subset) each assesses its domain read-only, the CoS synthesizes a ranked plan spanning tech debt AND organizational lessons, and the CEO picks the track (surfaced to the Owner for override, per ADR-028). Cadence-triggered; feeds the ticket-cycle.
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
 ---
 
@@ -60,23 +60,27 @@ The `mode` field anticipates [[work-038]]'s registry lint (not yet wired — see
      is the org *learning* from its own history, not only clearing a backlog.
 3. **CRO spot-check.** For convergent findings (multiple hats agree) or anything that
    would reprioritize the backlog, the [[chief-reality-officer]] verifies against
-   reality before it reaches the Owner — the same discipline [[decision]] applies at
+   reality before it shapes the plan — the same discipline [[decision]] applies at
    its step 3, scoped here to the findings that are actually load-bearing.
 4. **CoS synthesizes** one **ranked paydown-and-lessons plan**: convergent findings
    first, then hat-specific ones, each scored on leverage × cheapness (as
    [[ledger-027-level-set-round]] did). A reflection finding that reveals a **process
    gap** — not a one-off mistake — is routed through [[decision]] as its own
    load-bearing call, not silently folded into a paydown line item.
-5. **Owner picks the track.** The plan is a proposal; the loop parks here until the
-   Owner selects a track (e.g. "stabilize first," [[ledger-027-level-set-round]]) or
-   explicitly defers it. Owner-gated: this is the moment-of-action approval that
-   green-lights reprioritizing the backlog around the round's findings.
+5. **The CEO picks the track.** Reprioritizing the backlog is an org decision
+   ([[decision-rights]] v2: direction and priorities — the [[ceo]] leads, the CRO
+   verifies, the CoS ratifies). The CEO selects a track (e.g. "stabilize first,"
+   [[ledger-027-level-set-round]]) or explicitly defers it, and the choice is surfaced
+   to the Owner in the weekly digest for override — **not held for approval**
+   ([[invariants]] §4a, [[adr-028]]). A finding that falls in an "Owner holds" class
+   (spend, a §III.7 action, credentials, the safety kernel) is still held individually.
 6. **Tie-in to [[ticket-cycle]].** Every accepted item — debt or lesson — becomes a
    `work/` ticket (new, or reprioritized within its workstream), with this round's
    ledger entry cited as context. Tickets then run the ordinary [[ticket-cycle]] gate;
    this loop never executes a fix itself, only proposes and tickets it.
 7. **Record.** Append a [[ledger]] entry: hats convened, verdict, convergent findings,
-   the ranked plan, the Owner's track choice, and the resulting ticket ids. This entry
+   the ranked plan, the CEO's track choice (and any Owner override), and the resulting
+   ticket ids. This entry
    becomes `since` for the next cadence count.
 
 ## Spawn discipline (bakes in [[resource-budget]] §2)
@@ -97,24 +101,25 @@ mode, three times in one operating window. This loop must not repeat it:
   remaining hats' assessments against what already landed; don't restart the round.
 
 ## Outputs
-- A [[ledger]] entry carrying the ranked paydown-and-lessons plan, the Owner's chosen
-  track, and the resulting ticket ids.
+- A [[ledger]] entry carrying the ranked paydown-and-lessons plan, the chosen track, and
+  the resulting ticket ids.
 - Zero or more new/reprioritized `work/` tickets, handed to [[ticket-cycle]].
 - Zero or more [[decision]] loop invocations, where a reflection finding surfaces a
   process gap rather than a one-off fix.
 
 ## Termination
 Machine-checkable ([[invariants]] §IV.12): the loop halts at step 7 once the ledger
-entry is recorded, in exactly one of two states — **track chosen** (Owner picked; step
-6's tickets proceed) or **deferred** (Owner explicitly parks the plan; no tickets open
+entry is recorded, in exactly one of two states — **track chosen** (the CEO picked; step
+6's tickets proceed) or **deferred** (the CEO or the Owner explicitly parks the plan; no tickets open
 this round, but `since` still advances so the next cadence count starts clean). The
 loop's job stops at the recorded plan; executing it is [[ticket-cycle]]'s job.
 
 ## Notes
 - **`metadata.mode`** values follow [[glossary]]'s Loop definition (`autonomous |
   partially-autonomous | manual` — one property, how many steps are human-gated).
-  This loop is `partially-autonomous`: convene/assess/synthesize run unattended, step
-  5 (track selection) is a hard Owner gate. The field is populated here ahead of
+  This loop is `partially-autonomous`: convene/assess/synthesize run unattended; step
+  5 (track selection) is a CEO decision surfaced to the Owner for override
+  ([[adr-028]]), not a hard Owner gate. The field is populated here ahead of
   [[work-038]], which wires it into `registry/loops.json` and a `docs-lint` rule —
   that wiring is its own Owner-gated change ([[adr-013]] decision 7c); adding the
   field to this manifest is not.

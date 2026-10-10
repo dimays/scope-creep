@@ -35,8 +35,13 @@ template/employee model of [[adr-017]], and pins model selection to [[resource-b
 ## 2. The template → employee lifecycle (employees are ephemeral)
 1. **Summon.** An executive picks a template, names the employee, sets `reports_to`
    (itself) and `template`, and staffs it to one or more `work/` tickets via `assignees`
-   ([[adr-017]] §C). This is a **gated change**: proposed → isolated worktree → PR, never a
-   hand-edited registry, never an auto-merge ([[adr-017]] §E, [[adr-009]]).
+   ([[adr-017]] §C). **Pre-ratified by standing rule** ([[invariants]] §3, [[adr-028]]):
+   summoning from an existing template needs **no** per-instance approval and **no** Owner
+   review. An employee may be a **runtime instance**, meaning a subagent spawned from its
+   template for a ticket and recorded by one run-record line (`<template>#<ticket>,
+   summoned by <exec>`). It may also be a persisted `agents/employees/*.md` file, which
+   lands on ordinary org review, since employee files are org-governed. Only a **new or
+   materially changed template** needs the CoS's individual ratification.
 2. **Work.** The employee inherits its template's operating manual and model preset (§4),
    carries its staffed tickets through the [[ticket-cycle]], and proposes behind the gates.
 3. **Dissolve.** When the tickets land and no further work is queued, the employee is

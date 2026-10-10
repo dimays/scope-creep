@@ -4,9 +4,9 @@ description: The primary development loop — the outer cohort loop that staffs 
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
 ---
 
@@ -64,8 +64,10 @@ schedule** for it.
 Evaluate the state of play: in-flight work, the backlog, open [[request-intake]] threads,
 the round's `tickets`, and recent discussions/ledger. Then **staff the cohort** per
 [[staffing]]: summon employees from templates (or reuse warm ones), set `reports_to` +
-`template`, and assign them via each ticket's `assignees` — a gated change (propose →
-worktree → PR, [[adr-017]] §E), ratified by the [[chief-of-staff]] ([[adr-002]]). The
+`template`, and assign them via each ticket's `assignees`. Summoning from an existing
+template is **pre-ratified** by the [[chief-of-staff]]'s standing rule ([[invariants]] §3,
+[[adr-028]]): a runtime summon needs only a run-record line, and a persisted employee file
+lands on ordinary org review ([[staffing]] §2). The
 [[ceo]] sets the round's priority/center-of-gravity; the [[chief-reality-officer]]
 **re-checks the assumptions and dev plans** before build starts — the single assumption
 most likely to break the plan gets verified first ([[adr-007]]). Apply [[resource-budget]]
@@ -98,10 +100,13 @@ them all itself:
   rather than lowering the bar.
 
 When the diff meets standards and is green, the [[code-reviewer]] applies the **escalation
-checklist** ([[adr-022]] §2) before hand-off — **(a)** financial burden/spend, **(b)**
-security risk, **(c)** substantial tradeoff / C-suite concern, **(d)** a change to the safety
-rails or the core. All-clear → routine → hand to [[git-manager]] to land on independent
-review. Any trigger → **HOLD for the Owner** (route to Stage 6's Owner-gated path). The
+checklist** ([[adr-022]] §2, as amended by [[adr-028]]; [[invariants]] §10) before
+hand-off — **(a)** spend, including enabling metered compute; **(b)** security (auth/access
+control, secrets, credentials, permission grants, attack surface, data exposure); **(c)** an
+irreversible C-suite dispute still unresolved after CoS ratification and CRO verification;
+**(d)** a change to the **safety kernel** ([[invariants]] §4). All-clear → routine → hand to
+[[git-manager]] to land on independent review. Any trigger → **HOLD for the Owner** (route
+to Stage 6's Owner-gated path). The
 Code Reviewer never merges, waives a red gate, or ships (see its agent file).
 
 ### 5. Documentation review ([[chief-knowledge-manager]] or its employees)
@@ -118,10 +123,12 @@ flips to `done` with a [[ledger]] completion entry (per [[ticket-cycle]] step 5)
 applies is set by the escalation checklist ([[adr-022]]):**
 - **Routine PR (checklist all-clear):** lands on **independent org review** — green CI + the
   [[code-reviewer]] cycle + [[qa-tester]] proof, author ≠ merger. **No Owner approval
-  required** ([[adr-022]] §1). This is the new default for periphery / non-core work.
+  required** ([[adr-022]] §1). This is the default for everything outside the safety kernel
+  — loops, standards, ADRs, registries, templates, employees and docs included ([[adr-028]]).
 - **Escalated PR (any trigger fired):** **held for the Owner** and merged only on the Owner's
-  explicit approval ([[adr-014]] rule) — financial burden, security, substantial C-suite
-  tradeoff, or a safety-rail/core change. Core-touching PRs always take this path (§I.4).
+  explicit approval ([[adr-014]] rule, [[invariants]] §4b) — spend, security, an unresolved
+  irreversible dispute, or a safety-kernel change. Safety-kernel PRs always take this path
+  ([[invariants]] §4).
 
 [[adr-022]] is **active** (2026-09-06): routine PRs land on independent org review with **no
 Owner approval**; only escalation triggers hold for the Owner. `deploy` / spend / `delete` /
@@ -151,7 +158,7 @@ ledger entry is recorded. It never runs a cohort open-endedly — an employee wh
 - **`metadata.mode` = partially-autonomous:** standup / development / review / doc-review /
   close run unattended. Under [[adr-022]] a **routine** PR also **lands unattended** on
   independent review; the hard human gate is Stage 5's **escalation checklist** — a triggered
-  PR (financial / security / substantial-tradeoff / safety-rail-or-core) **holds for the
+  PR (spend / security / unresolved irreversible dispute / safety kernel, [[adr-028]]) **holds for the
   Owner** — plus any INVARIANTS §III action a ticket surfaces (which routes to
   [[ticket-cycle]]'s STOP checklist, not around it). [[adr-022]] is **active**, so Stage 6
   self-merges routine work on independent review and reserves Owner approval for escalations.
