@@ -22,16 +22,17 @@ Per [[board-hygiene]]: `scope-creep-console` deps installed (`bun install`), `SC
 exported to the `scope-creep` checkout, board read via `work/*.md` frontmatter (126 items) +
 `work-sweep sweep` (`node --import tsx scripts/work-sweep.ts sweep`, Node/tsx per ADR-024),
 diagnosis cross-checked against open/closed PRs on both repos (`list_pull_requests`,
-`pull_request_read`) and the [[ledger]]. This run follows
-[[ledger-094-board-hygiene-status-reconciliation]] (2026-10-11, held in `scope-creep#157`, still
-unmerged at the time of this run — the ledger history it builds on is read from the merged `main`
-tip, `ledger-095-work-sweep-eighth-cadenced-run`, since #157's own content has not landed).
+`pull_request_read`) and the [[ledger]]. This run follows ledger-094 (2026-10-11, held in
+`scope-creep#157`, still unmerged at the time of this run — not yet on `main`, so it is cited here
+by number, not as a `[[wiki-link]]`, per `docs:lint`'s existing-file check). The ledger history
+this run actually builds on is the merged `main` tip, `ledger-095-work-sweep-eighth-cadenced-run`,
+since #157's own content has not landed.
 
 ## Diagnosis
 
 **Status↔reality drift — none found.** Six tickets carry `status: review`, all still genuinely
-open on `scope-creep-console` (no drift to correct), unchanged since
-[[ledger-094-board-hygiene-status-reconciliation]]:
+open on `scope-creep-console` (no drift to correct), unchanged since ledger-094 (held in #157,
+unmerged):
 
 | Ticket | `pr:` cited | Live state | Open since |
 |---|---|---|---|
@@ -65,10 +66,10 @@ noted in every board-hygiene run since [[ledger-080-board-hygiene-status-reconci
   `#150`, [[ledger-089-board-hygiene-status-reconciliation]],
   [[ledger-090-board-hygiene-status-reconciliation]],
   [[ledger-091-board-hygiene-status-reconciliation]],
-  [[ledger-093-board-hygiene-status-reconciliation]], and
-  [[ledger-094-board-hygiene-status-reconciliation]]). This run suppresses it an **11th** time for
-  the same reason — re-flagging a standing Owner decision with no new information is exactly the
-  false-positive noise [[work-124]] (still `proposed`, unimplemented) exists to close.
+  [[ledger-093-board-hygiene-status-reconciliation]], and ledger-094 (held in #157, unmerged)).
+  This run suppresses it an **11th** time for the same reason — re-flagging a standing Owner
+  decision with no new information is exactly the false-positive noise [[work-124]] (still
+  `proposed`, unimplemented) exists to close.
 - **work-090, work-091, work-099, work-111, work-112** (`updated: 2026-09-21`, now **22 days**
   untouched) — reaffirmed unchanged for the eighth consecutive run.
 - **work-116** (`updated: 2026-09-22`, now **21 days** untouched) — reaffirmed unchanged for the
@@ -88,10 +89,9 @@ noted in every board-hygiene run since [[ledger-080-board-hygiene-status-reconci
 
 - [ ] **[[work-060]]** (`blocked` — branch protection). Unchanged since
   [[ledger-076-board-hygiene-status-reconciliation]] first surfaced it and reaffirmed by every
-  board-hygiene run since (most recently [[ledger-094-board-hygiene-status-reconciliation]]). No
-  PR to cite and no in-sandbox tool to read live GitHub branch-protection state. Recommend the
-  Owner/`@scope-creep-review` confirm branch protection directly on GitHub and close work-060 if
-  satisfied.
+  board-hygiene run since (most recently ledger-094, held in #157, unmerged). No PR to cite and no
+  in-sandbox tool to read live GitHub branch-protection state. Recommend the Owner/`@scope-creep-review`
+  confirm branch protection directly on GitHub and close work-060 if satisfied.
 - [ ] **Stale-`proposed` cluster** (work-068…076, work-078…080, work-082…085 — 17 tickets, 35
   days untouched) — not re-flagged as a new pruning candidate; standing Owner decision from
   [[ledger-075-stale-proposed-dispositions]], reaffirmed 10 times since. No action needed; flagged
@@ -116,8 +116,8 @@ noted in every board-hygiene run since [[ledger-080-board-hygiene-status-reconci
   clears its own hold; propose-only, no code-path writes) — carried forward as color, worsening,
   so the reviewer/Owner sees the queue depth and the diagnosed mechanism together. The same stall
   is now also blocking a non-board-hygiene routine's output (`#142`, `#159` — staffing-review,
-  per [[ledger-096-staffing-review-second-cadenced-run]]), so unsticking the merge pipeline is
-  blocking more than one loop's output, not just this one's.
+  per ledger-096, held in #159, unmerged), so unsticking the merge pipeline is blocking more than
+  one loop's output, not just this one's.
 
 ## Disposition
 
@@ -128,6 +128,5 @@ posted to the owning thread (scope-creep-thread:9, "Request: Planned Work Routin
 [[work-064]] writers (`work-sweep write-back`, run under Node/tsx per ADR-024). Nothing merged by
 this session's sandbox identity — structurally blocked per [[adr-026]]; the
 Owner/`@scope-creep-review` disposes (review + merge) off-sandbox. See [[board-hygiene]],
-[[work-readme]], [[ledger-094-board-hygiene-status-reconciliation]],
-[[ledger-092-work-sweep-seventh-cadenced-run]],
-[[ledger-096-staffing-review-second-cadenced-run]], [[work-124]], [[work-060]].
+[[work-readme]], ledger-094 (held in #157, unmerged), [[ledger-092-work-sweep-seventh-cadenced-run]],
+ledger-096 (held in #159, unmerged), [[work-124]], [[work-060]].
