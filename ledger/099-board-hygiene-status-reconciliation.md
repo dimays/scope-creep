@@ -24,7 +24,7 @@ exported to the `scope-creep` checkout, board read via `work/*.md` frontmatter (
 ADR-024), diagnosis cross-checked against open/closed PRs on both repos (`list_pull_requests`,
 `pull_request_read`) and the [[ledger]]. Local `scope-creep` checkout confirmed at `origin/main`
 HEAD `77746f0` (carries [[ledger-098-work-sweep-ninth-cadenced-run]]) before this run began —
-[[ledger-094-board-hygiene-status-reconciliation]] (held in `#157`), `ledger-096-staffing-review-second-cadenced-run`
+`ledger-094-board-hygiene-status-reconciliation` (held in `#157`), `ledger-096-staffing-review-second-cadenced-run`
 (held in `#159`), and `ledger-097-board-hygiene-status-reconciliation` (held in `#160`) are not yet
 on `main`; cited by number, not as `[[wiki-links]]`.
 
