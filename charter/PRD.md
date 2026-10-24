@@ -4,9 +4,9 @@ description: The living product-requirements document for Scope Creep. Grows and
 metadata:
   type: project
   status: active
-  version: 0.1.0
+  version: 0.2.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-04
+  last_verified: 2026-09-24
 ---
 
 # Scope Creep — Living PRD
@@ -28,6 +28,15 @@ The thing that builds the software is itself software the system can modify — 
 the discipline is: **keep the mutator small and stable; let infinity live only in
 the periphery.**
 
+## The kernel loop `active`
+
+The Owner drops a **kernel**: an idea, a piece of feedback, an insight, or a spark of
+inspiration. They can drop it wherever they already are, and in bursts. The org
+interprets it, develops it, and brings it back as a **delightful, running experience**.
+Each cycle **builds on the last**, and the Owner's reactions become remembered taste.
+The org drives the loop and escalates only what the INVARIANTS reserve to the Owner.
+See [[roadmap-002]] and [[principles]].
+
 ## The end-user `active`
 
 Exactly one human: the Owner, fully trusted. There is no second user, ever
@@ -41,7 +50,13 @@ destroyed freely; the core stays tiny.
 
 ## The agent org `active`
 
-Immutable core C-suite: **Chief of Staff** (orchestration + org ratification),
+Four tiers ([[adr-020]]): **executives**, **standing functions** (QA Tester, Code
+Reviewer, Git Manager), **employees** (summoned from templates, pre-ratified, retired when
+done) and **templates**. The **CEO** ([[adr-018]]) sets direction under the Owner. The
+org **drives**. It decides everything the INVARIANTS don't reserve, guided by
+[[principles]] ([[adr-028]]).
+
+Executives: **CEO** (direction), **Chief of Staff** (orchestration + org ratification),
 **Chief Designer** (design systems + delight), **CTO** (architecture + technical
 standards), **Chief Knowledge Manager** (docs, registries, discovery), **Chief
 Product Officer** (product vision, requirements, project management, feedback loop
@@ -55,6 +70,13 @@ End-to-end TypeScript. Recorded in [[adr-001]]; standard in [[golden-path]].
 Polyglot escape is allowed via the [[app-contract]].
 
 ## Roadmap `proposed`
+
+> **Current horizon: [[roadmap-002]]** (*Kernels in, delightful experiences out*).
+> - v0 and v1 below have shipped.
+> - v2 is re-scoped as an in-app capture surface that makes no Claude calls ([[adr-016]]).
+> - v3 (self-heal) is part of roadmap-002 workstream 6.
+>
+> The list below is kept as history.
 
 1. **v0 — the seed (this repo).** Charter, core agents, standards, App Contract,
    and one runnable loop (`new-app`) so the factory can build its first app.
