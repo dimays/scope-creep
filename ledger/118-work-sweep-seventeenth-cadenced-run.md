@@ -1,6 +1,6 @@
 ---
 name: ledger-118-work-sweep-seventeenth-cadenced-run
-description: Record of work-sweep's seventeenth real cadenced run (2026-10-26). Re-verified the identity gate a seventeenth time via mcp__github__get_me - resolves to dimays, the forced connector identity, not scope-creep-review or scope-creep-routine[bot]; GH_REVIEW_PAT absent again (by ADR-026 design); GH_APP_INSTALLATION_ID present again, still contradicting the stale stored prompt. Read the board (31 ready, unchanged since ledger-113/115, wipCap 2, activeCount 0, not exhausted). Held a twelfth consecutive run - scope-creep-console's 6-PR review queue (work-081/105/107/108/109/110) remains completely untouched, now 23-28 days old with zero review activity across its full operating history. On scope-creep, the propose-only duplicate-PR queue held flat at nine (#150/157/160/166/168/171/173/176/178) per today's own board-hygiene run (#182/ledger-117, filed ~an hour before this run, same table) - the close recommendation is now unactioned for a fifth consecutive cycle. Also noted: two sibling-routine PRs opened earlier today (#181 staffing-review, #182 board-hygiene) both independently claim ledger-117 - a numbering collision for the reviewer to resolve at merge time, not this routine's to fix. Delivered as a routine propose-only ledger PR holding for @scope-creep-review; write-back posted to the thread without a fresh Owner notification beyond what board-hygiene already surfaced hours earlier the same day.
+description: Record of work-sweep's seventeenth real cadenced run (2026-10-26). Re-verified the identity gate a seventeenth time via mcp__github__get_me - resolves to dimays, the forced connector identity, not scope-creep-review or scope-creep-routine[bot]; GH_REVIEW_PAT absent again (by ADR-026 design); GH_APP_INSTALLATION_ID present again, still contradicting the stale stored prompt. Read the board (31 ready, unchanged since ledger-113/115, wipCap 2, activeCount 0, not exhausted). Held a twelfth consecutive run - scope-creep-console's 6-PR review queue (work-081/105/107/108/109/110) remains completely untouched, now 23-28 days old with zero review activity across its full operating history. On scope-creep, the propose-only duplicate-PR queue held flat at nine (#150/157/160/166/168/171/173/176/178) per today's own board-hygiene run (#182/ledger-117, filed ~an hour before this run, same table) - the close recommendation is now unactioned for a fifth consecutive cycle. Also noted: two sibling-routine PRs opened earlier today (#181 staffing-review, #182 board-hygiene) both independently claim ledger-117 - a numbering collision for the reviewer to resolve at merge time, not this routine's to fix. New this run: the first write-back attempt hit a transient remote-thread-store outage (ADR-024 honest degradation, exit 0, no crash) - the first such occurrence in seventeen runs - and a retry three minutes later succeeded. Delivered as a routine propose-only ledger PR holding for @scope-creep-review; write-back posted to the thread without a fresh Owner notification beyond what board-hygiene already surfaced hours earlier the same day.
 metadata:
   type: project
   status: active
@@ -103,6 +103,18 @@ recommendation (first made `ledger-111`, repeated `#176`/`#178`/`#180`) is now u
 **fifth** consecutive cycle. `#142`/`#159` are a sibling `staffing-review` routine's output, also
 stuck `behind`/`blocked`. Escalation-class `#140` remains correctly untouched by any routine,
 awaiting the Owner's own steps, now 32 days stale.
+
+### New this run — a transient remote-thread-store outage, recovered on retry
+
+The first `write-back` attempt failed: `work-sweep: The remote thread store is unreachable. This
+is an outage, not an empty store — do not treat it as zero threads (ADR-024 honest degradation).`
+(exit 0 — the writer degrades honestly rather than crashing or silently dropping the post). This
+is the first time any `work-sweep` run has hit this path; all sixteen prior runs' write-backs
+succeeded on the first attempt. A second attempt, made ~3 minutes later with identical arguments,
+succeeded (the writer returned its normal `planned` echo with no error) — so this was transient
+DB-side latency/connectivity, not a code fault, and not escalated further. Flagged here only
+because it is new, not because it blocked anything: the retry landed the same outcome this ledger
+entry describes.
 
 ### Noted, not this routine's to fix — a ledger-number collision between two sibling PRs
 
