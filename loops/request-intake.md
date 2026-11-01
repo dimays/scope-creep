@@ -4,9 +4,9 @@ description: The Owner's request-intake loop — submit → triage → decide �
 metadata:
   type: reference
   status: active
-  version: 1.0.0
+  version: 1.1.0
   owner_agent: chief-of-staff
-  last_verified: 2026-09-06
+  last_verified: 2026-09-24
   mode: partially-autonomous
 ---
 
@@ -25,8 +25,11 @@ How an Owner request becomes a decision. Surfaced in the Console's **Work → Re
    assumption?); the CPO weighs it against the roadmap.
 3. **Decide** — exactly one of: **decline** (with a reason) · **propose** an
    alternative/modification · **accept** → create/modify tickets · **fold** into a
-   PRD. New scope (a new PRD/ADR) stays **human-gated** — the Owner already made the
-   ask, but the CoS confirms the framing.
+   PRD. New scope (a new PRD/ADR) is decided by the owning executive (the CPO by
+   default) and ratified by the CoS ([[decision-rights]] v2) — the Owner already made
+   the ask, so the org confirms the framing and writes it back as the "heard" line
+   rather than asking again ([[adr-028]]). Only an "Owner holds" class (spend, a
+   §III.7 action, credentials, the safety kernel) waits for the Owner.
 4. **Respond** — write the outcome back to the thread and set its status
    (`accepted | declined | needs-info | done`). Record in the [[ledger]] if
    consequential.
