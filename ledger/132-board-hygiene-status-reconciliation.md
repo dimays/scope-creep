@@ -161,4 +161,4 @@ Planned Work Routine") via the [[work-064]] writers as a `critical-update`. Noth
 this session's sandbox identity — structurally blocked per [[adr-026]]; the
 Owner/`@scope-creep-review` disposes (review + merge) off-sandbox. See [[board-hygiene]],
 [[work-readme]], [[work-120]], [[work-124]], [[work-060]], [[work-114]],
-[[ledger-130-board-hygiene-status-reconciliation]].
+[[ledger-129-board-hygiene-status-reconciliation]].
