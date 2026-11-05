@@ -7,7 +7,7 @@ priority: medium
 owner: chief-of-staff
 spec: adr-021
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-10-26
 ---
 
 The self-tuning-cadence design (documented across `registry/routines.json`'s note,
@@ -28,3 +28,14 @@ done-vs-reality gap.
 ## Notes
 Surfaced by the autonomy-layer audit. Owner: CoS (owns the loop/cadence system). Low user-visible
 impact today (seed crons are sane), but it means the advertised self-tuning is not actually running.
+
+**Partial close, 2026-10-26** ([[ledger-117-staffing-review-first-run]]): the
+[[staffing-review]] loop's first real scheduled run emitted a genuine, parseable
+`cadence-decision:` YAML block (the spec'd key, not a prose mention) — the first one
+on disk for *any* loop. That closes this gap for staffing-review specifically. It is
+still open for the other scheduled loops: work-sweep emits a `### cadence-decision`
+**markdown heading** with fields underneath (e.g. [[ledger-115-work-sweep-sixteenth-cadenced-run]]),
+not the spec'd `cadence-decision:` key, so even that loop isn't spec-conforming yet;
+request-triage, roadmap, board-hygiene, and evolve weren't checked this run (outside
+staffing-review's scope) and should be swept for the same gap before this ticket is
+marked `done`.
