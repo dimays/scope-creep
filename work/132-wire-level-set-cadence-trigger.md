@@ -7,7 +7,7 @@ priority: high
 owner: cto
 spec: adr-021
 created: 2026-10-01
-updated: 2026-10-01
+updated: 2026-11-01
 ---
 
 [[level-set]]'s own "When this loop fires" section says its cadence is **mechanical, not a
@@ -49,3 +49,15 @@ value to retune (`retune-live` doesn't apply; level-set has no live-retune path 
 manifest). Registering a new/changed routine and `registry/routines.json` entry is a core change
 — route through [[core-upgrade]], Owner-approved, per [[adr-021]] §E. CRO-checked: verified need
 (measured counts above), not speculative.
+
+**Re-surfaced by [[evolve]]'s second scheduled round ([[ledger-127-evolve-second-run]]),
+2026-11-01** — unactioned for a full **31 days**, still `status: proposed`. level-set itself is
+now **56 days** dormant (last real activity [[ledger-038-level-set-dry-run]], 2026-09-06), and
+in the month since this ticket opened the org completed only **1 net additional** `done` ticket
+(81→82 of 125→126) — not because the trigger stopped tripping, but because [[work-sweep]] held
+without pulling a ticket for sixteen consecutive runs over the same window (see
+[[ledger-125-work-sweep-twenty-first-cadenced-run]]). Not re-ticketed (already correctly scoped
+here); evolve declines to raise this ticket's priority unilaterally (already `high`) and instead
+flags the compounding staleness directly to the Owner — this ticket landing is itself blocked by
+the same propose-only-PR landing bottleneck named in [[ledger-127-evolve-second-run]], not by any
+remaining ambiguity in its own acceptance criteria.
